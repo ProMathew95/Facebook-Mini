@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-Facebook_project-DE63502F-22FE-4D58-A51A-97C5AFF58514</UserSecretsId>
+    <RootNamespace>Facebook_project</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200309131240_addingPostTabletoDB.cs" />
+    <Compile Remove="Data\Migrations\20200309131240_addingPostTabletoDB.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200309132635_addingRole.cs" />
+    <Compile Remove="Data\Migrations\20200309132635_addingRole.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200309133133_addingLikes.cs" />
+    <Compile Remove="Data\Migrations\20200309133133_addingLikes.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200309140600_test.cs" />
+    <Compile Remove="Data\Migrations\20200309140600_test.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0-preview1.19506.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0-preview1-19509-03" />
+  </ItemGroup>
+
+</Project>
