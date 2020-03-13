@@ -28,7 +28,7 @@ namespace Facebook_project.Data
             builder.Entity<Like>().HasKey(k => new { k.UserID, k.PostID });
             builder.Entity<Like>(entity => entity.HasOne(l => l.Post).WithMany(l => l.Like).OnDelete(DeleteBehavior.ClientSetNull));
 
-            builder.Entity<Comment>().HasKey(k => new { k.UserID, k.PostID });
+            builder.Entity<Comment>().HasKey(k => new { k.UserID, k.PostID, k.Time});
             builder.Entity<Comment>(entity => entity.HasOne(l => l.Post).WithMany(l => l.Comment).OnDelete(DeleteBehavior.ClientSetNull));
 
             builder.Entity<Friend>().HasKey(k => new { k.senderUserID, k.receiverUserID });
