@@ -12,14 +12,20 @@ namespace Facebook_project.Models
     {
         [Required]
         public int PostID { get; set; }
+
         [Required]
         public string UserID { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime Time { get; set; }
 
         public bool isRemoved { get; set; }
 
         //[JsonIgnore]
         [ForeignKey("UserID")]
         public virtual AppUser User { get; set; }
+
         //[JsonIgnore]
         [ForeignKey("PostID")]
         public virtual Post Post { get; set; }

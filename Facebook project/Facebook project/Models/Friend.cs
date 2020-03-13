@@ -10,9 +10,11 @@ namespace Facebook_project.Models
 {
     public enum Status
     {
-        pending,
-        blocked,
-        confirmed
+        RequestPending,
+        Blocked,//for future work
+        RequestConfirmed,
+        FriendRemoved,
+        RequestCanceled,
     }
     public class Friend
     {
