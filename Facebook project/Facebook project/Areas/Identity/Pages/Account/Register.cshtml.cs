@@ -61,6 +61,21 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Display(Name = "BirthDate")]
+            [DataType(DataType.Date)]
+            public DateTime BirthDate { get; set; }
+
+            [Display(Name = "Gender")]
+            public Gender? Gender { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +90,8 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email };
+                var user = new AppUser { UserName = Input.Email, Email = Input.Email , FullName = $"{Input.FirstName} {Input.LastName}",
+                    BirthDate = Input.BirthDate, Gender = Input.Gender};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
