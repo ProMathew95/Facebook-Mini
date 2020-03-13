@@ -37,10 +37,10 @@ namespace Facebook_project.Models
         [ForeignKey("PublisherId")]
         public virtual AppUser Publisher { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<Comment> Comment { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<Like> Like { get; set; }
 
 
