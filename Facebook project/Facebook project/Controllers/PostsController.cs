@@ -9,48 +9,49 @@ using Facebook_project.Data;
 using Facebook_project.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Facebook_project.Repositories;
 
 namespace Facebook_project.Controllers
 {
     public class PostsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public PostsController(ApplicationDbContext context)
+        //private readonly ApplicationDbContext _context;
+        PostRepository _context;
+        public PostsController(PostRepository context)
         {
             _context = context;
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Publisher);
-            return View(await applicationDbContext.ToListAsync());
+            var repo = _context.GetPosts();
+            return View(repo.ToList());
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var post = await _context.Posts
-                .Include(p => p.Publisher)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
+        //    var post = await _context.Posts
+        //        .Include(p => p.Publisher)
+        //        .FirstOrDefaultAsync(m => m.PostId == id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(post);
-        }
+        //    return View(post);
+        //}
 
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id");
+           // ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id");
             return PartialView();
         }
 
@@ -60,35 +61,31 @@ namespace Facebook_project.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ Post post)
+        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ Post post)
         {
             if (ModelState.IsValid)
             {
-                post.isDeleted = false;
-                post.numberOfLikes = 0;
-                post.Date = DateTime.Now;
-                _context.Add(post);
-                await _context.SaveChangesAsync();
+                _context.CreatePost(post);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
+            //ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
             return View(post);
         }
 
         // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = _context.GetPostByID(id);
             if (post == null)
             {
                 return NotFound();
             }
-            ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
+            //ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
             return View(post);
         }
 
@@ -97,7 +94,7 @@ namespace Facebook_project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")] Post post)
+        public IActionResult Edit(int id, [Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")] Post post)
         {
             if (id != post.PostId)
             {
@@ -108,12 +105,11 @@ namespace Facebook_project.Controllers
             {
                 try
                 {
-                    _context.Update(post);
-                    await _context.SaveChangesAsync();
+                    _context.UpdatePost(id,post);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.PostId))
+                    if (!_context.PostExists(post.PostId))
                     {
                         return NotFound();
                     }
@@ -124,43 +120,36 @@ namespace Facebook_project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
+           // ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
             return View(post);
         }
 
         // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var post = await _context.Posts
-                .Include(p => p.Publisher)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
+        //    var post = await _context.Posts
+        //        .Include(p => p.Publisher)
+        //        .FirstOrDefaultAsync(m => m.PostId == id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(post);
-        }
+        //    return View(post);
+        //}
 
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            _context.DeletePosts(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PostExists(int id)
-        {
-            return _context.Posts.Any(e => e.PostId == id);
         }
     }
 }

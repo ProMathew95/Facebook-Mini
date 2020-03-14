@@ -15,7 +15,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <partial name="~/Views/Posts/Create.cshtml"/>
+    <partial name="~/Views/Posts/_Create.cshtml"/>
      @*var claimsIdentity = (ClaimsIdentity)this.User.Identity;
      var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
      var userId = claim.Value;
