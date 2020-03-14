@@ -32,24 +32,25 @@ namespace Facebook_project.Controllers
             {
                 var userId = claim.Value;
 
-                var CurrentUserPosts = _db.Posts.Include(p => p.Publisher).Where(p => p.PublisherId == userId).ToList();
+                var CurrentUserPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
+                    .Include(p => p.Publisher).Where(p => p.PublisherId == userId).ToList();
 
                 if (CurrentUserPosts.Count > 0)
                 {
-                    List<PostViewModel> postList = new List<PostViewModel>();
+                    //List<PostViewModel> postList = new List<PostViewModel>();
 
-                    foreach (var post in CurrentUserPosts)
-                    {
-                        PostViewModel model = new PostViewModel()
-                        {
-                            post = post,
-                            comments = _db.Comments.Include(c => c.User).Where(c => c.PostID == post.PostId),
-                            likes = _db.Likes.Include(l => l.User).Where(l => l.PostID == post.PostId)
-                        };
+                    //foreach (var post in CurrentUserPosts)
+                    //{
+                    //    PostViewModel model = new PostViewModel()
+                    //    {
+                    //        post = post,
+                    //        comments = _db.Comments.Include(c => c.User).Where(c => c.PostID == post.PostId),
+                    //        likes = _db.Likes.Include(l => l.User).Where(l => l.PostID == post.PostId)
+                    //    };
 
-                        postList.Add(model);
-                    }
-                    return View(postList);
+                    //    postList.Add(model);
+                    //}
+                    return View(CurrentUserPosts);
                 }
             }
 

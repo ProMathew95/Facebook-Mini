@@ -2,9 +2,8 @@
 @using System.Security.Claims;
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
-@*@model Facebook_project.Models.Post*@
 
-@model IEnumerable<Facebook_project.Models.ViewModels.PostViewModel>
+@model IEnumerable<Facebook_project.Models.Post>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -27,23 +26,23 @@
                 <div class="col-3">
                     <p class="col-form-label text-center">
                         <img src="#" class="navbar-toggler-icon" />
-                        <a href="#">@item.post.Publisher.FullName</a>
+                        <a href="#">@item.Publisher.FullName</a>
                     </p>
                 </div>
                 <div class="col-6">
                     <p class="col-form-label">
-                        @item.post.Text
+                        @item.Text
                     </p>
                 </div>
 
                 <div class="col-3">
                     <p class="col-form-label text-center">
-                        @item.post.Date
+                        @item.Date
                     </p>
                 </div>
             </div>
 
-        @foreach (var comment in item.comments)
+        @foreach (var comment in item.Comment)
         {
             <div class="border mt-2">
                 <div class="row">
