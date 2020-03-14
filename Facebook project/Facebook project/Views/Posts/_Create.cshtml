@@ -5,20 +5,9 @@
 
 @model Facebook_project.Models.Post
 @{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-@if (SignInManager.IsSignedIn(User))
-{
-    <partial name="~/Views/Posts/Create.cshtml"/>
-     @*var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-     var userId = claim.Value;
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
 
     <div class="row">
         <div class="col-md-4">
@@ -26,7 +15,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
-                <input type="hidden" asp-for="PublisherId" value="@userId"/>
+                <input type="hidden" asp-for="PublisherId" value="@userId" />
                 <div class="form-group">
                     <label class="control-label">New Post</label>
                     <textarea asp-for="Text"></textarea>
@@ -36,5 +25,5 @@
                 </div>
             </form>
         </div>
-    </div>*@
+    </div>
 }
