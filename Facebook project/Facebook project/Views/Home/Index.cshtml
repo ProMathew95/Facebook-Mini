@@ -16,9 +16,6 @@
 @if (SignInManager.IsSignedIn(User))
 {
     @*<partial name="~/Views/Posts/_Create.cshtml"/>*@
-
-
-
     @foreach (var item in Model)
     {
         <div class="border mt-5">
