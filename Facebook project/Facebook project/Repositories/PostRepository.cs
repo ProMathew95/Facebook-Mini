@@ -75,7 +75,6 @@ namespace Facebook_project.Repositories
             if (result != null)
             {
                 result.isLiked = true;
-                _context.SaveChanges();
             }
             else
                 _context.Likes.Add(new Like {UserID = UserId, PostID = PostId,isLiked = true});
