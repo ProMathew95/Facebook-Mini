@@ -54,17 +54,11 @@
                     </p>
                     @if (Model.LikedPostsIds.Contains(item.PostId))
                     {
-                        <a class="btn btn-danger text-white" asp-controller="Posts" asp-action="Dislike" asp-route-Id="@item.PostId">
-                            Dislike
-                            @*<i class="fas fa-edit"></i>*@
-                        </a>
+                        <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
                     }
                     else
                     {
-                        <a class="btn btn-primary text-white" asp-controller="Posts" asp-action="Like" asp-route-Id="@item.PostId">
-                            Like
-                            @*<i class="fas fa-edit"></i>*@
-                        </a>
+                        <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
                     }
                 </div>
 
@@ -112,6 +106,48 @@
         $("#CreatePost").click(function () {
             $("#PopupContainer").modal("toggle");
         });
-    })
+    });
+
+    function Like(caller,id) {
+
+        if (caller.classList.contains("fa-thumbs-up")) {
+            
+
+            $.ajax({  
+                type: "POST",  
+                url: "Posts/Like/" + id,  
+                success: function () {  
+                     caller.classList.remove("fa-thumbs-up");
+                     caller.classList.add("fa-thumbs-down");
+                },  
+                error: function () {  
+                    alert("Error while liking post");  
+                }  
+            });
+
+        }
+        else if (caller.classList.contains("fa-thumbs-down")) {
+            
+
+            $.ajax({  
+                type: "POST",  
+                url: "Posts/Dislike/" + id,
+                success: function () {  
+                     caller.classList.remove("fa-thumbs-down");
+                     caller.classList.add("fa-thumbs-up");
+                },  
+                error: function () {  
+                    alert("Error while Disliking post");  
+                }  
+            });
+
+
+        }
+
+        
+
+    }
+
+    
 
 </script> 
