@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Facebook_project.Repositories;
 using Facebook_project.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace Facebook_project.Controllers
 {
@@ -176,6 +177,12 @@ namespace Facebook_project.Controllers
                 var userId = claim.Value;
                 _context.Dislike(userId, id);
             }
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        public IActionResult LikesModal(int id)
+        {
+            ViewData["id"] = id;
             return RedirectToAction(nameof(Index), "Home");
         }
     }

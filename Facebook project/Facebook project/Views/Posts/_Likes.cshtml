@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@*@inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager*@
+
+@model Facebook_project.Models.ViewModels.PostViewModel
+@{
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
+
+    <div id="LikesPopupContainer" class="modal fade LikesModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+
+                <h2>Likes</h2>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            
+                            @foreach(var item in Model.IncommingPosts)
+                            {
+                            }
+
+                           <p> @ViewData["id"]</p>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+
+                </div>
+
+                <div class="modal-footer"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+}

@@ -6,6 +6,7 @@
 @model Facebook_project.Models.ViewModels.PostViewModel
 @{
     ViewData["Title"] = "Home Page";
+    ViewData["id"] = 0;
 }
 
 <div class="text-center">
@@ -36,7 +37,9 @@
 
 
 
-    <partial name="~/Views/Posts/_Create.cshtml"/>
+    <partial name="~/Views/Posts/_Create.cshtml" />
+
+    <partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>
 
     @foreach (var item in Model.IncommingPosts)
     {
@@ -59,7 +62,9 @@
                     else
                     {
                         <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+
                     }
+                    <a class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
                 </div>
 
                 <div class="col-3">
@@ -108,46 +113,64 @@
         });
     });
 
-    function Like(caller,id) {
+
+    function LikesModal(id) {
+
+        $.ajax({
+                type: "GET",
+                url: "Posts/LikesModal/" + id,
+                success: function () {
+                    $("#LikesPopupContainer").modal("toggle");
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+
+        
+    };
+
+
+    function Like(caller, id) {
 
         if (caller.classList.contains("fa-thumbs-up")) {
-            
 
-            $.ajax({  
-                type: "POST",  
-                url: "Posts/Like/" + id,  
-                success: function () {  
-                     caller.classList.remove("fa-thumbs-up");
-                     caller.classList.add("fa-thumbs-down");
-                },  
-                error: function () {  
-                    alert("Error while liking post");  
-                }  
+
+            $.ajax({
+                type: "POST",
+                url: "Posts/Like/" + id,
+                success: function () {
+                    caller.classList.remove("fa-thumbs-up");
+                    caller.classList.add("fa-thumbs-down");
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
             });
 
         }
         else if (caller.classList.contains("fa-thumbs-down")) {
-            
 
-            $.ajax({  
-                type: "POST",  
+
+            $.ajax({
+                type: "POST",
                 url: "Posts/Dislike/" + id,
-                success: function () {  
-                     caller.classList.remove("fa-thumbs-down");
-                     caller.classList.add("fa-thumbs-up");
-                },  
-                error: function () {  
-                    alert("Error while Disliking post");  
-                }  
+                success: function () {
+                    caller.classList.remove("fa-thumbs-down");
+                    caller.classList.add("fa-thumbs-up");
+                },
+                error: function () {
+                    alert("Error while Disliking post");
+                }
             });
 
 
         }
 
-        
+
 
     }
 
-    
+
 
 </script> 
