@@ -66,11 +66,11 @@ namespace Facebook_project.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.CreatePost(model.post);
+                _context.CreatePost(model.Post);
                 return RedirectToAction(nameof(Index),"Home");
             }
             //ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
-            return View(model.post);
+            return View(model.Post);
         }
 
         // GET: Posts/Edit/5
@@ -152,7 +152,7 @@ namespace Facebook_project.Controllers
             _context.DeletePosts(id);
             return RedirectToAction(nameof(Index));
         }
-
+        
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult Like(int id)
@@ -163,6 +163,18 @@ namespace Facebook_project.Controllers
             {
                 var userId = claim.Value;
                 _context.AddLike(userId, id);
+            }
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        public IActionResult Dislike(int id)
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                _context.Dislike(userId, id);
             }
             return RedirectToAction(nameof(Index), "Home");
         }

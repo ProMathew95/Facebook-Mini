@@ -52,10 +52,20 @@
                     <p class="col-form-label">
                         @item.Text
                     </p>
-                    <a class="btn btn-primary text-white" asp-controller="Posts" asp-action="Like" asp-route-Id="@item.PostId">
-                        Like
-                        @*<i class="fas fa-edit"></i>*@
-                    </a>
+                    @if (Model.LikedPostsIds.Contains(item.PostId))
+                    {
+                        <a class="btn btn-danger text-white" asp-controller="Posts" asp-action="Dislike" asp-route-Id="@item.PostId">
+                            Dislike
+                            @*<i class="fas fa-edit"></i>*@
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary text-white" asp-controller="Posts" asp-action="Like" asp-route-Id="@item.PostId">
+                            Like
+                            @*<i class="fas fa-edit"></i>*@
+                        </a>
+                    }
                 </div>
 
                 <div class="col-3">

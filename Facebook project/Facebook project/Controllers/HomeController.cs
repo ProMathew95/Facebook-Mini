@@ -35,27 +35,30 @@ namespace Facebook_project.Controllers
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
                 friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
 
-
                 var CurrentPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
                     .Include(p => p.Publisher).Where(p => p.PublisherId == userId || friendsIds.Contains(p.PublisherId)).ToList();
 
                 CurrentPosts = CurrentPosts.OrderByDescending(p => p.Date).ToList();
 
+                List<int> likedPosts = _db.Likes.Where(l => l.UserID == userId && l.isLiked).Select(l => l.PostID).ToList();
+
                 if (CurrentPosts != null)
                 {
-                        PostViewModel model = new PostViewModel()
-                        {
-                            IncommingPosts = CurrentPosts,
-                            post = new Post()
-                        };
-                        return View(model);
+                    PostViewModel model = new PostViewModel()
+                    {
+                        IncommingPosts = CurrentPosts,
+                        Post = new Post(),
+                        LikedPostsIds = likedPosts
+                    };
+                    return View(model);
                 }
                 else
                 {
                     PostViewModel model = new PostViewModel()
                     {
                         IncommingPosts = new List<Post>(),
-                        post = new Post()
+                        Post = new Post(),
+                        LikedPostsIds = likedPosts
                     };
                     return View(model);
                 }

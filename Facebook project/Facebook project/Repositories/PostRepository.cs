@@ -70,8 +70,28 @@ namespace Facebook_project.Repositories
 
         public void AddLike(string UserId,int PostId)
         {
-            _context.Likes.Add(new Like {UserID = UserId, PostID = PostId });
+            var result = _context.Likes.Where(l => l.UserID == UserId && l.PostID == PostId).ToList().FirstOrDefault();
+
+            if (result != null)
+            {
+                result.isLiked = true;
+                _context.SaveChanges();
+            }
+            else
+                _context.Likes.Add(new Like {UserID = UserId, PostID = PostId,isLiked = true});
+            
             _context.SaveChanges();
         }
-	}
+
+        public void Dislike(string UserId, int PostId)
+        {
+            var result = _context.Likes.Where(l => l.UserID == UserId && l.PostID == PostId).ToList().FirstOrDefault();
+
+            if(result != null)
+            {
+                result.isLiked = false;
+                _context.SaveChanges();
+            }
+        }
+    }
 }
