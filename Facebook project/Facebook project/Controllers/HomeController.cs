@@ -32,25 +32,32 @@ namespace Facebook_project.Controllers
             {
                 var userId = claim.Value;
 
-                var CurrentUserPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
-                    .Include(p => p.Publisher).Where(p => p.PublisherId == userId).ToList();
+                List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
+                friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
 
-                if (CurrentUserPosts.Count > 0)
+
+                var CurrentPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
+                    .Include(p => p.Publisher).Where(p => p.PublisherId == userId || friendsIds.Contains(p.PublisherId)).ToList();
+
+                CurrentPosts = CurrentPosts.OrderByDescending(p => p.Date).ToList();
+
+                if (CurrentPosts != null)
                 {
-                    //List<PostViewModel> postList = new List<PostViewModel>();
-
-                    //foreach (var post in CurrentUserPosts)
-                    //{
-                    //    PostViewModel model = new PostViewModel()
-                    //    {
-                    //        post = post,
-                    //        comments = _db.Comments.Include(c => c.User).Where(c => c.PostID == post.PostId),
-                    //        likes = _db.Likes.Include(l => l.User).Where(l => l.PostID == post.PostId)
-                    //    };
-
-                    //    postList.Add(model);
-                    //}
-                    return View(CurrentUserPosts);
+                        PostViewModel model = new PostViewModel()
+                        {
+                            IncommingPosts = CurrentPosts,
+                            post = new Post()
+                        };
+                        return View(model);
+                }
+                else
+                {
+                    PostViewModel model = new PostViewModel()
+                    {
+                        IncommingPosts = new List<Post>(),
+                        post = new Post()
+                    };
+                    return View(model);
                 }
             }
 

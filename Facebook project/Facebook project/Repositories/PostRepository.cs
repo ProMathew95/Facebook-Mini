@@ -67,5 +67,11 @@ namespace Facebook_project.Repositories
 		{
 			return _context.Posts.Any(e => e.PostId == id);
 		}
+
+        public void AddLike(string UserId,int PostId)
+        {
+            _context.Likes.Add(new Like {UserID = UserId, PostID = PostId });
+            _context.SaveChanges();
+        }
 	}
 }

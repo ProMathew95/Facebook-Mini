@@ -10,6 +10,7 @@ using Facebook_project.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Facebook_project.Repositories;
+using Facebook_project.Models.ViewModels;
 
 namespace Facebook_project.Controllers
 {
@@ -61,15 +62,15 @@ namespace Facebook_project.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ Post post)
+        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ PostViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.CreatePost(post);
-                return RedirectToAction(nameof(Index));
+                _context.CreatePost(model.post);
+                return RedirectToAction(nameof(Index),"Home");
             }
             //ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
-            return View(post);
+            return View(model.post);
         }
 
         // GET: Posts/Edit/5
@@ -150,6 +151,20 @@ namespace Facebook_project.Controllers
         {
             _context.DeletePosts(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Like(int id)
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                _context.AddLike(userId, id);
+            }
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }

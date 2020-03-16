@@ -3,7 +3,7 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-@model IEnumerable<Facebook_project.Models.Post>
+@model Facebook_project.Models.ViewModels.PostViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -13,10 +13,32 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
+
 @if (SignInManager.IsSignedIn(User))
 {
-    @*<partial name="~/Views/Posts/_Create.cshtml"/>*@
-    @foreach (var item in Model)
+
+    <p>
+        @*<button id="CreatePost" type="button" class="btn btn-success"
+                    data-toggle="modal" data-target="#openModal">
+                Create Post
+            </button>*@
+
+        <div class="container">
+            <div class="row">
+
+
+                <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
+                       data-toggle="modal" data-target="#openModal" value="What's on your mind" />
+
+            </div>
+        </div>
+    </p>
+
+
+
+    <partial name="~/Views/Posts/_Create.cshtml"/>
+
+    @foreach (var item in Model.IncommingPosts)
     {
         <div class="border mt-5">
             <div class="row">
@@ -30,6 +52,10 @@
                     <p class="col-form-label">
                         @item.Text
                     </p>
+                    <a class="btn btn-primary text-white" asp-controller="Posts" asp-action="Like" asp-route-Id="@item.PostId">
+                        Like
+                        @*<i class="fas fa-edit"></i>*@
+                    </a>
                 </div>
 
                 <div class="col-3">
@@ -39,25 +65,43 @@
                 </div>
             </div>
 
-        @foreach (var comment in item.Comment)
-        {
-            <div class="border mt-2">
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        <p class="col-form-label">
-                        <img src="#" class="navbar-toggler-icon"/>
-                        <a href="#">@comment.User.FullName</a></p>
-                        <p class="col-form-label">@comment.Text</p>
+            @foreach (var comment in item.Comment)
+            {
+                <div class="border mt-2">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <p class="col-form-label">
+                                <img src="#" class="navbar-toggler-icon" />
+                                <a href="#">@comment.User.FullName</a>
+                            </p>
+                            <p class="col-form-label">@comment.Text</p>
+                        </div>
+                        <div class="col-4">@comment.Time</div>
                     </div>
-                    <div class="col-4">@comment.Time</div>
                 </div>
-            </div>
-         }
+            }
 
         </div>
     }
 
 
 
-    }
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#CreatePost").click(function () {
+            $("#PopupContainer").modal("toggle");
+        });
+    })
+
+</script> 
