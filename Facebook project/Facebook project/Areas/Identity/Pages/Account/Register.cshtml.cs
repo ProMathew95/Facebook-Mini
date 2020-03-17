@@ -47,8 +47,10 @@ namespace Facebook_project.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+          
             [EmailAddress]
             [Display(Name = "Email")]
+            [BindProperty]
             public string Email { get; set; }
 
             [Required]
@@ -127,5 +129,16 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+       
+        //public async Task<IActionResult> IsEmailInUse(string email)
+        //{
+        //    var result = await _userManager.FindByEmailAsync(email);
+        //    if(result != null)
+        //    {
+        //        return new JsonResult($"Email {email} is already in use");
+        //    }
+        //        return new JsonResult(true);
+           
+        //}
     }
 }

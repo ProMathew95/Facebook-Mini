@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 namespace Facebook_project.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+   
     public class LoginModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;

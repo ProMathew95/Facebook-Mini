@@ -1,5 +1,6 @@
 ﻿using Facebook_project.Data;
 using Facebook_project.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Facebook_project.Repositories
 {
+	
 	public class PostRepository
 	{
 		ApplicationDbContext _context;

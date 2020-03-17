@@ -10,6 +10,7 @@ using Facebook_project.Data;
 using Facebook_project.Models.ViewModels;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Facebook_project.Controllers
 {
@@ -23,7 +24,7 @@ namespace Facebook_project.Controllers
             _logger = logger;
             _db = db;
         }
-
+       
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
