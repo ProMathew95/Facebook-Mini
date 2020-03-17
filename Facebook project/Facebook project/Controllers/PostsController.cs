@@ -185,5 +185,29 @@ namespace Facebook_project.Controllers
             List<AppUser> Users = _context.GetPostLikers(id);
             return PartialView("_Likes",Users);
         }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult AddComment([FromBody]CommentViewModel commentVM)
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                Comment comment = new Comment()
+                {
+                    PostID = commentVM.PostId,
+                    Text = commentVM.Comment,
+                    Time = DateTime.Now,
+                    UserID = userId,
+                    isRemoved = false
+                };
+
+                _context.AddComment(comment);
+            }
+
+            return Json("Success");
+        }
     }
 }
