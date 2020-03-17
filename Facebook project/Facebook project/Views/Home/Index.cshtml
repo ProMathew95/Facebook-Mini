@@ -39,7 +39,9 @@
 
     <partial name="~/Views/Posts/_Create.cshtml" />
 
-    <partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>
+    @*<partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>*@
+
+    <div id="LikesDiv"></div>
 
     @foreach (var item in Model.IncommingPosts)
     {
@@ -62,9 +64,9 @@
                     else
                     {
                         <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-
                     }
                     <a class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+                    
                 </div>
 
                 <div class="col-3">
@@ -119,11 +121,12 @@
         $.ajax({
                 type: "GET",
                 url: "Posts/LikesModal/" + id,
-                success: function () {
+            success: function (response) {
+                    $("#LikesDiv").html(response);
                     $("#LikesPopupContainer").modal("toggle");
                 },
                 error: function () {
-                    alert("Error");
+                    alert("Error retreiving Users");
                 }
             });
 

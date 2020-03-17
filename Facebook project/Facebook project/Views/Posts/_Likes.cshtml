@@ -3,7 +3,7 @@
 @*@inject SignInManager<AppUser> SignInManager
     @inject UserManager<AppUser> UserManager*@
 
-@model Facebook_project.Models.ViewModels.PostViewModel
+@model IEnumerable<Facebook_project.Models.AppUser>
 @{
     var claimsIdentity = (ClaimsIdentity)this.User.Identity;
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -19,18 +19,17 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            
-                            @foreach(var item in Model.IncommingPosts)
+
+                            @foreach (var item in Model)
                             {
+                                <img src="#" class="navbar-toggler-icon" />
+                                <a href="#">@item.FullName</a>
                             }
-
-                           <p> @ViewData["id"]</p>
-
                         </div>
                     </div>
 
                     <div>
-                        @Html.ActionLink("Back to List", "Index")
+                        @Html.ActionLink("Back to List", "Index","Home")
                     </div>
 
                 </div>

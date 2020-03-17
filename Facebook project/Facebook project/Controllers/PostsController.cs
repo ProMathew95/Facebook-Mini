@@ -182,8 +182,8 @@ namespace Facebook_project.Controllers
 
         public IActionResult LikesModal(int id)
         {
-            ViewData["id"] = id;
-            return RedirectToAction(nameof(Index), "Home");
+            List<AppUser> Users = _context.GetPostLikers(id);
+            return PartialView("_Likes",Users);
         }
     }
 }
