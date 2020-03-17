@@ -94,5 +94,18 @@ namespace Facebook_project.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public List<AppUser> GetPostLikers(int id) 
+        {
+            var LikersIds = _context.Likes.Where(l => l.PostID == id).Select(l => l.UserID).ToList();
+            return _context.Users.Where(u => LikersIds.Contains(u.Id)).ToList();
+        }
+
+        
+        public void AddComment(Comment comment)
+        {
+            _context.Comments.Add(comment);
+            _context.SaveChanges();
+        }
     }
 }

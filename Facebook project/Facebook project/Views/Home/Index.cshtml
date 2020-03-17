@@ -39,7 +39,9 @@
 
     <partial name="~/Views/Posts/_Create.cshtml" />
 
-    <partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>
+    @*<partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>*@
+
+    <div id="LikesDiv"></div>
 
     @foreach (var item in Model.IncommingPosts)
     {
@@ -55,6 +57,14 @@
                     <p class="col-form-label">
                         @item.Text
                     </p>
+
+                    <p>Comment</p>
+
+                    @{string str = $"comment{item.PostId}";}
+                    <input type="text" id="@str"/>
+                    <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
+                    <br />
+
                     @if (Model.LikedPostsIds.Contains(item.PostId))
                     {
                         <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
@@ -62,9 +72,10 @@
                     else
                     {
                         <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-
                     }
+
                     <a class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+
                 </div>
 
                 <div class="col-3">
@@ -107,6 +118,31 @@
 
 <script type="text/javascript">
 
+    function addComment(postId) {
+        var id = '#comment' + postId;
+        var comment = document.querySelector(id).value;
+
+        commentObj = {
+            "Comment": comment,
+            "PostId": postId
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/AddComment/",
+            data: JSON.stringify(commentObj),  
+            dataType: "json",  
+            contentType: "application/json; charset=utf-8",
+
+            success: function (response) {
+                    
+                },
+                error: function () {
+                    alert("Error submiting comment");
+                }
+            });
+    }
+
     $(document).ready(function () {
         $("#CreatePost").click(function () {
             $("#PopupContainer").modal("toggle");
@@ -119,15 +155,14 @@
         $.ajax({
                 type: "GET",
                 url: "Posts/LikesModal/" + id,
-                success: function () {
+            success: function (response) {
+                    $("#LikesDiv").html(response);
                     $("#LikesPopupContainer").modal("toggle");
                 },
                 error: function () {
-                    alert("Error");
+                    alert("Error retreiving Users");
                 }
             });
-
-        
     };
 
 
