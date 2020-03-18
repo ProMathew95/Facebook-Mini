@@ -45,6 +45,7 @@ namespace Facebook_project
             }).AddXmlSerializerFormatters();
             services.AddRazorPages();
             services.AddScoped<PostRepository>();
+            services.AddScoped<FriendsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

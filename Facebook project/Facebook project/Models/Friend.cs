@@ -15,6 +15,7 @@ namespace Facebook_project.Models
         RequestConfirmed,
         FriendRemoved,
         RequestCanceled,
+        RequestRejected
     }
     public class Friend
     {

@@ -18,6 +18,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    <i class="btn fas fa-user-friends" onclick="FriendRequestsModal()"></i>
 
     <p>
         @*<button id="CreatePost" type="button" class="btn btn-success"
@@ -43,6 +44,7 @@
     @*<partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>*@
 
     <div id="LikesDiv"></div>
+    <div id="FriendRequestsDiv"></div>
 
     @foreach (var item in Model.IncommingPosts)
     {
@@ -81,18 +83,18 @@
                     </form>
 
 
-                        <br />
+                    <br />
 
-                        @if (Model.LikedPostsIds.Contains(item.PostId))
-                        {
-                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
-                        }
-                        else
-                        {
-                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-                        }
-                        @{string likesId = $"likes{item.PostId}";}
-                        <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+                    @if (Model.LikedPostsIds.Contains(item.PostId))
+                    {
+                        <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
+                    }
+                    else
+                    {
+                        <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+                    }
+                    @{string likesId = $"likes{item.PostId}";}
+                    <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
 
                 </div>
 
@@ -165,11 +167,6 @@
         data.append("Comment", comment);
         data.append("PostId", postId);
 
-        //commentObj = {
-        //    "Comment": comment,
-        //    "PostId": postId
-        //};
-
         $.ajax({
             type: "POST",
             url: "Posts/AddComment",
@@ -194,7 +191,7 @@
                 newComment += '</p><p class="col-form-label">' + respText + '</p>';
                 if (respImg != null && respImg != "") {
                     newComment += '<div class="col-12"><img class="img-fluid" src="/CommentsPics/' + respImg + '" /> </div>';
-                }          
+                }
                 newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
 
                 var targetPostId = "#post" + postId;
@@ -210,62 +207,11 @@
         document.querySelector(id).value = "";
     }
 
-
-
-
-
-    //function addComment(postId) {
-    //    var id = '#commentArea' + postId;
-    //    var comment = document.querySelector(id).value;
-
-    //    commentObj = {
-    //        "Comment": comment,
-    //        "PostId": postId
-    //    };
-
-    //    $.ajax({
-    //        type: "POST",
-    //        url: "Posts/AddComment/",
-    //        data: JSON.stringify(commentObj),
-    //        dataType: "json",
-    //        contentType: "application/json; charset=utf-8",
-
-    //        success: function (response) {
-
-    //            var respPostId = Object.values(response)[0];
-    //            var respUserId = Object.values(response)[1];
-    //            var respUserName = Object.values(response)[2];
-    //            var respDate = Object.values(response)[3];
-    //            var respText = Object.values(response)[4];
-    //            var respPhotoURL = Object.values(response)[5];
-
-
-    //            var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
-    //            newComment += '<div class="col-4"></div> <div class="col-4"><p class="col-form-label">';
-    //            newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
-    //            newComment += '<a href="#">' + respUserName + '</a>';
-    //            newComment += '</p><p class="col-form-label">' + respText + '</p>';
-    //            newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
-
-    //            var targetPostId = "#post" + postId;
-    //            var targetPost = document.querySelector(targetPostId);
-    //            targetPost.innerHTML += newComment;
-
-    //        },
-    //        error: function (response) {
-    //            alert("Error submiting comment");
-    //        }
-    //    });
-
-    //    document.querySelector(id).value = "";
-    //}
-
     $(document).ready(function () {
         $("#CreatePost").click(function () {
             $("#PopupContainer").modal("toggle");
         });
     });
-
 
     function LikesModal(id) {
 
@@ -282,6 +228,20 @@
         });
     };
 
+    function FriendRequestsModal() {
+
+        $.ajax({
+            type: "GET",
+            url: "Friends/FriendRequestsModal/",
+            success: function (response) {
+                $("#FriendRequestsDiv").html(response);
+                $("#FriendRequestsPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    };
 
     function Like(caller, id) {
 
@@ -331,6 +291,100 @@
 
     }
 
+    function FriendRequest(caller,ReqUserId) {
+        var RID = '#request' + ReqUserId;
+        var RequestElement = document.querySelector(RID);
+        if (caller.classList.contains("Accept")) {
+            $.ajax({
+                type: "POST",
+                url: "Friends/AcceptRequest/" + ReqUserId,
+                success: function () {
+                    RequestElement.remove();
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
+            });
+        }
+        else if (caller.classList.contains("Reject")) {
 
+            $.ajax({
+                type: "POST",
+                url: "Friends/RejectRequest/" + ReqUserId,
+                success: function () {
+                    RequestElement.remove();
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
+            });
+        }
+    }
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*function addComment(postId) {
+            var id = '#commentArea' + postId;
+            var comment = document.querySelector(id).value;
+
+            commentObj = {
+                "Comment": comment,
+                "PostId": postId
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "Posts/AddComment/",
+                data: JSON.stringify(commentObj),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+                success: function (response) {
+
+                    var respPostId = Object.values(response)[0];
+                    var respUserId = Object.values(response)[1];
+                    var respUserName = Object.values(response)[2];
+                    var respDate = Object.values(response)[3];
+                    var respText = Object.values(response)[4];
+                    var respPhotoURL = Object.values(response)[5];
+
+
+                    var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2">
+        <div class="row">
+            ';
+            newComment += '<div class="col-4"></div> <div class="col-4">
+                <p class="col-form-label">
+                    ';
+                    newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
+                    newComment += '<a href="#">' + respUserName + '</a>';
+                    newComment += '
+                </p><p class="col-form-label">' + respText + '</p>';
+                newComment += '
+            </div><div class="col-4">' + respDate + '</div>
+        </div>
+    </div>'
+
+                    var targetPostId = "#post" + postId;
+                    var targetPost = document.querySelector(targetPostId);
+                    targetPost.innerHTML += newComment;
+
+                },
+                error: function (response) {
+                    alert("Error submiting comment");
+                }
+            });
+
+            document.querySelector(id).value = "";
+        }*@
