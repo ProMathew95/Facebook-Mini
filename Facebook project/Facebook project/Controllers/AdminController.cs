@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Facebook_project.Controllers
 {
-   
+   [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<AppRole> roleManager;
@@ -21,10 +21,17 @@ namespace Facebook_project.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
+        //[Authorize(Roles ="Admin")]
         [HttpGet]
         public IActionResult CreateRole()
         {
             return View();
+        }
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            var users = userManager.Users;
+            return View(users);
         }
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
@@ -50,6 +57,7 @@ namespace Facebook_project.Controllers
             var roles = roleManager.Roles;
             return View(roles);
         }
+       // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
@@ -75,6 +83,7 @@ namespace Facebook_project.Controllers
             }
             return View(model);
         }
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
@@ -100,6 +109,7 @@ namespace Facebook_project.Controllers
             }
             return View(model);
         }
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
        public async Task<IActionResult> EditUserInRole(string roleId)
         {
@@ -170,5 +180,11 @@ namespace Facebook_project.Controllers
             return RedirectToAction("EditRole", new { Id = roleId });
 
         }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult AccessDenied()
+        //{
+        //    return View();
+        //}
     }
 }

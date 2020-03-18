@@ -1,0 +1,61 @@
+﻿@model IEnumerable<AppUser>
+@{
+    ViewData["Title"] = "All Users";
+}
+<label>Search</label>
+<input type="text" id="search" onchange="filter()"/>
+<div>
+
+</div>
+<h1>All Users</h1>
+@if (Model.Any())
+{
+    foreach (var user in Model)
+    {
+    <div class="card">
+        <div class="card-header">
+            User ID :@user.Id
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                @user.UserName
+            </h5>
+        </div>
+        <div class="card-footer">
+            <a href="#" class="btn btn-danger">Block</a>
+        </div>
+    </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Users Created Yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Use Button below to create a user</h5>
+            <a href="/Account/register" class="btn btn-primary" style="width:auto">Add new User</a>
+        </div>
+    </div>
+}
+<script>
+   function filter() {
+    // in the first line
+    event.preventDefault();
+    // remaining code
+   // debugger;
+    $.ajax({
+         type: "POST"
+         , url: "Dashboards/Filter"
+         , data: JSON.stringify({ filterText: $("#search").val() })
+         , contentType: 'application/json;'
+        , success: function (result) {
+            alert(result);
+         }
+    });
+});
+
+
+</script>
+
