@@ -60,8 +60,8 @@
 
                     <p>Comment</p>
 
-                    @{string str = $"comment{item.PostId}";}
-                    <input type="text" id="@str"/>
+                    @{string CommentID = $"comment{item.PostId}";}
+                    <input type="text" id="@CommentID" />
                     <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
                     <br />
 
@@ -73,8 +73,8 @@
                     {
                         <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
                     }
-
-                    <a class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+                    @{string likesId = $"likes{item.PostId}";}
+                    <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
 
                 </div>
 
@@ -168,6 +168,10 @@
 
     function Like(caller, id) {
 
+        var counterid = '#likes' + id;
+        var likeCounter = document.querySelector(counterid);
+        var countVal = likeCounter.innerHTML;
+
         if (caller.classList.contains("fa-thumbs-up")) {
 
 
@@ -175,6 +179,8 @@
                 type: "POST",
                 url: "Posts/Like/" + id,
                 success: function () {
+                    countVal++;
+                    likeCounter.innerHTML = countVal;
                     caller.classList.remove("fa-thumbs-up");
                     caller.classList.add("fa-thumbs-down");
                 },
@@ -191,6 +197,8 @@
                 type: "POST",
                 url: "Posts/Dislike/" + id,
                 success: function () {
+                    countVal--;
+                    likeCounter.innerHTML = countVal;
                     caller.classList.remove("fa-thumbs-down");
                     caller.classList.add("fa-thumbs-up");
                 },

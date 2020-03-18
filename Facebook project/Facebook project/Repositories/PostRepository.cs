@@ -97,7 +97,7 @@ namespace Facebook_project.Repositories
 
         public List<AppUser> GetPostLikers(int id) 
         {
-            var LikersIds = _context.Likes.Where(l => l.PostID == id).Select(l => l.UserID).ToList();
+            var LikersIds = _context.Likes.Where(l => l.PostID == id && l.isLiked).Select(l => l.UserID).ToList();
             return _context.Users.Where(u => LikersIds.Contains(u.Id)).ToList();
         }
 
