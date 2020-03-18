@@ -9,27 +9,33 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
 
-    <div id="LikesPopupContainer" class="modal fade LikesModal">
+    <div id="FriendRequestsPopupContainer" class="modal fade LikesModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header"></div>
 
-                <h2>Likes</h2>
+                <h2>Friend Requests</h2>
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-10">
 
                             @foreach (var item in Model)
                             {
-                                <img src="~/ProfilPics/@item.PhotoURL" class="navbar-toggler-icon" />
-                                <a href="#">@item.FullName</a>
+                                string RequestId = $"request{item.Id}";
+
+                                <div id="@RequestId">
+                                    <img src="~/ProfilPics/@item.PhotoURL" class="navbar-toggler-icon" />
+                                    <a href="#">@item.FullName</a>
+                                    <input type="button" class="btn btn-primary Accept" value="Accept" onclick="FriendRequest(this,'@item.Id')" />
+                                    <input type="button" class="btn btn-danger Reject" value="Reject" onclick="FriendRequest(this,'@item.Id')" />
+                                </div>
                             }
                         </div>
                     </div>
 
                     <div>
-                        @Html.ActionLink("Back to List", "Index","Home")
+                        @Html.ActionLink("Back to List", "Index", "Home")
                     </div>
 
                 </div>
