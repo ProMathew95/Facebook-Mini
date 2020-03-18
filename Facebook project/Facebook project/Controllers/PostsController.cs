@@ -203,9 +203,19 @@ namespace Facebook_project.Controllers
                     UserID = userId,
                     isRemoved = false
                 };
-
                 _context.AddComment(comment);
-                return Json(comment);
+                var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
+
+                CommentResponseViewModel response = new CommentResponseViewModel()
+                {
+                    PostId = respComment.PostID,
+                    UserId = respComment.UserID,
+                    UserName = respComment.User.UserName,
+                    Time = respComment.Time,
+                    Text = respComment.Text,
+                    UserPicURL = respComment.User.PhotoURL
+                };
+                return Json(response);
             }
 
             return Json("error");

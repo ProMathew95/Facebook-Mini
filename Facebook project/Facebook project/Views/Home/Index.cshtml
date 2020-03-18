@@ -45,64 +45,67 @@
 
     @foreach (var item in Model.IncommingPosts)
     {
-        <div class="border mt-5">
-            <div class="row">
-                <div class="col-3">
-                    <p class="col-form-label text-center">
-                        <img src="#" class="navbar-toggler-icon" />
-                        <a href="#">@item.Publisher.FullName</a>
-                    </p>
-                </div>
-                <div class="col-6">
-                    <p class="col-form-label">
-                        @item.Text
-                    </p>
+        string PostID = $"post{item.PostId}";
 
-                    <p>Comment</p>
+<div id="@PostID" class="border mt-5">
+    <div class="row">
+        <div class="col-3">
+            <p class="col-form-label text-center">
+                <img src="#" class="navbar-toggler-icon" />
+                <a href="#">@item.Publisher.FullName</a>
+            </p>
+        </div>
+        <div class="col-6">
+            <p class="col-form-label">
+                @item.Text
+            </p>
 
-                    @{string CommentID = $"comment{item.PostId}";}
-                    <input type="text" id="@CommentID" />
-                    <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
-                    <br />
+            <p>Comment</p>
 
-                    @if (Model.LikedPostsIds.Contains(item.PostId))
-                    {
-                        <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
-                    }
-                    else
-                    {
-                        <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-                    }
-                    @{string likesId = $"likes{item.PostId}";}
-                    <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+            @{string CommentAreaID = $"commentArea{item.PostId}";}
+            <input type="text" id="@CommentAreaID" />
+            <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
+            <br />
 
-                </div>
-
-                <div class="col-3">
-                    <p class="col-form-label text-center">
-                        @item.Date
-                    </p>
-                </div>
-            </div>
-
-            @foreach (var comment in item.Comment)
+            @if (Model.LikedPostsIds.Contains(item.PostId))
             {
-                <div class="border mt-2">
-                    <div class="row">
-                        <div class="col-4"></div>
-                        <div class="col-4">
-                            <p class="col-form-label">
-                                <img src="#" class="navbar-toggler-icon" />
-                                <a href="#">@comment.User.FullName</a>
-                            </p>
-                            <p class="col-form-label">@comment.Text</p>
-                        </div>
-                        <div class="col-4">@comment.Time</div>
-                    </div>
-                </div>
+                <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
             }
+            else
+            {
+                <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+            }
+            @{string likesId = $"likes{item.PostId}";}
+            <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
 
         </div>
+
+        <div class="col-3">
+            <p class="col-form-label text-center">
+                @item.Date
+            </p>
+        </div>
+    </div>
+
+    @foreach (var comment in item.Comment)
+    {
+        string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
+        <div id="" class="border mt-2">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <p class="col-form-label">
+                        <img src="#" class="navbar-toggler-icon" />
+                        <a href="#">@comment.User.FullName</a>
+                    </p>
+                    <p class="col-form-label">@comment.Text</p>
+                </div>
+                <div class="col-4">@comment.Time</div>
+            </div>
+        </div>
+    }
+
+</div>
     }
 
 
@@ -119,7 +122,7 @@
 <script type="text/javascript">
 
     function addComment(postId) {
-        var id = '#comment' + postId;
+        var id = '#commentArea' + postId;
         var comment = document.querySelector(id).value;
 
         commentObj = {
@@ -130,23 +133,36 @@
         $.ajax({
             type: "POST",
             url: "Posts/AddComment/",
-            data: JSON.stringify(commentObj),  
-            dataType: "json",  
+            data: JSON.stringify(commentObj),
+            dataType: "json",
             contentType: "application/json; charset=utf-8",
 
             success: function (response) {
-                var commentStr = JSON.stringify(response);
 
                 var respPostId = Object.values(response)[0];
                 var respUserId = Object.values(response)[1];
-                var respDate = Object.values(response)[2];
-                var respTesxt = Object.values(response)[6];
+                var respUserName = Object.values(response)[2];
+                var respDate = Object.values(response)[3];
+                var respText = Object.values(response)[4];
+                var respPhotoURL = Object.values(response)[5];
 
-                },
-                error: function () {
-                    alert("Error submiting comment");
-                }
-            });
+
+                var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
+                newComment += '<div class="col-4"></div> <div class="col-4"><p class="col-form-label">';
+                newComment += '<img src="' + respPhotoURL + '" class="navbar-toggler-icon">';
+                newComment += '<a href="#">' + respUserName + '</a>';
+                newComment += '</p><p class="col-form-label">' + respText + '</p>';
+                newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
+
+                var targetPostId = "#post" + postId;
+                var targetPost = document.querySelector(targetPostId);
+                targetPost.innerHTML += newComment;
+
+            },
+            error: function (response) {
+                alert("Error submiting comment");
+            }
+        });
     }
 
     $(document).ready(function () {
@@ -159,16 +175,16 @@
     function LikesModal(id) {
 
         $.ajax({
-                type: "GET",
-                url: "Posts/LikesModal/" + id,
+            type: "GET",
+            url: "Posts/LikesModal/" + id,
             success: function (response) {
-                    $("#LikesDiv").html(response);
-                    $("#LikesPopupContainer").modal("toggle");
-                },
-                error: function () {
-                    alert("Error retreiving Users");
-                }
-            });
+                $("#LikesDiv").html(response);
+                $("#LikesPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
     };
 
 
@@ -222,18 +238,4 @@
 
 
 
-</script> 
-
-@*<div class="border mt-2">
-                    <div class="row">
-                        <div class="col-4"></div>
-                        <div class="col-4">
-                            <p class="col-form-label">
-                                <img src="#" class="navbar-toggler-icon">
-                                <a href="#">Ahmad Wael</a>
-                            </p>
-                            <p class="col-form-label">COMMENTTTT</p>
-                        </div>
-                        <div class="col-4">3/17/2020 11:50:30 PM</div>
-                    </div>
-                </div>*@
+</script>

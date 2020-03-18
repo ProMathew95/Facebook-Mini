@@ -101,11 +101,16 @@ namespace Facebook_project.Repositories
             return _context.Users.Where(u => LikersIds.Contains(u.Id)).ToList();
         }
 
-        
         public void AddComment(Comment comment)
         {
             _context.Comments.Add(comment);
             _context.SaveChanges();
+        }
+
+        public Comment GetComment(string userID, int postID, DateTime time)
+        {
+            return _context.Comments.Include(c => c.User).
+                Where(c => c.UserID == userID && c.PostID == postID && c.Time == time).FirstOrDefault();
         }
     }
 }
