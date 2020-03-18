@@ -210,7 +210,7 @@ namespace Facebook_project.Controllers
                 {
                     PostId = respComment.PostID,
                     UserId = respComment.UserID,
-                    UserName = respComment.User.UserName,
+                    UserName = respComment.User.FullName,
                     Time = respComment.Time,
                     Text = respComment.Text,
                     UserPicURL = respComment.User.PhotoURL
