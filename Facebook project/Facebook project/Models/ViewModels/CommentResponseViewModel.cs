@@ -12,6 +12,7 @@ namespace Facebook_project.Models.ViewModels
         public string UserName { get; set; }
         public DateTime Time { get; set; }
         public string Text { get; set; }
+        public string CommentPicURL { get; set; }
         public string UserPicURL { get; set; }
     }
 }

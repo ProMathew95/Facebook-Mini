@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Facebook_project.Repositories;
 using Facebook_project.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Facebook_project.Controllers
 {
@@ -63,10 +64,27 @@ namespace Facebook_project.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ PostViewModel model)
+        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ IFormFile file, PostViewModel model)
         {
             if (ModelState.IsValid)
             {
+                if (file != null)
+                {
+                    string pic = Path.GetFileName(file.FileName);
+                    byte[] array;
+
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        array = ms.GetBuffer();
+                        var picName = $"{Guid.NewGuid()}.jpg";
+                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics//",$"{picName}");
+                        System.IO.File.WriteAllBytes(str, array);
+                        model.Post.PictureURL = picName;
+                    }
+                }
+
                 _context.CreatePost(model.Post);
                 return RedirectToAction(nameof(Index),"Home");
             }
@@ -186,36 +204,111 @@ namespace Facebook_project.Controllers
             return PartialView("_Likes",Users);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddComment([FromBody]CommentViewModel commentVM)
+        //{
+        //    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+        //    if (claim != null)
+        //    {
+        //        var userId = claim.Value;
+        //        Comment comment = new Comment()
+        //        {
+        //            PostID = commentVM.PostId,
+        //            Text = commentVM.Comment,
+        //            Time = DateTime.Now,
+        //            UserID = userId,
+        //            isRemoved = false
+        //        };
+        //        _context.AddComment(comment);
+        //        var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
+
+        //        CommentResponseViewModel response = new CommentResponseViewModel()
+        //        {
+        //            PostId = respComment.PostID,
+        //            UserId = respComment.UserID,
+        //            UserName = respComment.User.FullName,
+        //            Time = respComment.Time,
+        //            Text = respComment.Text,
+        //            UserPicURL = respComment.User.PhotoURL
+        //        };
+        //        return Json(response);
+        //    }
+
+        //    return Json("error");
+        //}
+
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult AddComment([FromBody]CommentViewModel commentVM)
+        public IActionResult AddComment(IFormFile file)
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (claim != null)
             {
                 var userId = claim.Value;
-                Comment comment = new Comment()
-                {
-                    PostID = commentVM.PostId,
-                    Text = commentVM.Comment,
-                    Time = DateTime.Now,
-                    UserID = userId,
-                    isRemoved = false
-                };
-                _context.AddComment(comment);
-                var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
+                var picName = "";
 
-                CommentResponseViewModel response = new CommentResponseViewModel()
+                /////checking image
+                if (HttpContext.Request.Form.Files.Any())
                 {
-                    PostId = respComment.PostID,
-                    UserId = respComment.UserID,
-                    UserName = respComment.User.FullName,
-                    Time = respComment.Time,
-                    Text = respComment.Text,
-                    UserPicURL = respComment.User.PhotoURL
-                };
-                return Json(response);
+                    var img = HttpContext.Request.Form.Files[0];
+                    string pic = Path.GetFileName(img.FileName);
+                    byte[] array;
+
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        img.CopyTo(ms);
+                        array = ms.GetBuffer();
+                        picName = $"{Guid.NewGuid()}.jpg";
+                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//CommentsPics", picName);
+                        System.IO.File.WriteAllBytes(str, array);
+                    }
+                }
+                /////////////////////
+
+                if (HttpContext.Request.Form.Keys.Any())
+                {
+                    Microsoft.Extensions.Primitives.StringValues cmnt = "";
+                    Microsoft.Extensions.Primitives.StringValues PID = "";
+                    HttpContext.Request.Form.TryGetValue("comment", out cmnt);
+                    HttpContext.Request.Form.TryGetValue("PostId", out PID);
+
+                    string PostId = PID.ToString();
+                    string Comment = cmnt.ToString();
+
+                    Comment comment = new Comment()
+                    {
+                        PostID = int.Parse(PostId),
+                        Text = Comment,
+                        Time = DateTime.Now,
+                        UserID = userId,
+                        isRemoved = false
+                        
+                    };
+                    if (picName != "")
+                        comment.PictureURL = picName;
+
+
+                    _context.AddComment(comment);
+
+                    var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
+
+                    CommentResponseViewModel response = new CommentResponseViewModel()
+                    {
+                        PostId = respComment.PostID,
+                        UserId = respComment.UserID,
+                        UserName = respComment.User.FullName,
+                        Time = respComment.Time,
+                        Text = respComment.Text,
+                        CommentPicURL = picName,
+                        UserPicURL = respComment.User.PhotoURL
+                    };
+                    return Json(response);
+
+                }
             }
 
             return Json("error");

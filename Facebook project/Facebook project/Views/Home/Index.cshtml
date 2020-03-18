@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using System.Security.Claims;
+@using System.Drawing;
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
@@ -47,65 +48,90 @@
     {
         string PostID = $"post{item.PostId}";
 
-<div id="@PostID" class="border mt-5">
-    <div class="row">
-        <div class="col-3">
-            <p class="col-form-label text-center">
-                <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                <a href="#">@item.Publisher.FullName</a>
-            </p>
-        </div>
-        <div class="col-6">
-            <p class="col-form-label">
-                @item.Text
-            </p>
-
-            <p>Comment</p>
-
-            @{string CommentAreaID = $"commentArea{item.PostId}";}
-            <input type="text" id="@CommentAreaID" />
-            <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
-            <br />
-
-            @if (Model.LikedPostsIds.Contains(item.PostId))
-            {
-                <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
-            }
-            else
-            {
-                <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-            }
-            @{string likesId = $"likes{item.PostId}";}
-            <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
-
-        </div>
-
-        <div class="col-3">
-            <p class="col-form-label text-center">
-                @item.Date
-            </p>
-        </div>
-    </div>
-
-    @foreach (var comment in item.Comment)
-    {
-        string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
-        <div id="" class="border mt-2">
+        <div id="@PostID" class="border mt-5">
             <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4">
-                    <p class="col-form-label">
+                <div class="col-3">
+                    <p class="col-form-label text-center">
                         <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                        <a href="#">@comment.User.FullName</a>
+                        <a href="#">@item.Publisher.FullName</a>
                     </p>
-                    <p class="col-form-label">@comment.Text</p>
                 </div>
-                <div class="col-4">@comment.Time</div>
-            </div>
-        </div>
-    }
+                <div class="col-6">
+                    <p class="col-form-label">
+                        @item.Text
+                    </p>
 
-</div>
+                    <div class="col-12">
+                        @{
+                            if (@item.PictureURL != null)
+                            {
+                                <img class="img-fluid" src="~/PostsPics/@item.PictureURL" />
+                            }
+                        }
+                    </div>
+
+                    <p>Comment</p>
+
+                    <form method="post" enctype="multipart/form-data">
+                        @{string CommentAreaID = $"commentArea{item.PostId}";}
+                        <input type="text" id="@CommentAreaID" />
+                        <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
+                        @{string CommentImgID = $"commentImg{item.PostId}";}
+                        <input type="file" name="file" id="@CommentImgID" />
+                    </form>
+
+
+                        <br />
+
+                        @if (Model.LikedPostsIds.Contains(item.PostId))
+                        {
+                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
+                        }
+                        else
+                        {
+                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+                        }
+                        @{string likesId = $"likes{item.PostId}";}
+                        <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+
+                </div>
+
+                <div class="col-3">
+                    <p class="col-form-label text-center">
+                        @item.Date
+                    </p>
+                </div>
+            </div>
+
+            @foreach (var comment in item.Comment)
+            {
+                string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
+                <div id="" class="border mt-2">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <p class="col-form-label">
+                                <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                                <a href="#">@comment.User.FullName</a>
+                            </p>
+                            <p class="col-form-label">@comment.Text</p>
+
+                            <div class="col-12">
+                                @{
+                                    if (comment.PictureURL != null)
+                                    {
+                                        <img class="img-fluid" src="~/CommentsPics/@comment.PictureURL" />
+                                    }
+                                }
+                            </div>
+
+                        </div>
+                        <div class="col-4">@comment.Time</div>
+                    </div>
+                </div>
+            }
+
+        </div>
     }
 
 
@@ -121,30 +147,44 @@
 
 <script type="text/javascript">
 
+
+
     function addComment(postId) {
         var id = '#commentArea' + postId;
         var comment = document.querySelector(id).value;
 
-        commentObj = {
-            "Comment": comment,
-            "PostId": postId
-        };
+        var CommentImgId = '#commentImg' + postId;
+
+        var data = new FormData();
+        var files = $(CommentImgId).get(0).files;
+
+        if (files.length > 0) {
+            data.append("CommentImg", files[0]);
+        }
+
+        data.append("Comment", comment);
+        data.append("PostId", postId);
+
+        //commentObj = {
+        //    "Comment": comment,
+        //    "PostId": postId
+        //};
 
         $.ajax({
             type: "POST",
-            url: "Posts/AddComment/",
-            data: JSON.stringify(commentObj),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
+            url: "Posts/AddComment",
+            data: data,
+            processData: false,
+            contentType: false,
 
             success: function (response) {
-
                 var respPostId = Object.values(response)[0];
                 var respUserId = Object.values(response)[1];
                 var respUserName = Object.values(response)[2];
                 var respDate = Object.values(response)[3];
                 var respText = Object.values(response)[4];
-                var respPhotoURL = Object.values(response)[5];
+                var respImg = Object.values(response)[5];
+                var respPhotoURL = Object.values(response)[6];
 
 
                 var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
@@ -152,6 +192,9 @@
                 newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
                 newComment += '<a href="#">' + respUserName + '</a>';
                 newComment += '</p><p class="col-form-label">' + respText + '</p>';
+                if (respImg != null && respImg != "") {
+                    newComment += '<div class="col-12"><img class="img-fluid" src="/CommentsPics/' + respImg + '" /> </div>';
+                }          
                 newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
 
                 var targetPostId = "#post" + postId;
@@ -166,6 +209,56 @@
 
         document.querySelector(id).value = "";
     }
+
+
+
+
+
+    //function addComment(postId) {
+    //    var id = '#commentArea' + postId;
+    //    var comment = document.querySelector(id).value;
+
+    //    commentObj = {
+    //        "Comment": comment,
+    //        "PostId": postId
+    //    };
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "Posts/AddComment/",
+    //        data: JSON.stringify(commentObj),
+    //        dataType: "json",
+    //        contentType: "application/json; charset=utf-8",
+
+    //        success: function (response) {
+
+    //            var respPostId = Object.values(response)[0];
+    //            var respUserId = Object.values(response)[1];
+    //            var respUserName = Object.values(response)[2];
+    //            var respDate = Object.values(response)[3];
+    //            var respText = Object.values(response)[4];
+    //            var respPhotoURL = Object.values(response)[5];
+
+
+    //            var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
+    //            newComment += '<div class="col-4"></div> <div class="col-4"><p class="col-form-label">';
+    //            newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
+    //            newComment += '<a href="#">' + respUserName + '</a>';
+    //            newComment += '</p><p class="col-form-label">' + respText + '</p>';
+    //            newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
+
+    //            var targetPostId = "#post" + postId;
+    //            var targetPost = document.querySelector(targetPostId);
+    //            targetPost.innerHTML += newComment;
+
+    //        },
+    //        error: function (response) {
+    //            alert("Error submiting comment");
+    //        }
+    //    });
+
+    //    document.querySelector(id).value = "";
+    //}
 
     $(document).ready(function () {
         $("#CreatePost").click(function () {
