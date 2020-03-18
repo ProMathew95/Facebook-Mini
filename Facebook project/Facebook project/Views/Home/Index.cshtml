@@ -51,7 +51,7 @@
     <div class="row">
         <div class="col-3">
             <p class="col-form-label text-center">
-                <img src="#" class="navbar-toggler-icon" />
+                <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
                 <a href="#">@item.Publisher.FullName</a>
             </p>
         </div>
@@ -95,7 +95,7 @@
                 <div class="col-4"></div>
                 <div class="col-4">
                     <p class="col-form-label">
-                        <img src="#" class="navbar-toggler-icon" />
+                        <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
                         <a href="#">@comment.User.FullName</a>
                     </p>
                     <p class="col-form-label">@comment.Text</p>
@@ -149,7 +149,7 @@
 
                 var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
                 newComment += '<div class="col-4"></div> <div class="col-4"><p class="col-form-label">';
-                newComment += '<img src="' + respPhotoURL + '" class="navbar-toggler-icon">';
+                newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
                 newComment += '<a href="#">' + respUserName + '</a>';
                 newComment += '</p><p class="col-form-label">' + respText + '</p>';
                 newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
