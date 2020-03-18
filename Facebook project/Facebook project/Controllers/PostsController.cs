@@ -205,9 +205,10 @@ namespace Facebook_project.Controllers
                 };
 
                 _context.AddComment(comment);
+                return Json(comment);
             }
 
-            return Json("Success");
+            return Json("error");
         }
     }
 }

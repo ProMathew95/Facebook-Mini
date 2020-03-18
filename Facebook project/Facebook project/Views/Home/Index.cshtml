@@ -135,7 +135,18 @@
             contentType: "application/json; charset=utf-8",
 
             success: function (response) {
-                    
+                var commentStr = JSON.stringify(response);
+
+                var respPostId = Object.values(response)[0];
+                var respUserId = Object.values(response)[1];
+                var respDate = Object.values(response)[2];
+                var respTesxt = Object.values(response)[6];
+
+
+                for (var i = 0; i < 10; i++)
+        {
+                    alert(Object.values(response)[i] + " " + i);
+        }
                 },
                 error: function () {
                     alert("Error submiting comment");
@@ -217,3 +228,17 @@
 
 
 </script> 
+
+@*<div class="border mt-2">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <p class="col-form-label">
+                                <img src="#" class="navbar-toggler-icon">
+                                <a href="#">Ahmad Wael</a>
+                            </p>
+                            <p class="col-form-label">COMMENTTTT</p>
+                        </div>
+                        <div class="col-4">3/17/2020 11:50:30 PM</div>
+                    </div>
+                </div>*@
