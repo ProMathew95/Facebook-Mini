@@ -20,22 +20,20 @@
                     <div class="row">
                         <div class="col-md-4">
                             
-                            <form asp-controller="Posts" asp-action="Create" FormMethod.Post, new { enctype = "multipart/form-data" }>
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="text-danger"></div>
 
-
-                                <input type="hidden" asp-for="Post.PublisherId" value="@userId" />
                                 <div class="form-group">
                                     <label class="control-label">New Post</label>
-                                    <textarea asp-for="Post.Text"></textarea>
+                                    <textarea id="postText"></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="file" name="file" id="file" style="width: 100%;" />
+                                    <input type="file" name="file" id="postImg" style="width: 100%;" />
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
                                 </div>
                             </form>
                         </div>

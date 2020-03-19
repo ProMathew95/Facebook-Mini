@@ -34,7 +34,13 @@ namespace Facebook_project.Repositories
 			var post = _context.Posts.Find(id);
 			return post;
 		}
-		public void UpdatePost(int id, Post post)
+
+        public Post GetPostByUserAndDate(string userId,DateTime date)
+        {
+            return _context.Posts.Include(p => p.Publisher).Where(p => p.PublisherId == userId && p.Date == date).FirstOrDefault();
+        }
+
+        public void UpdatePost(int id, Post post)
 		{
 			Post p = _context.Posts.FirstOrDefault(po => po.PostId == id);
 			if(p!=null)

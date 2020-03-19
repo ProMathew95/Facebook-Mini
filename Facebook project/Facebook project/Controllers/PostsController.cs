@@ -61,35 +61,105 @@ namespace Facebook_project.Controllers
         // POST: Posts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[Authorize]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ IFormFile file, PostViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (file != null)
+        //        {
+        //            string pic = Path.GetFileName(file.FileName);
+        //            byte[] array;
+
+
+        //            using (MemoryStream ms = new MemoryStream())
+        //            {
+        //                file.CopyTo(ms);
+        //                array = ms.GetBuffer();
+        //                var picName = $"{Guid.NewGuid()}.jpg";
+        //                var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics//",$"{picName}");
+        //                System.IO.File.WriteAllBytes(str, array);
+        //                model.Post.PictureURL = picName;
+        //            }
+        //        }
+
+        //        _context.CreatePost(model.Post);
+        //        return RedirectToAction(nameof(Index),"Home");
+        //    }
+
         [HttpPost]
         [Authorize]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ IFormFile file, PostViewModel model)
+        //[ValidateAntiForgeryToken]
+        public IActionResult AddPost(IFormFile file)
         {
-            if (ModelState.IsValid)
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
             {
-                if (file != null)
+                var userId = claim.Value;
+                var picName = "";
+
+                /////checking image
+                if (HttpContext.Request.Form.Files.Any())
                 {
-                    string pic = Path.GetFileName(file.FileName);
+                    var img = HttpContext.Request.Form.Files[0];
+                    string pic = Path.GetFileName(img.FileName);
                     byte[] array;
 
 
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        file.CopyTo(ms);
+                        img.CopyTo(ms);
                         array = ms.GetBuffer();
-                        var picName = $"{Guid.NewGuid()}.jpg";
-                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics//",$"{picName}");
+                        picName = $"{Guid.NewGuid()}.jpg";
+                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics", picName);
                         System.IO.File.WriteAllBytes(str, array);
-                        model.Post.PictureURL = picName;
                     }
                 }
+                /////////////////////
 
-                _context.CreatePost(model.Post);
-                return RedirectToAction(nameof(Index),"Home");
+                if (HttpContext.Request.Form.Keys.Any())
+                {
+                    Microsoft.Extensions.Primitives.StringValues post = "";
+                    Microsoft.Extensions.Primitives.StringValues PID = "";
+                    HttpContext.Request.Form.TryGetValue("postText", out post);
+
+                    string PostText = post.ToString();
+
+                    Post newpPost = new Post()
+                    {
+                        Date = DateTime.Now,
+                        isDeleted = false,
+                        Text = PostText,
+                        PublisherId = userId
+                    };
+
+                    if (picName != "")
+                        newpPost.PictureURL = picName;
+
+
+                    _context.CreatePost(newpPost);
+
+                    var respPost = _context.GetPostByUserAndDate(newpPost.PublisherId, newpPost.Date);
+
+                    ResponseViewModel response = new ResponseViewModel()
+                    {
+                        PostId = respPost.PostId,
+                        UserId = respPost.PublisherId,
+                        UserName = respPost.Publisher.FullName,
+                        Time = respPost.Date,
+                        Text = respPost.Text,
+                        PicURL = picName,
+                        UserPicURL = respPost.Publisher.PhotoURL
+                    };
+                    return Json(response);
+
+                }
             }
-            //ViewData["PublisherId"] = new SelectList(_context.AppUsers, "Id", "Id", post.PublisherId);
-            return View(model.Post);
+
+            return Json("error");
         }
 
         // GET: Posts/Edit/5
@@ -296,18 +366,17 @@ namespace Facebook_project.Controllers
 
                     var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
 
-                    CommentResponseViewModel response = new CommentResponseViewModel()
+                    ResponseViewModel response = new ResponseViewModel()
                     {
                         PostId = respComment.PostID,
                         UserId = respComment.UserID,
                         UserName = respComment.User.FullName,
                         Time = respComment.Time,
                         Text = respComment.Text,
-                        CommentPicURL = picName,
+                        PicURL = picName,
                         UserPicURL = respComment.User.PhotoURL
                     };
                     return Json(response);
-
                 }
             }
 
