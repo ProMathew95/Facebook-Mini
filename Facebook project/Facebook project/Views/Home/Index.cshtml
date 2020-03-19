@@ -18,7 +18,26 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <i class="btn fas fa-user-friends" onclick="FriendRequestsModal()"></i>
+    <br />
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <i class="btn fas fa-user-friends" onclick="FriendRequestsModal()"></i>
+            </div>
+            <div class="col-8">
+                <div class="dropdown">
+                    <input type="text" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" onfocusout="hideResults()">
+                    <div id="myDropdown" class="dropdown-content show">
+                        @*search Results Here*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <p>
         @*<button id="CreatePost" type="button" class="btn btn-success"
@@ -46,99 +65,99 @@
     <div id="LikesDiv"></div>
     <div id="FriendRequestsDiv"></div>
 
-        <div id="postsContainer" class="container">
-            @foreach (var item in Model.IncommingPosts)
-            {
-                string PostID = $"post{item.PostId}";
+    <div id="postsContainer" class="container">
+        @foreach (var item in Model.IncommingPosts)
+        {
+            string PostID = $"post{item.PostId}";
 
-                <div id="@PostID" class="border mt-5">
-                    <div class="row">
-                        <div class="col-3">
-                            <p class="col-form-label text-center">
-                                <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                                <a href="#">@item.Publisher.FullName</a>
-                            </p>
-                        </div>
-                        <div class="col-6">
-                            <p class="col-form-label">
-                                @item.Text
-                            </p>
-
-
-                            @{
-                                if (@item.PictureURL != null)
-                                {
-                                    <div class="col-12">
-                                        <img class="img-fluid" src="~/PostsPics/@item.PictureURL" />
-                                    </div>
-
-                                }
-                            }
-
-                            <p>Comment</p>
-
-                            <form method="post" enctype="multipart/form-data">
-                                @{string CommentAreaID = $"commentArea{item.PostId}";}
-                                <input type="text" id="@CommentAreaID" />
-                                <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
-                                @{string CommentImgID = $"commentImg{item.PostId}";}
-                                <input type="file" name="file" id="@CommentImgID" />
-                            </form>
+            <div id="@PostID" class="border mt-5">
+                <div class="row">
+                    <div class="col-3">
+                        <p class="col-form-label text-center">
+                            <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                            <a href="#">@item.Publisher.FullName</a>
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <p class="col-form-label">
+                            @item.Text
+                        </p>
 
 
-                            <br />
-
-                            @if (Model.LikedPostsIds.Contains(item.PostId))
+                        @{
+                            if (@item.PictureURL != null)
                             {
-                                <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
-                            }
-                            else
-                            {
-                                <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-                            }
-                            @{string likesId = $"likes{item.PostId}";}
-                            <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+                                <div class="col-12">
+                                    <img class="img-fluid" src="~/PostsPics/@item.PictureURL" />
+                                </div>
 
-                        </div>
+                            }
+                        }
 
-                        <div class="col-3">
-                            <p class="col-form-label text-center">
-                                @item.Date
-                            </p>
-                        </div>
+                        <p>Comment</p>
+
+                        <form method="post" enctype="multipart/form-data">
+                            @{string CommentAreaID = $"commentArea{item.PostId}";}
+                            <input type="text" id="@CommentAreaID" />
+                            <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
+                            @{string CommentImgID = $"commentImg{item.PostId}";}
+                            <input type="file" name="file" id="@CommentImgID" />
+                        </form>
+
+
+                        <br />
+
+                        @if (Model.LikedPostsIds.Contains(item.PostId))
+                        {
+                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
+                        }
+                        else
+                        {
+                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+                        }
+                        @{string likesId = $"likes{item.PostId}";}
+                        <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+
                     </div>
 
-                    @foreach (var comment in item.Comment)
-                    {
-                        string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
-                        <div id="" class="border mt-2">
-                            <div class="row">
-                                <div class="col-4"></div>
-                                <div class="col-4">
-                                    <p class="col-form-label">
-                                        <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                                        <a href="#">@comment.User.FullName</a>
-                                    </p>
-                                    <p class="col-form-label">@comment.Text</p>
-
-                                    <div class="col-12">
-                                        @{
-                                            if (comment.PictureURL != null)
-                                            {
-                                                <img class="img-fluid" src="~/CommentsPics/@comment.PictureURL" />
-                                            }
-                                        }
-                                    </div>
-
-                                </div>
-                                <div class="col-4">@comment.Time</div>
-                            </div>
-                        </div>
-                    }
-
+                    <div class="col-3">
+                        <p class="col-form-label text-center">
+                            @item.Date
+                        </p>
+                    </div>
                 </div>
-            }
-        </div>
+
+                @foreach (var comment in item.Comment)
+                {
+                    string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
+                    <div id="" class="border mt-2">
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-4">
+                                <p class="col-form-label">
+                                    <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                                    <a href="#">@comment.User.FullName</a>
+                                </p>
+                                <p class="col-form-label">@comment.Text</p>
+
+                                <div class="col-12">
+                                    @{
+                                        if (comment.PictureURL != null)
+                                        {
+                                            <img class="img-fluid" src="~/CommentsPics/@comment.PictureURL" />
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+                            <div class="col-4">@comment.Time</div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        }
+    </div>
 
 
 
@@ -261,11 +280,11 @@
                 newPost += '</div><div class="col-3"><p class="col-form-label text-center">';
                 newPost += respDate + '</p></div></div></div>';
 
-                document.querySelector("#postsContainer").insertAdjacentHTML( 'afterbegin', newPost );
+                document.querySelector("#postsContainer").insertAdjacentHTML('afterbegin', newPost);
 
             },
             error: function (response) {
-                alert("Error submiting comment");
+                alert("Error submiting Post");
             }
         });
 
@@ -380,111 +399,59 @@
         }
     }
 
-</script>
+    function Search() {
+        var searchKey = $('#myInput').val();
 
-
-
-@*<div id="post6" class="border mt-5">
-        <div class="row">
-            <div class="col-3">
-                <p class="col-form-label text-center">
-                    <img src="/ProfilPics/default.jpg" class="navbar-toggler-icon">
-                    <a href="#">Ahmad Wael</a>
-                </p>
-            </div>
-            <div class="col-6">
-                <p class="col-form-label">
-                    ya rab y3ml create mazbot
-                </p>
-
-                <div class="col-12">
-                </div>
-
-                <p>Comment</p>
-
-                <form method="post" enctype="multipart/form-data">
-                    <input type="text" id="commentArea6">
-                    <input type="button" value="Submit" onclick="addComment(6)">
-                    <input type="file" name="file" id="commentImg6">
-                    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KtmRfjABz5Ap37hE0EKop9COjPoslk_2M6IDRfWvSEreXZERCVAENzgUBOLwcWvL6aRX3fruZLAl0aBIXDR3M61Es-4goyq_GgAEmq9nrCxZMvuxOW_8cL36OOCjB29z4IxbtgrakvqoTSp1pyGNA26DrvMooUc_D0geN1VMWPUU8NKQaVPu6FCpUPtolWmYQ">
-                </form>
-
-
-                <br>
-
-                <i class="btn fa fa-thumbs-up" onclick="Like(this,6)" aria-hidden="true"></i>
-                <a id="likes6" class="btn likes" onclick="LikesModal(6)">0</a>
-
-            </div>
-
-            <div class="col-3">
-                <p class="col-form-label text-center">
-                    3/16/2020 3:48:22 PM
-                </p>
-            </div>
-        </div>
-
-
-    </div>*@
-
-
-
-
-
-
-
-
-
-@*function addComment(postId) {
-            var id = '#commentArea' + postId;
-            var comment = document.querySelector(id).value;
-
-            commentObj = {
-                "Comment": comment,
-                "PostId": postId
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "Posts/AddComment/",
-                data: JSON.stringify(commentObj),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-
+        $.ajax({
+                type: "GET",
+                url: "Friends/Search/" + searchKey,
                 success: function (response) {
+                    console.log(response);
 
-                    var respPostId = Object.values(response)[0];
-                    var respUserId = Object.values(response)[1];
-                    var respUserName = Object.values(response)[2];
-                    var respDate = Object.values(response)[3];
-                    var respText = Object.values(response)[4];
-                    var respPhotoURL = Object.values(response)[5];
+                    var tagsStr = "";
+                    for(var i = 0; i < response.length; i++) {
+                        var obj = response[i];
+
+                        
+                        if (obj.hasOwnProperty("fullName") &&
+                            obj.hasOwnProperty("id") &&
+                            obj.hasOwnProperty("photoURL")) {
+
+                            var fullName = obj['fullName'];
+                            var userId = obj['id'];
+                            var photoUrl = obj['photoURL'];
+
+                            tagsStr += '<div class="col-8"><img class="navbar-toggler-icon" src="/ProfilPics/' + photoUrl + '" />';
+                            tagsStr += '<a class="ml-2 d-inline" id="' + userId + '" href = "#" > ' + fullName + '</a></div >';
+
+                        }
+                    }
+
+                    document.querySelector("#myDropdown").innerHTML = tagsStr;
 
 
-                    var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2">
-        <div class="row">
-            ';
-            newComment += '<div class="col-4"></div> <div class="col-4">
-                <p class="col-form-label">
-                    ';
-                    newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
-                    newComment += '<a href="#">' + respUserName + '</a>';
-                    newComment += '
-                </p><p class="col-form-label">' + respText + '</p>';
-                newComment += '
-            </div><div class="col-4">' + respDate + '</div>
-        </div>
-    </div>'
 
-                    var targetPostId = "#post" + postId;
-                    var targetPost = document.querySelector(targetPostId);
-                    targetPost.innerHTML += newComment;
+                    
 
                 },
-                error: function (response) {
-                    alert("Error submiting comment");
+                error: function () {
+                    alert("Error");
                 }
             });
+    }
 
-            document.querySelector(id).value = "";
-        }*@
+    function showResults() {
+        var results = document.querySelector("#myDropdown");
+        if (!results.classList.contains("show")) {
+            results.classList.add("show");
+        }
+    }
+
+    function hideResults() {
+        var results = document.querySelector("#myDropdown");
+        if (results.classList.contains("show")) {
+            results.classList.remove("show");
+        }
+    }
+
+</script>

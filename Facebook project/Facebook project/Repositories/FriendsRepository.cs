@@ -23,12 +23,17 @@ namespace Facebook_project.Repositories
                 && f.Status == Status.RequestPending).Select(f => f.SenderUser).ToList();
         }
 
-        internal void changeRequestStatus(string senderId, string userId, Status status)
+        public void changeRequestStatus(string senderId, string userId, Status status)
         {
             var result = _context.Friends.Single(f => f.senderUserID == senderId && f.receiverUserID == userId);
             if (result != null)
                 result.Status = status;
             _context.SaveChanges();
+        }
+
+        public List<AppUser> Search(string searchKey)
+        {
+            return _context.AppUsers.Where(u => u.FullName.Contains(searchKey)).ToList();
         }
     }
 }
