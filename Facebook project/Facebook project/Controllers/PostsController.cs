@@ -149,7 +149,7 @@ namespace Facebook_project.Controllers
                         PostId = respPost.PostId,
                         UserId = respPost.PublisherId,
                         UserName = respPost.Publisher.FullName,
-                        Time = respPost.Date,
+                        Time = respPost.Date.ToString(),
                         Text = respPost.Text,
                         PicURL = picName,
                         UserPicURL = respPost.Publisher.PhotoURL
@@ -371,7 +371,7 @@ namespace Facebook_project.Controllers
                         PostId = respComment.PostID,
                         UserId = respComment.UserID,
                         UserName = respComment.User.FullName,
-                        Time = respComment.Time,
+                        Time = respComment.Time.ToString(),
                         Text = respComment.Text,
                         PicURL = picName,
                         UserPicURL = respComment.User.PhotoURL

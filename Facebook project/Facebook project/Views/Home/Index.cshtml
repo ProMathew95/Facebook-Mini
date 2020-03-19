@@ -459,7 +459,6 @@
                 url: "Posts/DeletePost/" + postId,
             success: function () {
                 var postFullId = '#post' + postId;
-                alert(postFullId)
                 $(postFullId).remove();
                 },
                 error: function () {
