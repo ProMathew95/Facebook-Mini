@@ -33,6 +33,100 @@ namespace Facebook_project.Controllers
             var users = userManager.Users;
             return View(users);
         }
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id= {id} cannot be found";
+                //return View("NotFound");
+            }
+            var UserRoles = await userManager.GetRolesAsync(user);
+            var model = new EditUserViewModel
+            {
+                id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles=UserRoles
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id= {model.id} cannot be found";
+                //return View("NotFound");
+            }
+            else
+            {
+                user.Email = model.Email;
+                user.UserName = model.UserName;
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("listUsers");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
+      
+        public async Task<IActionResult> BlockUser(string id)
+        {
+            var users = userManager.Users;
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id= {id} cannot be found";
+                //return View("NotFound");
+            }
+            else
+            {
+                user.isBlocked = true;
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("listUsers");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+                return View(users);
+        }
+      
+        public async Task<IActionResult> UnBlockUser(string id)
+        {
+            var users = userManager.Users;
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id= {id} cannot be found";
+                //return View("NotFound");
+            }
+            else
+            {
+                user.isBlocked = false;
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("listUsers");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return RedirectToAction("ListUsers");
+        }
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
         {
@@ -140,6 +234,61 @@ namespace Facebook_project.Controllers
             }
             return View(model);
         } 
+        [HttpGet]
+        public async Task<IActionResult> ManageUserRoles(string id)
+        {
+            ViewBag.userId = id;
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} Cannot Be found";
+                //return View("NotFound");
+            }
+            var model = new List<UserRolesViewModel>();
+            foreach (var role in roleManager.Roles)
+            {
+                var instance = new UserRolesViewModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+                if(await userManager.IsInRoleAsync(user, role.Name))
+                {
+                    instance.IsSelected = true;
+                }
+                else
+                {
+                    instance.IsSelected = false;
+                }
+                model.Add(instance);
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> models,string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} Cannot Be found";
+                //return View("NotFound");
+            }
+            var roles = await userManager.GetRolesAsync(user);
+            var result = await userManager.RemoveFromRolesAsync(user, roles);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove User existing Roles");
+                return View(models);
+            }
+            result = await userManager.AddToRolesAsync(user, models.Where(aa => aa.IsSelected == true).Select(y => y.RoleName));
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected Roles to user");
+                return View(models);
+            }
+            return RedirectToAction("EditUser", new { Id = id });
+        }
+
         [HttpPost]
         public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model,string roleId)
         {
