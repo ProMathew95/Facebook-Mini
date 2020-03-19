@@ -238,7 +238,7 @@ namespace Facebook_project.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            _context.DeletePosts(id);
+            _context.DeletePost(id);
             return RedirectToAction(nameof(Index));
         }
         
@@ -381,6 +381,13 @@ namespace Facebook_project.Controllers
             }
 
             return Json("error");
+        }
+
+        public IActionResult DeletePost(int Id)
+        {
+            if (_context.DeletePost(Id))
+                return Json("success");
+            return Json("error"); 
         }
     }
 }

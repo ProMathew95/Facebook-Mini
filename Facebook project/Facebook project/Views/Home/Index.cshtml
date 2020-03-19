@@ -124,6 +124,7 @@
                         <p class="col-form-label text-center">
                             @item.Date
                         </p>
+                        <i class="fas fa-trash-alt" onclick="DeletePost(@item.PostId)"></i>
                     </div>
                 </div>
 
@@ -158,9 +159,6 @@
             </div>
         }
     </div>
-
-
-
 
 }
 
@@ -452,6 +450,22 @@
         if (results.classList.contains("show")) {
             results.classList.remove("show");
         }
+    }
+
+    function DeletePost(postId) {
+
+        $.ajax({
+                type: "POST",
+                url: "Posts/DeletePost/" + postId,
+            success: function () {
+                var postFullId = '#post' + postId;
+                alert(postFullId)
+                $(postFullId).remove();
+                },
+                error: function () {
+                    alert("Error Deleting Post");
+                }
+            });
     }
 
 </script>

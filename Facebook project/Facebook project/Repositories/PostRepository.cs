@@ -58,18 +58,18 @@ namespace Facebook_project.Repositories
 
 			_context.SaveChanges();
 		}
-		public Post DeletePosts(int id)
+		public bool DeletePost(int id)
 		{
-			var posts = _context.Posts.Find(id);
-			if (posts == null)
+			var post = _context.Posts.Find(id);
+			if (post == null)
 			{
-				return posts;
+				return false;
 			}
 
-			_context.Posts.Remove(posts);
+			post.isDeleted = true;
 			_context.SaveChanges();
 
-			return posts;
+			return true;
 		}
 		public bool PostExists(int id)
 		{
