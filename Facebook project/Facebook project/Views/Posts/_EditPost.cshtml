@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@*@inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager*@
+
+@model Facebook_project.Models.Post
+@{
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
+
+    <div id="EditPostPopupContainer" class="modal fade CreateModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+
+                <h2>Create</h2>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="text-danger"></div>
+
+                                <div class="form-group">
+                                    <label class="control-label">New Post</label>
+                                    <textarea asp-for="@Model.Text" id="EditPostText"></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    @{
+                                        if (Model.PictureURL != null)
+                                        {
+                                            <img id="EditpostImg" class="img-fluid" src="~/PostsPics/@Model.PictureURL" />
+                                        }
+                                        else
+                                        {
+                                            <img id="EditpostImg" class="img-fluid" src="" />
+                                        }
+                                    }
+                                </div>
+
+                                <div id="postImgSelectorDiv" class="form-group">
+                                    <input type="file" name="file" id="postImgSelector" style="width: 100%;" onchange="readURL(this)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="button" value="Edit" class="btn btn-primary" onclick="editPost(@Model.PostId)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <i class="fas fa-backspace" onclick="ResetFile()"></i>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        @Html.ActionLink("Back to List", "Index","Home")
+                    </div>
+
+                </div>
+
+                <div class="modal-footer"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+}

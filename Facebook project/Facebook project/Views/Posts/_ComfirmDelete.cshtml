@@ -1,0 +1,35 @@
+﻿@model string
+
+    <div id="ConfirmDeletePopupContainer" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+
+                <h2>Confirm Delete ?</h2>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            @{
+                                if (Model.Contains("comment"))
+                                {
+                                    <input class="btn btn-info" type="button" name="Yes" value="Yes" onclick="DeleteComment('@Model')" />
+                                }
+                                else if (int.TryParse(Model,out _))
+                                {
+                                    <input class="btn btn-info" type="button" name="Yes" value="Yes" onclick="DeletePost(@Model)" />
+                                }
+                            }
+
+                            <input class="btn btn-danger" onclick="ToggleConfirmDeleteModal()" type="button" name="No" value="No" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer"></div>
+
+
+            </div>
+        </div>
+    </div>

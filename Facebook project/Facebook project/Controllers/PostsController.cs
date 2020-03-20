@@ -195,7 +195,7 @@ namespace Facebook_project.Controllers
             {
                 try
                 {
-                    _context.UpdatePost(id,post);
+                    //_context.UpdatePost(id,post,_);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -390,10 +390,10 @@ namespace Facebook_project.Controllers
             return Json("error"); 
         }
 
-        [HttpPost]
-        public IActionResult DeleteComment([FromBody]stringId commentId)
+        //[HttpPost]
+        public IActionResult DeleteComment(string objId)
         {
-            var arr = commentId.commentId.Split("*");
+            var arr = objId.Split("*");
             var postId = int.Parse(arr[1]);
             var publisherId = arr[2];
             var date = arr[3];
@@ -403,10 +403,84 @@ namespace Facebook_project.Controllers
             return Json("error");
         }
 
-    }
-}
+        public IActionResult ConfirmDeleteModal(string objId)
+        {
+            return PartialView("_ComfirmDelete", objId);
+        }
+        public IActionResult EditPostModal(int Id)
+        {
+            var post = _context.GetPostByID(Id);
 
-public class stringId
-{
-    public string commentId { get; set; }
+            if(post != null)
+                return PartialView("_EditPost", post);
+            return Json("error");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult EditPost(IFormFile file)
+        {
+            
+
+            if (HttpContext.Request.Form.Keys.Any())
+            {
+                if (HttpContext.Request.Form.Keys.Contains("postId"))
+                {
+
+                    Microsoft.Extensions.Primitives.StringValues postText = "";
+                    Microsoft.Extensions.Primitives.StringValues PID = "";
+                    Microsoft.Extensions.Primitives.StringValues removeImg = "";
+                    HttpContext.Request.Form.TryGetValue("postText", out postText);
+                    HttpContext.Request.Form.TryGetValue("postId", out PID);
+                    HttpContext.Request.Form.TryGetValue("removeImg", out removeImg);
+
+
+
+
+                    string PostText = postText.ToString();
+                    int PostID =int.Parse(PID);
+                    string picName = "";
+                    bool removeImage = bool.Parse(removeImg);
+
+                    /////checking image
+                    if (HttpContext.Request.Form.Files.Any())
+                    {
+                        var img = HttpContext.Request.Form.Files[0];
+                        string pic = Path.GetFileName(img.FileName);
+                        byte[] array;
+
+
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            img.CopyTo(ms);
+                            array = ms.GetBuffer();
+                            picName = $"{Guid.NewGuid()}.jpg";
+                            var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics", picName);
+                            System.IO.File.WriteAllBytes(str, array);
+                        }
+                    }
+                    /////////////////////
+
+                    var respPost = _context.UpdatePost(PostID, PostText, picName, removeImage);
+
+
+                    ResponseViewModel response = new ResponseViewModel()
+                    {
+                        PostId = respPost.PostId,
+                        UserId = respPost.PublisherId,
+                        //UserName = respPost.Publisher.FullName,
+                        Time = respPost.Date.ToString(),
+                        Text = respPost.Text,
+                        PicURL = respPost.PictureURL,
+                        //UserPicURL = respPost.Publisher.PhotoURL
+                    };
+
+                    return Json(response);
+
+                }
+            }
+
+            return Json("error");
+        }
+    }
 }

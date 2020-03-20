@@ -64,103 +64,124 @@
 
     <div id="LikesDiv"></div>
     <div id="FriendRequestsDiv"></div>
+    <div id="ConfirmDeleteDiv"></div>
+    <div id="EditPostDiv"></div>
+    <div id="EditCommentDiv"></div>
 
     <div id="postsContainer" class="container">
         @foreach (var item in Model.IncommingPosts)
         {
             string PostID = $"post{item.PostId}";
 
-            <div id="@PostID" class="border mt-5">
-                <div class="row">
-                    <div class="col-3">
-                        <p class="col-form-label text-center">
-                            <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                            <a href="#">@item.Publisher.FullName</a>
-                        </p>
-                    </div>
-                    <div class="col-6">
-                        <p class="col-form-label">
-                            @item.Text
-                        </p>
-
-
-                        @{
-                            if (@item.PictureURL != null)
-                            {
-                                <div class="col-12">
-                                    <img class="img-fluid" src="~/PostsPics/@item.PictureURL" />
+            if (!(bool)item.isDeleted || item.isDeleted == null)
+            {
+                <div id="@PostID" class="border mt-5">
+                    <div class="row">
+                        <div class="col-3">
+                            <p class="col-form-label text-center">
+                                <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                                <a href="#">@item.Publisher.FullName</a>
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            @{
+                                string PostTextDiv = $"PostTextDiv{item.PostId}";
+                                <div id="@PostTextDiv" class="col-12">
+                                    @if (@item.Text != null && @item.Text != "")
+                                    {
+                                        <p class="col-form-label">
+                                            @item.Text
+                                        </p>
+                                    }
                                 </div>
-
                             }
-                        }
-
-                        <p>Comment</p>
-
-                        <form method="post" enctype="multipart/form-data">
-                            @{string CommentAreaID = $"commentArea{item.PostId}";}
-                            <input type="text" id="@CommentAreaID" />
-                            <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
-                            @{string CommentImgID = $"commentImg{item.PostId}";}
-                            <input type="file" name="file" id="@CommentImgID" />
-                        </form>
 
 
-                        <br />
+                            @{
+                                string PostImgDiv = $"PostImgDiv{item.PostId}";
 
-                        @if (Model.LikedPostsIds.Contains(item.PostId))
-                        {
-                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
-                        }
-                        else
-                        {
-                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
-                        }
-                        @{string likesId = $"likes{item.PostId}";}
-                        <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
-
-                    </div>
-
-                    <div class="col-3">
-                        <p class="col-form-label text-center">
-                            @item.Date
-                        </p>
-                        <i class="fas fa-trash-alt" onclick="DeletePost(@item.PostId)"></i>
-                    </div>
-                </div>
-
-                @foreach (var comment in item.Comment)
-                {
-                    if (!comment.isRemoved)
-                    {
-                        string CommentID = $"comment*{comment.PostID}*{comment.UserID}*{comment.Time.ToString().Replace(" ","")}";
-                    <div id="@CommentID" class="border mt-2">
-                        <div class="row">
-                            <div class="col-4"></div>
-                            <div class="col-4">
-                                <p class="col-form-label">
-                                    <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                                    <a href="#">@comment.User.FullName</a>
-                                </p>
-                                <p class="col-form-label">@comment.Text</p>
-
-                                <div class="col-12">
-                                    @{
-                                        if (comment.PictureURL != null)
-                                        {
-                                            <img class="img-fluid" src="~/CommentsPics/@comment.PictureURL" />
-                                        }
+                                <div id="@PostImgDiv" class="col-12">
+                                    @if (@item.PictureURL != null && @item.PictureURL != "")
+                                    {
+                                        <img class="img-fluid" src="~/PostsPics/@item.PictureURL" />
                                     }
                                 </div>
 
-                            </div>
-                            <div class="col-4">@comment.Time</div>
-                            <i class="fas fa-trash-alt" onclick="DeleteComment('@CommentID')"></i>
+                            }
+
+                            <p>Comment</p>
+
+                            <form method="post" enctype="multipart/form-data">
+                                @{string CommentAreaID = $"commentArea{item.PostId}";}
+                                <input type="text" id="@CommentAreaID" />
+                                <input type="button" value="Submit" onclick="addComment(@item.PostId)" />
+                                @{string CommentImgID = $"commentImg{item.PostId}";}
+                                <input type="file" name="file" id="@CommentImgID" />
+                            </form>
+
+
+                            <br />
+
+                            @if (Model.LikedPostsIds.Contains(item.PostId))
+                            {
+                                <i class="btn fa fa-thumbs-down" onclick="Like(this,@item.PostId)"></i>
+                            }
+                            else
+                            {
+                                <i class="btn fa fa-thumbs-up" onclick="Like(this,@item.PostId)"></i>
+                            }
+                            @{string likesId = $"likes{item.PostId}";}
+                            <a id="@likesId" class="btn likes" onclick="LikesModal(@item.PostId)">@item.Like.Count(l => l.isLiked)</a>
+
+                        </div>
+
+                        <div class="col-3">
+                            <p class="col-form-label text-center">
+                                @item.Date
+                                <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@item.PostId)"></i>
+                                <i class="fas fa-edit ml-2" onclick="EditPostModal(@item.PostId)"></i>
+                            </p>
                         </div>
                     </div>
+
+                    @foreach (var comment in item.Comment)
+                    {
+                        if (!comment.isRemoved)
+                        {
+                            string CommentID = $"comment*{comment.PostID}*{comment.UserID}*{comment.Time.ToString().Replace(" ", "")}";
+                            <div id="@CommentID" class="border mt-2">
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        <p class="col-form-label">
+                                            <img src="~/ProfilPics/@item.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                                            <a href="#">@comment.User.FullName</a>
+                                        </p>
+                                        <p class="col-form-label">@comment.Text</p>
+
+                                        <div class="col-12">
+                                            @{
+                                                if (comment.PictureURL != null)
+                                                {
+                                                    <img class="img-fluid" src="~/CommentsPics/@comment.PictureURL" />
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="col-form-label text-center">
+                                            @comment.Time
+                                            <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal('@CommentID')"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     }
 
-            </div>
+                </div>
+            }
         }
     </div>
 
@@ -237,6 +258,86 @@
         document.querySelector(id).value = "";
     }
 
+    function editPost(postId) {
+
+        var text = document.querySelector('#EditPostText').value;
+        var data = new FormData();
+        var files = $("#postImgSelector").get(0).files;
+        var src = document.querySelector('#EditpostImg').src;
+        var isImgSelected = src.includes('jpg') || src.includes('jpeg');
+
+        
+        //alert(isImgSelected);
+
+        if (files.length > 0) {
+            data.append("postImg", files[0]);
+        }
+
+        data.append("postText", text);
+        data.append("postId", postId);
+        if (isImgSelected) {
+            data.append("removeImg", false);
+        }
+        else {
+            data.append("removeImg", true);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/EditPost",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                var respPostId = Object.values(response)[0];
+                var respText = Object.values(response)[4];
+                var respImg = Object.values(response)[5];
+
+                alert(respImg)
+
+                var imgDivId = '#PostImgDiv' + postId
+                var textDivId = '#PostTextDiv' + postId
+
+
+                //////////NEEED FIXXXX
+                if (respImg == null) {
+                    respImg = "";
+                }
+
+                    if (($(imgDivId)).children().length > 0) {
+
+                        var ImgTag = (document.querySelector(imgDivId)).firstElementChild;
+                        ImgTag.src = '/PostsPics/' + respImg;
+                    }
+                    else {
+                        var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
+                        (document.querySelector(imgDivId)).innerHTML += ImgTag;
+                    }
+
+                
+                ////////////////
+
+                if (respText != null) {
+
+                    if (($(textDivId)).children().length > 0) {
+
+                        var TextTag = (document.querySelector(textDivId)).firstElementChild;
+                        TextTag.innerText = respText;
+                    }
+                    else {
+                        var TextTag = '<p class="col-form-label">' + respText + '</p>';
+                        (document.querySelector(textDivId)).innerHTML += TextTag;
+                    }
+
+                }
+
+            },
+            error: function () {
+                alert("Error Editing Post");
+            }
+        });
+    }
     function addPost() {
         var postText = document.querySelector("#postText").value;
 
@@ -269,9 +370,9 @@
                 var newPost = '<div id="post' + respPostId + '" class="border mt-5"> <div class="row"> <div class="col-3">';
                 newPost += '<p class="col-form-label text-center"><img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
                 newPost += '<a href="#">' + respUserName + '</a></p></div>';
-                newPost += '<div class="col-6"><p class="col-form-label">' + respText + '</p>';
+                newPost += '<div class="col-6"><div id="PostTextDiv' + respPostId + '" class="col-12"><p class="col-form-label">' + respText + '</p></div>';
                 if (respImg != null && respImg != "") {
-                    newPost += '<div class="col-12"><img class="img-fluid" src="/PostsPics/' + respImg + '" /> </div>';
+                    newPost += '<div id="PostImgDiv' + respPostId + '" class="col-12"><img class="img-fluid" src="/PostsPics/' + respImg + '" /> </div>';
                 }
                 newPost += '<p>Comment</p><form method="post" enctype="multipart/form-data">';
                 newPost += '<input type="text" id="commentArea' + respPostId + '">';
@@ -405,41 +506,41 @@
         var searchKey = $('#myInput').val();
 
         $.ajax({
-                type: "GET",
-                url: "Friends/Search/" + searchKey,
-                success: function (response) {
-                    console.log(response);
+            type: "GET",
+            url: "Friends/Search/" + searchKey,
+            success: function (response) {
+                console.log(response);
 
-                    var tagsStr = "";
-                    for(var i = 0; i < response.length; i++) {
-                        var obj = response[i];
+                var tagsStr = "";
+                for (var i = 0; i < response.length; i++) {
+                    var obj = response[i];
 
-                        
-                        if (obj.hasOwnProperty("fullName") &&
-                            obj.hasOwnProperty("id") &&
-                            obj.hasOwnProperty("photoURL")) {
 
-                            var fullName = obj['fullName'];
-                            var userId = obj['id'];
-                            var photoUrl = obj['photoURL'];
+                    if (obj.hasOwnProperty("fullName") &&
+                        obj.hasOwnProperty("id") &&
+                        obj.hasOwnProperty("photoURL")) {
 
-                            tagsStr += '<div class="col-8"><img class="navbar-toggler-icon" src="/ProfilPics/' + photoUrl + '" />';
-                            tagsStr += '<a class="ml-2 d-inline" id="' + userId + '" href = "#" > ' + fullName + '</a></div >';
+                        var fullName = obj['fullName'];
+                        var userId = obj['id'];
+                        var photoUrl = obj['photoURL'];
 
-                        }
+                        tagsStr += '<div class="col-8"><img class="navbar-toggler-icon" src="/ProfilPics/' + photoUrl + '" />';
+                        tagsStr += '<a class="ml-2 d-inline" id="' + userId + '" href = "#" > ' + fullName + '</a></div >';
+
                     }
-
-                    document.querySelector("#myDropdown").innerHTML = tagsStr;
-
-
-
-                    
-
-                },
-                error: function () {
-                    alert("Error");
                 }
-            });
+
+                document.querySelector("#myDropdown").innerHTML = tagsStr;
+
+
+
+
+
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
     }
 
     function showResults() {
@@ -456,42 +557,95 @@
         }
     }
 
-    function DeletePost(postId) {
+    function ConfirmDeleteModal(Id) {
 
         $.ajax({
-                type: "POST",
-                url: "Posts/DeletePost/" + postId,
+            type: "GET",
+            url: "Posts/ConfirmDeleteModal/",
+            data: { objId: Id },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#ConfirmDeleteDiv").html(response);
+                ToggleConfirmDeleteModal();
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    };
+
+    function DeletePost(postId) {
+        $.ajax({
+            type: "POST",
+            url: "Posts/DeletePost/" + postId,
             success: function () {
                 var postFullId = '#post' + postId;
                 $(postFullId).remove();
-                },
-                error: function () {
-                    alert("Error Deleting Post");
-                }
-            });
+            },
+            error: function () {
+                alert("Error Deleting Post");
+            }
+        });
+        ToggleConfirmDeleteModal();
     }
 
     function DeleteComment(commentId) {
 
-        var commentObj = {
-            "commentId": commentId
-        }
-
         $.ajax({
-                type: "Post",
+            type: "GET",
             url: "Posts/DeleteComment/",
-            data:JSON.stringify(commentObj), 
-            dataType: "json",  
-            contentType: "application/json; charset=utf-8",  
+            data: { objId: commentId },
+            contentType: "application/json; charset=utf-8",
             success: function () {
                 alert("success");
 
                 document.getElementById(commentId).remove();
-                },
-                error: function () {
-                    alert("Error Deleting Comment");
-                }
-            });
+            },
+            error: function () {
+                alert("Error Deleting Comment");
+            }
+        });
+        ToggleConfirmDeleteModal();
     }
 
+    function ToggleConfirmDeleteModal() {
+        $("#ConfirmDeletePopupContainer").modal("toggle");
+    }
+
+    function EditPostModal(postId) {
+        $.ajax({
+            type: "GET",
+            url: "Posts/EditPostModal/" + postId,
+            success: function (response) {
+                $("#EditPostDiv").html(response);
+                $("#EditPostPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#EditpostImg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function ResetFile() {
+        document.querySelector('#postImgSelector').remove();
+        document.querySelector('#postImgSelectorDiv').innerHTML += '<input type="file" name="file" id="postImgSelector" style="width: 100%;" onchange="readURL(this)" />';
+        document.querySelector('#EditpostImg').src = "";
+
+    }
+
+    //$("#postImgSelector").change(function () {
+    //    alert("lalala");
+    //readURL(this);
+//});
 </script>

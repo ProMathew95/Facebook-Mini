@@ -40,23 +40,21 @@ namespace Facebook_project.Repositories
             return _context.Posts.Include(p => p.Publisher).Where(p => p.PublisherId == userId && p.Date == date).FirstOrDefault();
         }
 
-        public void UpdatePost(int id, Post post)
+        public Post UpdatePost(int id, string text,string PictureUrl,bool removeImg)
 		{
 			Post p = _context.Posts.FirstOrDefault(po => po.PostId == id);
 			if(p!=null)
-			{
-				p.Date = DateTime.Now;
-				p.Comment = post.Comment;
-				p.isDeleted = post.isDeleted;
-				p.Text = post.Text;
-				p.PictureURL = post.PictureURL;
-				p.Like = post.Like;
-				//p.numberOfLikes = post.numberOfLikes;
+            {
+				p.Text = text;
+                if (removeImg)
+                    p.PictureURL = null;
+                else if (PictureUrl != "")
+                    p.PictureURL = PictureUrl;
+                
 			}
 
-			//_context.Entry(post).State = EntityState.Modified;
-
 			_context.SaveChanges();
+            return p;
 		}
 		public bool DeletePost(int id)
 		{
