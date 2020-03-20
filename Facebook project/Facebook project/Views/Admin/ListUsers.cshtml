@@ -2,44 +2,47 @@
 @{
     ViewData["Title"] = "All Users";
 }
-<label>Search</label>
-<input type="text" id="search" onchange="filter()"/>
-<div>
+<form method="post">
+    <label>Search</label>
+    <input type="text" id="searchi" />
+    <input type="button" onclick="srch()" id="searchb" value="Start" />
+    <div id="search">
 
-</div>
+    </div>
+</form>
 <h1>All Users</h1>
 
 @if (Model.Any())
 {
 
-<form method="post">
-    @foreach (var user in Model)
-    {
-        <div class="card">
-            <div class="card-header">
-                User ID :@user.Id
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">
-                    @user.UserName
-                </h5>
-            </div>
-            <div class="card-footer">
-                <a asp-action="EditUser" asp-controller="admin" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
-                @if (user.isBlocked == true)
-                {
-                    <a asp-action="UnblockUser" asp-route-id="@user.Id" class="btn btn-danger">Un Block</a>
-                }
-                else
-                {
-                    <a asp-action="blockUser" asp-route-id="@user.Id" onclick="return confirm('Are You Sure you want to block user : @user.UserName')"class="btn btn-danger">Block</a>
+    <form method="post">
+        @foreach (var user in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    User ID :@user.Id
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @user.UserName
+                    </h5>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="EditUser" asp-controller="admin" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                    @if (user.isBlocked == true)
+                    {
+                        <a asp-action="UnblockUser" asp-route-id="@user.Id" class="btn btn-danger">Un Block</a>
+                    }
+                    else
+                    {
+                        <a asp-action="blockUser" asp-route-id="@user.Id" onclick="return confirm('Are You Sure you want to block user : @user.UserName')" class="btn btn-danger">Block</a>
 
 
-                }
+                    }
+                </div>
             </div>
-        </div>
-    }
-</form>
+        }
+    </form>
 }
 else
 {
@@ -53,39 +56,40 @@ else
         </div>
     </div>
 }
-@section Scripts{ 
+@section Scripts{
+   
     <script src="~/js/site.js"></script>
 }
 @*<script>
-   function filter() {
-    // in the first line
-    event.preventDefault();
-    // remaining code
-   // debugger;
-    $.ajax({
-         type: "POST"
-         , url: "Dashboards/Filter"
-         , data: JSON.stringify({ filterText: $("#search").val() })
-         , contentType: 'application/json;'
-        , success: function (result) {
-            alert(result);
-         }
-    });
-    };
-    function ConfirmBlock(uniqueId, IsBLockClicked) {
-    var blockSpan = 'blockSpan' + uniqueId;
-    var confirmblockspan = 'confirmblockSpan' + uniqueId;
-    if (IsBLockClicked) {
-        $('#' + blockSpan).hide();
-        $('#' + confirmblockspan).show();
+       function filter() {
+        // in the first line
+        event.preventDefault();
+        // remaining code
+       // debugger;
+        $.ajax({
+             type: "POST"
+             , url: "Dashboards/Filter"
+             , data: JSON.stringify({ filterText: $("#search").val() })
+             , contentType: 'application/json;'
+            , success: function (result) {
+                alert(result);
+             }
+        });
+        };
+        function ConfirmBlock(uniqueId, IsBLockClicked) {
+        var blockSpan = 'blockSpan' + uniqueId;
+        var confirmblockspan = 'confirmblockSpan' + uniqueId;
+        if (IsBLockClicked) {
+            $('#' + blockSpan).hide();
+            $('#' + confirmblockspan).show();
+        }
+        else {
+            $('#' + blockSpan).show();
+            $('#' + confirmblockspan).hide();
+        }
     }
-    else {
-        $('#' + blockSpan).show();
-        $('#' + confirmblockspan).hide();
-    }
-}
 
 
 
-</script>*@
+    </script>*@
 

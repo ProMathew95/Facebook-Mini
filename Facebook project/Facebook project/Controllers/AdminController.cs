@@ -329,11 +329,28 @@ namespace Facebook_project.Controllers
             return RedirectToAction("EditRole", new { Id = roleId });
 
         }
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult AccessDenied()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+       // [HttpGet]
+        [Route("/Admin/getuser/{Name}")]
+        public IActionResult getUser(string Name)
+        {
+            var result= userManager.Users.Where(X=>X.UserName==Name).FirstOrDefault();
+           if(result == null)
+            {
+                return Json("eMPTY");
+            }
+            else
+            {
+               // var UserRoles =  userManager.GetRolesAsync(result);
+                var model = new EditUserViewModel
+                {
+                    id = result.Id,
+                    UserName = result.UserName,
+                    Email = result.Email,
+                    
+                };
+                return Json(model);
+            }
+        }
     }
 }
