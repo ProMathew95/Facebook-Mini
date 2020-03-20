@@ -58,18 +58,18 @@ namespace Facebook_project.Repositories
 
 			_context.SaveChanges();
 		}
-		public Post DeletePosts(int id)
+		public bool DeletePost(int id)
 		{
-			var posts = _context.Posts.Find(id);
-			if (posts == null)
+			var post = _context.Posts.Find(id);
+			if (post == null)
 			{
-				return posts;
+				return false;
 			}
 
-			_context.Posts.Remove(posts);
+			post.isDeleted = true;
 			_context.SaveChanges();
 
-			return posts;
+			return true;
 		}
 		public bool PostExists(int id)
 		{
@@ -117,6 +117,21 @@ namespace Facebook_project.Repositories
         {
             return _context.Comments.Include(c => c.User).
                 Where(c => c.UserID == userID && c.PostID == postID && c.Time == time).FirstOrDefault();
+        }
+
+        public bool DeleteComment(int postId, string publisherId, string date)
+        {
+            ////// Need FIXXXXXXXXX
+            var comment = _context.Comments.Single(c => c.PostID == postId && c.UserID == publisherId && c.Time.ToString().Equals(date));
+            if (comment == null)
+            {
+                return false;
+            }
+
+            comment.isRemoved = true;
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

@@ -149,7 +149,7 @@ namespace Facebook_project.Controllers
                         PostId = respPost.PostId,
                         UserId = respPost.PublisherId,
                         UserName = respPost.Publisher.FullName,
-                        Time = respPost.Date,
+                        Time = respPost.Date.ToString(),
                         Text = respPost.Text,
                         PicURL = picName,
                         UserPicURL = respPost.Publisher.PhotoURL
@@ -238,7 +238,7 @@ namespace Facebook_project.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            _context.DeletePosts(id);
+            _context.DeletePost(id);
             return RedirectToAction(nameof(Index));
         }
         
@@ -371,7 +371,7 @@ namespace Facebook_project.Controllers
                         PostId = respComment.PostID,
                         UserId = respComment.UserID,
                         UserName = respComment.User.FullName,
-                        Time = respComment.Time,
+                        Time = respComment.Time.ToString(),
                         Text = respComment.Text,
                         PicURL = picName,
                         UserPicURL = respComment.User.PhotoURL
@@ -382,5 +382,31 @@ namespace Facebook_project.Controllers
 
             return Json("error");
         }
+
+        public IActionResult DeletePost(int Id)
+        {
+            if (_context.DeletePost(Id))
+                return Json("success");
+            return Json("error"); 
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment([FromBody]stringId commentId)
+        {
+            var arr = commentId.commentId.Split("*");
+            var postId = int.Parse(arr[1]);
+            var publisherId = arr[2];
+            var date = arr[3];
+
+            if (_context.DeleteComment(postId, publisherId, date))
+                return Json("success");
+            return Json("error");
+        }
+
     }
+}
+
+public class stringId
+{
+    public string commentId { get; set; }
 }

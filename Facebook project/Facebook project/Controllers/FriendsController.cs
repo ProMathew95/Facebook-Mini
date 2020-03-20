@@ -54,5 +54,18 @@ namespace Facebook_project.Controllers
             }
             return Json("success");
         }
+
+        public IActionResult Search(string Id)
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                //var userId = claim.Value;
+                var result = _context.Search(Id);
+                return Json(result);
+            }
+            return Json("error");
+        }
     }
 }
