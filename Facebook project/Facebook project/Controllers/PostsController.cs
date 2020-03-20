@@ -389,5 +389,24 @@ namespace Facebook_project.Controllers
                 return Json("success");
             return Json("error"); 
         }
+
+        [HttpPost]
+        public IActionResult DeleteComment([FromBody]stringId commentId)
+        {
+            var arr = commentId.commentId.Split("*");
+            var postId = int.Parse(arr[1]);
+            var publisherId = arr[2];
+            var date = arr[3];
+
+            if (_context.DeleteComment(postId, publisherId, date))
+                return Json("success");
+            return Json("error");
+        }
+
     }
+}
+
+public class stringId
+{
+    public string commentId { get; set; }
 }

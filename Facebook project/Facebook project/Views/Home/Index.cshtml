@@ -130,8 +130,8 @@
 
                 @foreach (var comment in item.Comment)
                 {
-                    string CommentID = $"comment{item.PostId}{item.PublisherId}{item.Date}";
-                    <div id="" class="border mt-2">
+                    string CommentID = $"comment*{comment.PostID}*{comment.UserID}*{comment.Time}";
+                    <div id="@CommentID" class="border mt-2">
                         <div class="row">
                             <div class="col-4"></div>
                             <div class="col-4">
@@ -152,6 +152,7 @@
 
                             </div>
                             <div class="col-4">@comment.Time</div>
+                            <i class="fas fa-trash-alt" onclick="DeleteComment('@CommentID')"></i>
                         </div>
                     </div>
                 }
@@ -463,6 +464,29 @@
                 },
                 error: function () {
                     alert("Error Deleting Post");
+                }
+            });
+    }
+
+    function DeleteComment(commentId) {
+
+        var commentObj = {
+            "commentId": commentId
+        }
+        $.ajax({
+                type: "Post",
+            url: "Posts/DeleteComment/",
+            data:JSON.stringify(commentObj), 
+            dataType: "json",  
+            contentType: "application/json; charset=utf-8",  
+            success: function () {
+                alert("2");
+
+                var CommentFullId = '#' + commentId;
+                $(CommentFullId).remove();
+                },
+                error: function () {
+                    alert("Error Deleting Comment");
                 }
             });
     }
