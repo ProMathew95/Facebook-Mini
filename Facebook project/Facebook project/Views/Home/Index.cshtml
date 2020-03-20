@@ -130,7 +130,9 @@
 
                 @foreach (var comment in item.Comment)
                 {
-                    string CommentID = $"comment*{comment.PostID}*{comment.UserID}*{comment.Time}";
+                    if (!comment.isRemoved)
+                    {
+                        string CommentID = $"comment*{comment.PostID}*{comment.UserID}*{comment.Time.ToString().Replace(" ","")}";
                     <div id="@CommentID" class="border mt-2">
                         <div class="row">
                             <div class="col-4"></div>
@@ -155,7 +157,8 @@
                             <i class="fas fa-trash-alt" onclick="DeleteComment('@CommentID')"></i>
                         </div>
                     </div>
-                }
+                        }
+                    }
 
             </div>
         }
@@ -473,6 +476,7 @@
         var commentObj = {
             "commentId": commentId
         }
+
         $.ajax({
                 type: "Post",
             url: "Posts/DeleteComment/",
@@ -480,10 +484,9 @@
             dataType: "json",  
             contentType: "application/json; charset=utf-8",  
             success: function () {
-                alert("2");
+                alert("success");
 
-                var CommentFullId = '#' + commentId;
-                $(CommentFullId).remove();
+                document.getElementById(commentId).remove();
                 },
                 error: function () {
                     alert("Error Deleting Comment");

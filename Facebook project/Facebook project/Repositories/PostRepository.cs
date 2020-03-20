@@ -121,9 +121,15 @@ namespace Facebook_project.Repositories
 
         public bool DeleteComment(int postId, string publisherId, string date)
         {
-            ////// Need FIXXXXXXXXX
-            var comment = _context.Comments.Single(c => c.PostID == postId && c.UserID == publisherId && c.Time.ToString().Equals(date));
-            if (comment == null)
+            var comments = _context.Comments.Where(c => c.PostID == postId && c.UserID == publisherId).ToList();
+            if (comments == null)
+            {
+                return false;
+            }
+
+            var comment = comments.Single(c => c.Time.ToString().Replace(" ","") == date);
+
+            if (comments == null)
             {
                 return false;
             }
