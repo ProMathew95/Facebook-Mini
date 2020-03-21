@@ -111,10 +111,11 @@ namespace Facebook_project.Repositories
             _context.SaveChanges();
         }
 
-        public Comment GetComment(string userID, int postID, DateTime time)
+        public Comment GetComment(string userID, int postID, string time)
         {
-            return _context.Comments.Include(c => c.User).
-                Where(c => c.UserID == userID && c.PostID == postID && c.Time == time).FirstOrDefault();
+            var comments = _context.Comments.Include(c => c.User).Where(c => c.PostID == postID && c.UserID == userID).ToList();
+            var comment = comments.Single(c => c.Time.ToString().Replace(" ", "") == time.Replace(" ", ""));
+            return comment;
         }
 
         public bool DeleteComment(int postId, string publisherId, string date)
@@ -136,6 +137,21 @@ namespace Facebook_project.Repositories
             _context.SaveChanges();
 
             return true;
+        }
+        public Comment UpdateComment(int postId,string userId, string time,string commentText,string commentPicture, bool removeImage)
+        {
+            Comment c = GetComment(userId, postId, time);
+            if (c != null)
+            {
+                c.Text = commentText;
+                if (removeImage)
+                    c.PictureURL = null;
+                else if (commentPicture != "")
+                    c.PictureURL = commentPicture;
+
+            }
+            _context.SaveChanges();
+            return c;
         }
     }
 }

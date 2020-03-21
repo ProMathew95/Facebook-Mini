@@ -364,7 +364,7 @@ namespace Facebook_project.Controllers
 
                     _context.AddComment(comment);
 
-                    var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
+                    var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time.ToString());
 
                     ResponseViewModel response = new ResponseViewModel()
                     {
@@ -415,7 +415,20 @@ namespace Facebook_project.Controllers
                 return PartialView("_EditPost", post);
             return Json("error");
         }
+        public IActionResult EditCommentModal(string objId)
+        {
+            var arr = objId.Split("*");
+            var postId = int.Parse(arr[1]);
+            var publisherId = arr[2];
+            var date = arr[3];
 
+            var comment = _context.GetComment(publisherId, postId, date);
+
+            if (comment != null)
+                return PartialView("_EditComment", comment);
+            return Json("error");
+        }
+        
         [HttpPost]
         [Authorize]
         public IActionResult EditPost(IFormFile file)
@@ -472,6 +485,77 @@ namespace Facebook_project.Controllers
                         Time = respPost.Date.ToString(),
                         Text = respPost.Text,
                         PicURL = respPost.PictureURL,
+                        //UserPicURL = respPost.Publisher.PhotoURL
+                    };
+
+                    return Json(response);
+
+                }
+            }
+
+            return Json("error");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult EditComment(IFormFile file)
+        {
+            if (HttpContext.Request.Form.Keys.Any())
+            {
+                if (HttpContext.Request.Form.Keys.Contains("postId"))
+                {
+
+                    Microsoft.Extensions.Primitives.StringValues commentText = "";
+                    Microsoft.Extensions.Primitives.StringValues commentTime = "";
+                    Microsoft.Extensions.Primitives.StringValues userId = "";
+                    Microsoft.Extensions.Primitives.StringValues PID = "";
+                    Microsoft.Extensions.Primitives.StringValues removeImg = "";
+                    HttpContext.Request.Form.TryGetValue("commentText", out commentText);
+                    HttpContext.Request.Form.TryGetValue("commentTime", out commentTime);
+                    HttpContext.Request.Form.TryGetValue("userId", out userId);
+                    HttpContext.Request.Form.TryGetValue("postId", out PID);
+                    HttpContext.Request.Form.TryGetValue("removeImg", out removeImg);
+
+
+
+
+                    string CommentText = commentText.ToString();
+                    string CommentTime = commentTime.ToString();
+                    string UserId = userId.ToString();
+                    int PostID = int.Parse(PID);
+                    bool removeImage = bool.Parse(removeImg);
+                    string picName = "";
+
+                    /////checking image
+                    if (HttpContext.Request.Form.Files.Any())
+                    {
+                        var img = HttpContext.Request.Form.Files[0];
+                        string pic = Path.GetFileName(img.FileName);
+                        byte[] array;
+
+
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            img.CopyTo(ms);
+                            array = ms.GetBuffer();
+                            picName = $"{Guid.NewGuid()}.jpg";
+                            var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//CommentsPics", picName);
+                            System.IO.File.WriteAllBytes(str, array);
+                        }
+                    }
+                    /////////////////////
+
+                    var respComment = _context.UpdateComment(PostID, userId, CommentTime, commentText, picName, removeImage);
+
+
+                    ResponseViewModel response = new ResponseViewModel()
+                    {
+                        PostId = respComment.PostID,
+                        UserId = respComment.UserID,
+                        //UserName = respPost.Publisher.FullName,
+                        Time = respComment.Time.ToString().Replace(" ",""),
+                        Text = respComment.Text,
+                        PicURL = respComment.PictureURL,
                         //UserPicURL = respPost.Publisher.PhotoURL
                     };
 
