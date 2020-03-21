@@ -4,7 +4,7 @@
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
-@model Facebook_project.Models.ViewModels.PostViewModel
+@model IEnumerable<Post>
 @{
     ViewData["Title"] = "Home Page";
     ViewData["id"] = 0;
@@ -45,10 +45,6 @@
 
 
     <p>
-        @*<button id="CreatePost" type="button" class="btn btn-success"
-                    data-toggle="modal" data-target="#openModal">
-                Create Post
-            </button>*@
 
         <div class="container">
             <div class="row">
@@ -63,9 +59,8 @@
 
 
 
-    <partial name="~/Views/Posts/_Create.cshtml" />
 
-    @*<partial name="~/Views/Posts/_Likes.cshtml" view-data="ViewData"/>*@
+    @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post());
 
     <div id="LikesDiv"></div>
     <div id="FriendRequestsDiv"></div>
@@ -74,7 +69,7 @@
     <div id="EditCommentDiv"></div>
 
     <div id="postsContainer" class="container">
-        @foreach (var item in Model.IncommingPosts)
+        @foreach (var item in Model)
         {
             @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
         }
@@ -121,28 +116,10 @@
             contentType: false,
 
             success: function (response) {
-                var respPostId = Object.values(response)[0];
-                var respUserId = Object.values(response)[1];
-                var respUserName = Object.values(response)[2];
-                var respDate = Object.values(response)[3];
-                var respText = Object.values(response)[4];
-                var respImg = Object.values(response)[5];
-                var respPhotoURL = Object.values(response)[6];
-
-
-                var newComment = '<div id="comment' + respPostId + respUserId + respDate + '" class="border mt-2"> <div class="row">';
-                newComment += '<div class="col-4"></div> <div class="col-4"><p class="col-form-label">';
-                newComment += '<img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
-                newComment += '<a href="#">' + respUserName + '</a>';
-                newComment += '</p><p class="col-form-label">' + respText + '</p>';
-                if (respImg != null && respImg != "") {
-                    newComment += '<div class="col-12"><img class="img-fluid" src="/CommentsPics/' + respImg + '" /> </div>';
-                }
-                newComment += '</div><div class="col-4">' + respDate + '</div></div></div>'
 
                 var targetPostId = "#post" + postId;
                 var targetPost = document.querySelector(targetPostId);
-                targetPost.innerHTML += newComment;
+                targetPost.innerHTML += response;
 
             },
             error: function (response) {
@@ -166,7 +143,6 @@
             return;
         }
 
-        //alert(isImgSelected);
 
         if (files.length > 0) {
             data.append("postImg", files[0]);
@@ -261,36 +237,8 @@
             contentType: false,
 
             success: function (response) {
-                var respPostId = Object.values(response)[0];
-                var respUserId = Object.values(response)[1];
-                var respUserName = Object.values(response)[2];
-                var respDate = Object.values(response)[3];
-                var respText = Object.values(response)[4];
-                var respImg = Object.values(response)[5];
-                var respPhotoURL = Object.values(response)[6];
 
-
-                var newPost = '<div id="post' + respPostId + '" class="border mt-5"> <div class="row"> <div class="col-3">';
-                newPost += '<p class="col-form-label text-center"><img src="/ProfilPics/' + respPhotoURL + '" class="navbar-toggler-icon">';
-                newPost += '<a href="#">' + respUserName + '</a></p></div>';
-                newPost += '<div class="col-6"><div id="PostTextDiv' + respPostId + '" class="col-12"><p class="col-form-label">' + respText + '</p></div>';
-                if (respImg != null && respImg != "") {
-                    newPost += '<div id="PostImgDiv' + respPostId + '" class="col-12"><img class="img-fluid" src="/PostsPics/' + respImg + '" /> </div>';
-                }
-                newPost += '<p>Comment</p><form method="post" enctype="multipart/form-data">';
-                newPost += '<input type="text" id="commentArea' + respPostId + '">';
-                newPost += '<input type="button" value="Submit" onclick="addComment(' + respPostId + ')">';
-                newPost += '<input type="file" name="file" id="commentImg' + respPostId + '">';
-                newPost += '<br><i class="btn fa fa-thumbs-up" onclick="Like(this,' + respPostId + ')" aria-hidden="true"></i>';
-                newPost += '<a id="likes' + respPostId + '" class="btn likes" onclick="LikesModal(' + respPostId + ')">0</a>';
-                newPost += '</div><div class="col-3"><p class="col-form-label text-center">';
-                newPost += respDate;
-                newPost += '<i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(' + respPostId + ')"></i>';
-                newPost += '<i class="fas fa-edit ml-2" onclick="EditPostModal(' + respPostId + ')"></i>';
-                newPost += '</p ></div ></div ></div >';
-
-                document.querySelector("#postsContainer").insertAdjacentHTML('afterbegin', newPost);
-
+                document.querySelector("#postsContainer").insertAdjacentHTML('afterbegin', response);
 
                 document.querySelector("#postText").value = "";
                 document.querySelector('#creatPostImgSelector').remove();
@@ -590,7 +538,6 @@
             contentType: false,
             success: function (response) {
 
-               // alert(response);
                 var respPostId = Object.values(response)[0];
                 var userId = Object.values(response)[1];
                 var commentTime = Object.values(response)[3];
@@ -640,7 +587,6 @@
         });
     }
 
-
     function readURL(input, selector) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -659,8 +605,4 @@
 
     }
 
-    //$("#postImgSelector").change(function () {
-    //    alert("lalala");
-    //readURL(this);
-//});
 </script>

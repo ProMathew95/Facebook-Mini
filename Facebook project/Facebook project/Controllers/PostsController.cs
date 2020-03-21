@@ -144,17 +144,18 @@ namespace Facebook_project.Controllers
 
                     var respPost = _context.GetPostByUserAndDate(newpPost.PublisherId, newpPost.Date);
 
-                    ResponseViewModel response = new ResponseViewModel()
-                    {
-                        PostId = respPost.PostId,
-                        UserId = respPost.PublisherId,
-                        UserName = respPost.Publisher.FullName,
-                        Time = respPost.Date.ToString(),
-                        Text = respPost.Text,
-                        PicURL = picName,
-                        UserPicURL = respPost.Publisher.PhotoURL
-                    };
-                    return Json(response);
+                    //ResponseViewModel response = new ResponseViewModel()
+                    //{
+                    //    PostId = respPost.PostId,
+                    //    UserId = respPost.PublisherId,
+                    //    UserName = respPost.Publisher.FullName,
+                    //    Time = respPost.Date.ToString(),
+                    //    Text = respPost.Text,
+                    //    PicURL = picName,
+                    //    UserPicURL = respPost.Publisher.PhotoURL
+                    //};
+
+                    return PartialView("~/Views/Posts/_Post.cshtml",respPost);
 
                 }
             }
@@ -365,18 +366,7 @@ namespace Facebook_project.Controllers
                     _context.AddComment(comment);
 
                     var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time.ToString());
-
-                    ResponseViewModel response = new ResponseViewModel()
-                    {
-                        PostId = respComment.PostID,
-                        UserId = respComment.UserID,
-                        UserName = respComment.User.FullName,
-                        Time = respComment.Time.ToString(),
-                        Text = respComment.Text,
-                        PicURL = picName,
-                        UserPicURL = respComment.User.PhotoURL
-                    };
-                    return Json(response);
+                    return PartialView("~/Views/Posts/_Comment.cshtml", respComment);
                 }
             }
 

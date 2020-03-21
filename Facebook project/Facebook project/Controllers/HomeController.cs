@@ -45,23 +45,11 @@ namespace Facebook_project.Controllers
 
                 if (CurrentPosts != null)
                 {
-                    PostViewModel model = new PostViewModel()
-                    {
-                        IncommingPosts = CurrentPosts,
-                        Post = new Post(),
-                        LikedPostsIds = likedPosts
-                    };
-                    return View(model);
+                    return View(CurrentPosts);
                 }
                 else
                 {
-                    PostViewModel model = new PostViewModel()
-                    {
-                        IncommingPosts = new List<Post>(),
-                        Post = new Post(),
-                        LikedPostsIds = likedPosts
-                    };
-                    return View(model);
+                    return View(new List<Post>());
                 }
             }
 

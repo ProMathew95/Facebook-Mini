@@ -37,7 +37,7 @@ namespace Facebook_project.Repositories
 
         public Post GetPostByUserAndDate(string userId,DateTime date)
         {
-            return _context.Posts.Include(p => p.Publisher).Where(p => p.PublisherId == userId && p.Date == date).FirstOrDefault();
+            return _context.Posts.Include(p => p.Publisher).Include(p=> p.Like).Include(p => p.Comment).Where(p => p.PublisherId == userId && p.Date == date).FirstOrDefault();
         }
 
         public Post UpdatePost(int id, string text,string PictureUrl,bool removeImg)

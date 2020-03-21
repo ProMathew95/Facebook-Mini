@@ -1,9 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using System.Security.Claims;
-@*@inject SignInManager<AppUser> SignInManager
-    @inject UserManager<AppUser> UserManager*@
 
-@model Facebook_project.Models.ViewModels.PostViewModel
+@model Facebook_project.Models.Post
 @{
     var claimsIdentity = (ClaimsIdentity)this.User.Identity;
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
