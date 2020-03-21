@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@model Post
+
+
+@{
+
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
+
+    string PostID = $"post{Model.PostId}";
+
+    if (!(bool)Model.isDeleted || Model.isDeleted == null)
+    {
+    <div id="@PostID" class="border mt-5">
+        <div class="row">
+            <div class="col-3">
+                <p class="col-form-label text-center">
+                    <img src="~/ProfilPics/@Model.Publisher.PhotoURL" class="navbar-toggler-icon" />
+                    <a href="#">@Model.Publisher.FullName</a>
+                </p>
+            </div>
+            <div class="col-6">
+                @{
+                    string PostTextDiv = $"PostTextDiv{Model.PostId}";
+                    <div id="@PostTextDiv" class="col-12">
+                        @if (Model.Text != null && Model.Text != "")
+                        {
+                            <p class="col-form-label">
+                                @Model.Text
+                            </p>
+                        }
+                    </div>
+                }
+
+
+                @{
+                    string PostImgDiv = $"PostImgDiv{Model.PostId}";
+
+                    <div id="@PostImgDiv" class="col-12">
+                        @if (@Model.PictureURL != null && @Model.PictureURL != "")
+                        {
+                            <img class="img-fluid" src="~/PostsPics/@Model.PictureURL" />
+                        }
+                    </div>
+
+                }
+
+                <p>Leave a Comment</p>
+
+                <form method="post" enctype="multipart/form-data">
+                    @{string CommentAreaID = $"commentArea{Model.PostId}";}
+                    <input type="text" id="@CommentAreaID" />
+                    <input type="button" value="Submit" onclick="addComment(@Model.PostId)" />
+                    @{string CommentImgID = $"commentImg{Model.PostId}";}
+                    <input type="file" name="file" id="@CommentImgID" />
+                </form>
+
+
+                <br />
+
+                @if (Model.Like.Where(l => l.UserID == userId).ToList().Count > 0)
+                {
+                    <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
+                }
+                else
+                {
+                    <i class="btn fa fa-thumbs-up" onclick="Like(this,@Model.PostId)"></i>
+                }
+                @{string likesId = $"likes{Model.PostId}";}
+                <a id="@likesId" class="btn likes" onclick="LikesModal(@Model.PostId)">@Model.Like.Count(l => l.isLiked)</a>
+
+            </div>
+
+            <div class="col-3">
+                <p class="col-form-label text-center">
+                    @Model.Date
+
+                    @if (userId == Model.PublisherId)
+                    {
+                        <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
+                        <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
+                    }
+                </p>
+            </div>
+        </div>
+
+        @foreach (var comment in Model.Comment)
+        {
+            @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
+
+        }
+
+    </div>
+    }
+}
