@@ -18,6 +18,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
+
     <br />
     <br />
     <div class="container">
@@ -138,8 +143,12 @@
                         <div class="col-3">
                             <p class="col-form-label text-center">
                                 @item.Date
-                                <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@item.PostId)"></i>
-                                <i class="fas fa-edit ml-2" onclick="EditPostModal(@item.PostId)"></i>
+
+                                @if (userId == item.PublisherId)
+                                {
+                                    <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@item.PostId)"></i>
+                                    <i class="fas fa-edit ml-2" onclick="EditPostModal(@item.PostId)"></i>
+                                }
                             </p>
                         </div>
                     </div>
@@ -266,6 +275,10 @@
         var src = document.querySelector('#EditpostImg').src;
         var isImgSelected = src.includes('jpg') || src.includes('jpeg');
 
+        if (text == "" && !isImgSelected) {
+            alert("Post cannot be empty");
+            return;
+        }
         
         //alert(isImgSelected);
 
@@ -294,13 +307,10 @@
                 var respText = Object.values(response)[4];
                 var respImg = Object.values(response)[5];
 
-                alert(respImg)
-
                 var imgDivId = '#PostImgDiv' + postId
                 var textDivId = '#PostTextDiv' + postId
 
 
-                //////////NEEED FIXXXX
                 if (respImg == null) {
                     respImg = "";
                 }
@@ -308,15 +318,15 @@
                     if (($(imgDivId)).children().length > 0) {
 
                         var ImgTag = (document.querySelector(imgDivId)).firstElementChild;
-                        ImgTag.src = '/PostsPics/' + respImg;
+                        if(respImg == "")
+                            ImgTag.src = "";
+                        else
+                            ImgTag.src = '/PostsPics/' + respImg;
                     }
                     else {
                         var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
                         (document.querySelector(imgDivId)).innerHTML += ImgTag;
                     }
-
-                
-                ////////////////
 
                 if (respText != null) {
 
@@ -338,14 +348,21 @@
             }
         });
     }
-    function addPost() {
+
+    function addPost(signedInUserId) {
         var postText = document.querySelector("#postText").value;
 
         var data = new FormData();
-        var files = $("#postImg").get(0).files;
+        var files = $("#creatPostImgSelector").get(0).files;
 
         if (files.length > 0) {
             data.append("postImg", files[0]);
+        }
+        else {
+            if (postText == "") {
+                alert("Cannot create an empty post");
+                return;
+            }
         }
 
         data.append("postText", postText);
@@ -381,10 +398,18 @@
                 newPost += '<br><i class="btn fa fa-thumbs-up" onclick="Like(this,' + respPostId + ')" aria-hidden="true"></i>';
                 newPost += '<a id="likes' + respPostId + '" class="btn likes" onclick="LikesModal(' + respPostId + ')">0</a>';
                 newPost += '</div><div class="col-3"><p class="col-form-label text-center">';
-                newPost += respDate + '</p></div></div></div>';
+                newPost += respDate;
+                newPost += '<i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(' + respPostId + ')"></i>';
+                newPost += '<i class="fas fa-edit ml-2" onclick="EditPostModal(' + respPostId + ')"></i>';
+                newPost += '</p ></div ></div ></div >';
 
                 document.querySelector("#postsContainer").insertAdjacentHTML('afterbegin', newPost);
 
+
+                document.querySelector("#postText").value = "";
+                document.querySelector('#creatPostImgSelector').remove();
+                document.querySelector('#creatPostImgSelectorDiv').innerHTML += '<input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" />';
+                document.querySelector('#createPostImg').src = "";
             },
             error: function (response) {
                 alert("Error submiting Post");
@@ -626,12 +651,12 @@
         });
     }
 
-    function readURL(input) {
+    function readURL(input,selector) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#EditpostImg').attr('src', e.target.result);
+                $(selector).attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }

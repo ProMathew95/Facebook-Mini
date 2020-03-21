@@ -28,8 +28,12 @@
                                     <textarea id="postText"></textarea>
                                 </div>
 
-                                <div class="form-group">
-                                    <input type="file" name="file" id="postImg" style="width: 100%;" />
+                                <div id="createPostImgDiv" class="col-12">
+                                    <img id="createPostImg" class="img-fluid" src="" />
+                                </div>
+
+                                <div id="creatPostImgSelectorDiv" class="form-group">
+                                    <input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" onchange="readURL(this,'#createPostImg')"/>
                                 </div>
 
                                 <div class="form-group">
