@@ -22,8 +22,11 @@
     var claimsIdentity = (ClaimsIdentity)this.User.Identity;
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
-
     <br />
+    <a asp-controller="Posts"
+   asp-action="UserInfoModal"
+      asp-route-id="@userId" >Profile Page</a>
+
     <br />
     <div class="container">
         <div class="row">
@@ -58,6 +61,7 @@
 
 
     @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post());
+
 
     <div id="LikesDiv"></div>
     <div id="FriendRequestsDiv"></div>
@@ -601,5 +605,17 @@
         document.querySelector('#EditpostImg').src = "";
 
     }
+    //function FindUser(id) {
 
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "Posts/UserInfoModal/" + id,
+    //        success: function (response) {
+    //         //   $("#UserInfpPopupContainer").modal("toggle");
+    //        },
+    //        error: function () {
+    //            alert("Error retreiving Users");
+    //        }
+    //    });
+    //};
 </script>

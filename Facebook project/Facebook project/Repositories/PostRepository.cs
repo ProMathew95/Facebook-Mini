@@ -153,5 +153,11 @@ namespace Facebook_project.Repositories
             _context.SaveChanges();
             return c;
         }
+        public AppUser GetUserByid(string userId)
+        {
+            var appUser = _context.AppUsers.Include(c=>c.Posts).FirstOrDefault(c => c.Id == userId);
+            return appUser;
+
+        }
     }
 }

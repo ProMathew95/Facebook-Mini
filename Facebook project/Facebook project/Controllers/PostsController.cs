@@ -32,25 +32,7 @@ namespace Facebook_project.Controllers
             return View(repo.ToList());
         }
 
-        // GET: Posts/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var post = await _context.Posts
-        //        .Include(p => p.Publisher)
-        //        .FirstOrDefaultAsync(m => m.PostId == id);
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
-
+        
         // GET: Posts/Create
         public IActionResult Create()
         {
@@ -58,37 +40,7 @@ namespace Facebook_project.Controllers
             return PartialView();
         }
 
-        // POST: Posts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[Authorize]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Create(/*[Bind("PostId,isDeleted,Date,numberOfLikes,Text,PictureURL,PublisherId")]*/ IFormFile file, PostViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (file != null)
-        //        {
-        //            string pic = Path.GetFileName(file.FileName);
-        //            byte[] array;
-
-
-        //            using (MemoryStream ms = new MemoryStream())
-        //            {
-        //                file.CopyTo(ms);
-        //                array = ms.GetBuffer();
-        //                var picName = $"{Guid.NewGuid()}.jpg";
-        //                var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics//",$"{picName}");
-        //                System.IO.File.WriteAllBytes(str, array);
-        //                model.Post.PictureURL = picName;
-        //            }
-        //        }
-
-        //        _context.CreatePost(model.Post);
-        //        return RedirectToAction(nameof(Index),"Home");
-        //    }
-
+        
         [HttpPost]
         [Authorize]
         //[ValidateAntiForgeryToken]
@@ -144,16 +96,7 @@ namespace Facebook_project.Controllers
 
                     var respPost = _context.GetPostByUserAndDate(newpPost.PublisherId, newpPost.Date);
 
-                    //ResponseViewModel response = new ResponseViewModel()
-                    //{
-                    //    PostId = respPost.PostId,
-                    //    UserId = respPost.PublisherId,
-                    //    UserName = respPost.Publisher.FullName,
-                    //    Time = respPost.Date.ToString(),
-                    //    Text = respPost.Text,
-                    //    PicURL = picName,
-                    //    UserPicURL = respPost.Publisher.PhotoURL
-                    //};
+                   
 
                     return PartialView("~/Views/Posts/_Post.cshtml",respPost);
 
@@ -215,24 +158,6 @@ namespace Facebook_project.Controllers
             return View(post);
         }
 
-        // GET: Posts/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var post = await _context.Posts
-        //        .Include(p => p.Publisher)
-        //        .FirstOrDefaultAsync(m => m.PostId == id);
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(post);
-        //}
 
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -274,42 +199,11 @@ namespace Facebook_project.Controllers
             List<AppUser> Users = _context.GetPostLikers(id);
             return PartialView("_Likes",Users);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult AddComment([FromBody]CommentViewModel commentVM)
-        //{
-        //    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-        //    if (claim != null)
-        //    {
-        //        var userId = claim.Value;
-        //        Comment comment = new Comment()
-        //        {
-        //            PostID = commentVM.PostId,
-        //            Text = commentVM.Comment,
-        //            Time = DateTime.Now,
-        //            UserID = userId,
-        //            isRemoved = false
-        //        };
-        //        _context.AddComment(comment);
-        //        var respComment = _context.GetComment(comment.UserID, comment.PostID, comment.Time);
-
-        //        CommentResponseViewModel response = new CommentResponseViewModel()
-        //        {
-        //            PostId = respComment.PostID,
-        //            UserId = respComment.UserID,
-        //            UserName = respComment.User.FullName,
-        //            Time = respComment.Time,
-        //            Text = respComment.Text,
-        //            UserPicURL = respComment.User.PhotoURL
-        //        };
-        //        return Json(response);
-        //    }
-
-        //    return Json("error");
-        //}
-
+        public IActionResult UserInfoModal(string id)
+        {
+            AppUser UserInfo = _context.GetUserByid(id);
+            return View("_UserInfo", UserInfo);
+        }
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult AddComment(IFormFile file)
