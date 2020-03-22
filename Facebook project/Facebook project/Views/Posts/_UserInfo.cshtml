@@ -1,0 +1,114 @@
+﻿@model Facebook_project.Models.AppUser
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserInfo</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <a >@Model.FullName</a>
+                <a >@Model.Bio</a>
+                <a>@Model.BirthDate</a>
+                @foreach (var item in Model.Posts)
+                {
+                    <div id="@item.PostId" class="border mt-5">
+                        <div class="row">
+                            <div class="col-3">
+                                <p class="col-form-label text-center">
+                                    <img src="~/ProfilPics/@Model.PhotoURL" class="navbar-toggler-icon" />
+                                    <a href="#">@Model.FullName</a>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                @{
+                                    string PostTextDiv = $"PostTextDiv{item.PostId}";
+                                    <div id="@PostTextDiv" class="col-12">
+                                        @if (item.Text != null && item.Text != "")
+                                        {
+                                            <p class="col-form-label">
+                                                @item.Text
+                                            </p>
+                                        }
+                                    </div>
+                                }
+
+
+                                @*@{
+                                    string PostImgDiv = $"PostImgDiv{item.PostId}";
+
+                                    <div id="@PostImgDiv" class="col-12">
+                                        @if (@Model.PictureURL != null && @Model.PictureURL != "")
+                                        {
+                                            <img class="img-fluid" src="~/PostsPics/@Model.PictureURL" />
+                                        }
+                                    </div>
+
+                                }*@
+
+                                @*<form method="post" enctype="multipart/form-data">
+                                    @{string CommentAreaID = $"commentArea{Model.PostId}";}
+                                    <input type="text" id="@CommentAreaID" />
+                                    <input type="button" value="Submit" onclick="addComment(@Model.PostId)" />
+                                    @{string CommentImgID = $"commentImg{Model.PostId}";}
+                                    <input type="file" name="file" id="@CommentImgID" />
+                                </form>*@
+
+
+                                <br />
+
+                                @*@if (Model.Like.Where(l => l.UserID == userId).ToList().Count > 0)
+                                {
+                                    <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
+                                }*@
+                                @*else
+                                {
+                                    <i class="btn fa fa-thumbs-up" onclick="Like(this,@Model.PostId)"></i>
+                                }
+                                @{string likesId = $"likes{Model.PostId}";}
+                                <a id="@likesId" class="btn likes" onclick="LikesModal(@Model.PostId)">@Model.Like.Count(l => l.isLiked)</a>*@
+
+                            </div>
+
+                            <div class="col-3">
+                                <p class="col-form-label text-center">
+                                    @item.Date
+
+                                    @*@if (userId == Model.PublisherId)
+                                    {
+                                        <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
+                                        <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
+                                    }*@
+                                </p>
+                            </div>
+                        </div>
+
+                        @*@foreach (var comment in item.Comment)
+                        {
+                            @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
+
+                        }*@
+
+                    </div>
+                }
+                
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>
