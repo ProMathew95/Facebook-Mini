@@ -16,6 +16,7 @@ using Facebook_project.Models;
 using Facebook_project.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Facebook_project
 {
@@ -43,6 +44,12 @@ namespace Facebook_project
                 .RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddXmlSerializerFormatters();
+
+
+
+
+
+
             services.AddRazorPages();
             services.AddScoped<PostRepository>();
             services.AddScoped<FriendsRepository>();
@@ -66,16 +73,18 @@ namespace Facebook_project
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
+
+     
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+              endpoints.MapRazorPages();
             });
         }
     }

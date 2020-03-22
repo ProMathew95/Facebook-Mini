@@ -11,7 +11,7 @@
 
     string PostID = $"post{Model.PostId}";
 
-    if (!(bool)Model.isDeleted || Model.isDeleted == null)
+    if ( Model.isDeleted == null||!(bool)Model.isDeleted )
     {
     <div id="@PostID" class="border mt-5">
         <div class="row">

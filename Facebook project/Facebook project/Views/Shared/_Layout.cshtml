@@ -1,122 +1,77 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Facebook_project</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://kit.fontawesome.com/f5fdd04ada.js" crossorigin="anonymous"></script>
 
-    <style>
-        img {
-            image-orientation: from-image;
-        }
-        .dropbtn {
-          background-color: #4CAF50;
-          color: white;
-          padding: 16px;
-          font-size: 16px;
-          border: none;
-          cursor: pointer;
-        }
+    <link href="~/css/WelcomePage.css" rel="stylesheet" />
 
-        .dropbtn:hover, .dropbtn:focus {
-          background-color: #3e8e41;
-        }
 
-        #myInput {
-            box-sizing: border-box;
-            background-image: url(searchicon.png);
-            background-position: 14px 12px;
-            background-repeat: no-repeat;
-            font-size: 16px;
-            padding: 14px 20px 12px 15px;
-            border: none;
-            border-bottom: 1px solid #ddd;
-            min-width: 400px;
-        }
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script src="https://kit.fontawesome.com/f5fdd04ada.js" crossorigin="anonymous"></script>
 
-        #myInput:focus {outline: 3px solid #ddd;}
 
-        .dropdown {
-        position: relative;
-        display: inline-block;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            display: none;
-            background-color: #f6f6f6;
-            min-width: 400px;
-            overflow: auto;
-            border: 1px solid #ddd;
-            z-index: 1;
-        }
-
-        .dropdown-content div {
-          color: black;
-          padding: 6px 16px;
-          text-decoration: none;
-          display: block;
-        }
-
-        .dropdown a:hover {background-color: #ddd;}
-
-        .show {display:block;}
-
-    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Facebook_project</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Valid" asp-action="MainPage">Facebook</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
-                            <div class="dropdown-menu" aria-labelledby="navbardropdown">
-                                <a asp-action="Listusers" asp-controller="admin" class="dropdown-item">Users</a>
-                                <a asp-action="Listroles" asp-controller="admin" class="dropdown-item">Roles</a>
-
-                            </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+   
+
+
+
+
+
+
+
+
+
+
+
+    @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
+            <div class="dropdown-menu" aria-labelledby="navbardropdown">
+                <a asp-action="Listusers" asp-controller="admin" class="dropdown-item">Users</a>
+                <a asp-action="Listroles" asp-controller="admin" class="dropdown-item">Roles</a>
+
+            </div>
+        </li>
+        }*@
+
+
+    <div class="wrapper">
+        @*<main role="main" class="pb-3">*@
+        <div>
             @RenderBody()
-        </main>
+        </div>
+        @*</main>*@
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Facebook_project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Facebook_project
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @if(IsSectionDefined("Scripts"))
-    @RenderSection("Scripts", required: true)
+    <link href="~/css/site.css" rel="stylesheet" />
+    @if (IsSectionDefined("Scripts"))
+        @RenderSection("Scripts", required: true)
 </body>
 </html>

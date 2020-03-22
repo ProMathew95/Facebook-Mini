@@ -3,11 +3,16 @@
 @using System.Drawing;
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
+@*@model Facebook_project.Models.ViewModels.UserPosts;*@
 
 @model IEnumerable<Post>
+
+
 @{
     ViewData["Title"] = "Home Page";
     ViewData["id"] = 0;
+    //Layout = "_HomeLayout";
+
 }
 
 <div class="text-center">
@@ -66,10 +71,12 @@
     <div id="EditCommentDiv"></div>
 
     <div id="postsContainer" class="container">
-        @foreach (var item in Model)
-        {
-            @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
-        }
+        @*@foreach (var item in Model)*@
+            @foreach (var item in Model)
+
+            {
+                @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+            }
     </div>
 
 }

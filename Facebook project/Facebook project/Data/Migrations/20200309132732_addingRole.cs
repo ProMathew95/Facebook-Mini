@@ -26,7 +26,7 @@ namespace Facebook_project.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Discriminator",
-                table: "AspNetRoles");
+               table: "AspNetRoles");
         }
     }
 }

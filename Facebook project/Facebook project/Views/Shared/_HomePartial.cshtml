@@ -1,0 +1,65 @@
+﻿
+
+@*@model AppUser*@
+
+@model Facebook_project.Models.ViewModels.UserPosts;
+
+
+@using Microsoft.AspNetCore.Identity
+@*@inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager*@
+
+
+
+<div id="SearchSetting" class="navbar-brand">
+    <input type="text" id="searchUserTxt">
+</div>
+
+<div id="UserSetting">
+    <ul class="navbar-nav">
+
+
+        <li class="nav-item">
+            <div>
+                <a class="nav-link" asp-action="" asp-controller="">
+
+                    <img id="homeProfileImg" src="~/femaleProfile.PNG" />
+                    <span>@Model.myUser.NormalizedUserName</span>
+                </a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <div>
+                <a class="nav-link" asp-action="Home" asp-controller="User">
+                    Home
+                </a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <div>
+                <a class="nav-link" asp-action="Home" asp-controller="User">
+                    <i class="fa fa-bell" aria-hidden="true"></i>
+                </a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <div>
+                <a class="nav-link" asp-action="Home" asp-controller="User">
+                    request
+                </a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <div>
+                <a class="nav-link" asp-action="Home" asp-controller="User">
+                    Logout
+                </a>
+            </div>
+        </li>
+
+
+
+
+
+    </ul>
+</div>

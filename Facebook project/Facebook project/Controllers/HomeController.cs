@@ -27,11 +27,14 @@ namespace Facebook_project.Controllers
        
         public IActionResult Index()
         {
+            AppUser currentUser = null;
+            var x = (ClaimsIdentity)this.User.Identity;
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (claim != null)
             {
                 var userId = claim.Value;
+                currentUser = _db.AppUsers.Find(userId);
 
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
                 friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
@@ -43,17 +46,36 @@ namespace Facebook_project.Controllers
 
                 List<int> likedPosts = _db.Likes.Where(l => l.UserID == userId && l.isLiked).Select(l => l.PostID).ToList();
 
-                if (CurrentPosts != null)
-                {
+              //  if (CurrentPosts != null)
+                if (CurrentPosts.Count> 0 )
+
+                 {
+                    UserPosts uspo1 = new UserPosts()
+                    {
+                        myUser = currentUser,
+                        allpost = new List<Post>()
+
+                    };
+                    //return View(currentUser);
                     return View(CurrentPosts);
+
                 }
-                else
-                {
-                    return View(new List<Post>());
-                }
+                //else
+                //{
+                  return View(new List<Post>());
+                //}
             }
 
-            return View();
+            UserPosts uspo = new UserPosts()
+            {
+                myUser = currentUser,
+                allpost = new List<Post>()
+
+            };
+
+           // return View(new List<Post>());
+            return View(uspo);
+
         }
 
         public IActionResult Privacy()
