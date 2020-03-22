@@ -612,6 +612,12 @@
         document.querySelector('#EditpostImg').src = "";
 
     }
+
+    function ResetFile(selector,div,img) {
+        document.querySelector('#' + selector).remove();
+        document.querySelector('#' + div).innerHTML += '<input type="file" name="file" id="' + selector + '" style="width: 100%;" onchange="readURL(this)" />';
+        document.querySelector('#' + img).src = "";
+    }
     //function FindUser(id) {
 
     //    $.ajax({
