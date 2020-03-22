@@ -1,0 +1,37 @@
+﻿@model Facebook_project.Models.AppUser
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserInfo</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <a>@Model.FullName</a>
+                <a>@Model.Bio</a>
+                <a>@Model.BirthDate</a>
+                @foreach (var item in Model.Posts)
+                {
+                    @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>

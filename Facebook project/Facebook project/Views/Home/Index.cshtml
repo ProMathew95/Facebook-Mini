@@ -28,9 +28,7 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
     <br />
-    <a asp-controller="Posts"
-   asp-action="UserInfoModal"
-      asp-route-id="@userId" >Profile Page</a>
+    <a asp-controller="AppUser" asp-action="UserPage" asp-route-id="@userId" >Profile Page</a>
 
     <br />
     <div class="container">

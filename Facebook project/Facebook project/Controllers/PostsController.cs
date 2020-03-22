@@ -199,11 +199,7 @@ namespace Facebook_project.Controllers
             List<AppUser> Users = _context.GetPostLikers(id);
             return PartialView("_Likes",Users);
         }
-        public IActionResult UserInfoModal(string id)
-        {
-            AppUser UserInfo = _context.GetUserByid(id);
-            return View("_UserInfo", UserInfo);
-        }
+       
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult AddComment(IFormFile file)
