@@ -607,29 +607,10 @@
         }
     }
 
-    function ResetFile() {
-        document.querySelector('#postImgSelector').remove();
-        document.querySelector('#postImgSelectorDiv').innerHTML += '<input type="file" name="file" id="postImgSelector" style="width: 100%;" onchange="readURL(this)" />';
-        document.querySelector('#EditpostImg').src = "";
-
-    }
-
     function ResetFile(selector,div,img) {
         document.querySelector('#' + selector).remove();
         document.querySelector('#' + div).innerHTML += '<input type="file" name="file" id="' + selector + '" style="width: 100%;" onchange="readURL(this)" />';
         document.querySelector('#' + img).src = "";
     }
-    //function FindUser(id) {
-
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "Posts/UserInfoModal/" + id,
-    //        success: function (response) {
-    //         //   $("#UserInfpPopupContainer").modal("toggle");
-    //        },
-    //        error: function () {
-    //            alert("Error retreiving Users");
-    //        }
-    //    });
-    //};
+    
 </script>
