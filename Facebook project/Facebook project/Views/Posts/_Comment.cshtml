@@ -9,8 +9,14 @@
                 <div class="col-4"></div>
                 <div class="col-4">
                     <p class="col-form-label">
-                        <img src="~/ProfilPics/@Model.User.PhotoURL" class="navbar-toggler-icon" />
-                        <a href="#">@Model.User.FullName</a>
+
+                        <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">
+                            <img src="~/ProfilPics/@Model.User.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />
+                        </a>
+                        <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">@Model.User.FullName</a>
+
+                        @*<img src="~/ProfilPics/@Model.User.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />
+                        <a href="#">@Model.User.FullName</a>*@
                     </p>
                     <div>
                         @{

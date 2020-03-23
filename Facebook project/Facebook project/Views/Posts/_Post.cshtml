@@ -17,8 +17,14 @@
         <div class="row">
             <div class="col-3">
                 <p class="col-form-label text-center">
-                    <img src="~/ProfilPics/@Model.Publisher.PhotoURL" class="navbar-toggler-icon" />
-                    <a href="#">@Model.Publisher.FullName</a>
+                    @*<img src="~/ProfilPics/@Model.Publisher.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />*@
+                    @*<a href="#">@Model.Publisher.FullName</a>*@
+
+                    <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
+                        <img src="~/ProfilPics/@Model.Publisher.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />
+                    </a>
+                    <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">@Model.Publisher.FullName</a>
+
                 </p>
             </div>
             <div class="col-6">

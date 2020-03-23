@@ -15,12 +15,6 @@
 
 }
 
-@*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>*@
-
-
 @if (SignInManager.IsSignedIn(User))
 {
 
@@ -89,19 +83,5 @@
             }
         });
     };
-
-    function showResults() {
-        var results = document.querySelector("#myDropdown");
-        if (!results.classList.contains("show")) {
-            results.classList.add("show");
-        }
-    }
-
-    function hideResults() {
-        var results = document.querySelector("#myDropdown");
-        if (results.classList.contains("show")) {
-            results.classList.remove("show");
-        }
-    }
 
 </script>

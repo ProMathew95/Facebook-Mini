@@ -1,6 +1,6 @@
 ﻿<div class="col-8">
     <div class="dropdown">
-        <input type="text" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" onfocusout="hideResults()">
+        <input type="text" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" @*onfocusout="hideResults()"*@>
         <div id="myDropdown" class="dropdown-content show">
             @*search Results Here*@
         </div>
@@ -31,17 +31,16 @@
                         var userId = obj['id'];
                         var photoUrl = obj['photoURL'];
 
-                        tagsStr += '<div class="col-8"><img class="navbar-toggler-icon" src="/ProfilPics/' + photoUrl + '" />';
-                        tagsStr += '<a class="ml-2 d-inline" id="' + userId + '" href = "#" > ' + fullName + '</a></div >';
+                        tagsStr += '<div class="col-8">';
+                        tagsStr += '<a href="/Users/UserPage/' + userId + '">';
+                        tagsStr += '<img src="/ProfilPics/' + photoUrl +'" class="navbar-toggler-icon img-fluid rounded-circle" /></a>'
+                        tagsStr += '<a href="/Users/UserPage/' + userId + '">' + fullName + '</a>';
+                        tagsStr += '</div >';
 
                     }
                 }
 
                 document.querySelector("#myDropdown").innerHTML = tagsStr;
-
-
-
-
 
             },
             error: function () {
@@ -50,4 +49,20 @@
         });
     }
 
+    function showResults() {
+        var results = document.querySelector("#myDropdown");
+        if (!results.classList.contains("show")) {
+            results.classList.add("show");
+        }
+    }
+
+    function hideResults() {
+        setTimeout(function () {
+            var results = document.querySelector("#myDropdown");
+            if (results.classList.contains("show")) {
+                results.classList.remove("show");
+        }
+        }, 150)
+        
+    }
 </script>
