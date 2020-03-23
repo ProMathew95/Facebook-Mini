@@ -57,16 +57,16 @@
 
         function EditUserData() {
 
-	    var fullname = document.querySelector('#fullname').value;
-        var bio = document.querySelector('#bio').value;
-        var birthdate = document.querySelector('#birthdate').value;
-		var gender = document.querySelector('#gender').value;
-         
+	    var Editfullname = document.querySelector('#Editfullname').value;
+        var Editbio = document.querySelector('#Editbio').value;
+        var Editbirthdate = document.querySelector('#Editbirthdate').value;
+		var Editgender = document.querySelector('#Editgender').value;
+
 			var data = new FormData();
-			data.append("fullname", fullname);
-			data.append("bio", bio);
-			data.append("birthdate", birthdate);
-			data.append("gender", gender);
+			data.append("fullname", Editfullname);
+			data.append("bio", Editbio);
+			data.append("birthdate", Editbirthdate);
+			data.append("gender", Editgender);
 
         $.ajax({
             type: "POST",
@@ -75,7 +75,23 @@
             processData: false,
             contentType: false,
 			success: function (response) {
-				alert("succes");
+
+                document.querySelector('#fullname').innerText = Object.values(response)[2];
+                document.querySelector('#bio').innerText = Object.values(response)[3];
+
+                var date = new Date(Object.values(response)[1]);
+                var dateStr = (date.getMonth() + 1)  + "/" + date.getDate() + "/" + date.getFullYear()
+
+                document.querySelector('#birthdate').innerText = dateStr;
+                var gender = document.querySelector('#gender');
+
+                if (Object.values(response)[0] == 0) {
+                    gender.innerText  = "Female";
+                }
+                else {
+                    gender.innerText  = "Male";
+                }
+
                 //var respPostId = Object.values(response)[0];
                 //var respText = Object.values(response)[4];
                 //var respImg = Object.values(response)[5];
