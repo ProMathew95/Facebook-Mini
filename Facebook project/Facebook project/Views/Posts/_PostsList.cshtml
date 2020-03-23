@@ -8,9 +8,13 @@
 
 <div id="postsContainer" class="container">
     @*@foreach (var item in Model)*@
-    @foreach (var item in Model)
-    {
-        @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+    @{
+        var postsSorted = Model.OrderByDescending(p => p.Date).ToList();
+
+        @foreach (var item in postsSorted)
+        {
+            @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+        }
     }
 </div>
 
@@ -33,7 +37,7 @@
 
         $.ajax({
             type: "POST",
-            url: "Posts/AddComment",
+            url: '@Url.Action("AddComment","Posts")',//"Posts/AddComment",
             data: data,
             processData: false,
             contentType: false,
@@ -82,7 +86,7 @@
 
         $.ajax({
             type: "POST",
-            url: "Posts/EditPost",
+            url: '@Url.Action("EditPost","Posts")',//"Posts/EditPost",
             data: data,
             processData: false,
             contentType: false,
@@ -138,7 +142,7 @@
 
         $.ajax({
             type: "GET",
-            url: "Posts/LikesModal/" + id,
+            url: '@Url.Action("LikesModal","Posts")/' + id,//"Posts/LikesModal/" + id,
             success: function (response) {
                 $("#LikesDiv").html(response);
                 $("#LikesPopupContainer").modal("toggle");
@@ -160,7 +164,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "Posts/Like/" + id,
+                url: '@Url.Action("Like","Posts")/' + id,//"Posts/Like/" + id,
                 success: function () {
                     countVal++;
                     likeCounter.innerHTML = countVal;
@@ -178,7 +182,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "Posts/Dislike/" + id,
+                url: '@Url.Action("Dislike","Posts")/' + id,//"Posts/Dislike/" + id,
                 success: function () {
                     countVal--;
                     likeCounter.innerHTML = countVal;
@@ -201,7 +205,7 @@
 
         $.ajax({
             type: "GET",
-            url: "Posts/ConfirmDeleteModal/",
+            url: '@Url.Action("ConfirmDeleteModal","Posts")',//"Posts/ConfirmDeleteModal/",
             data: { objId: Id },
             contentType: "application/json; charset=utf-8",
             success: function (response) {
@@ -217,7 +221,7 @@
     function DeletePost(postId) {
         $.ajax({
             type: "POST",
-            url: "Posts/DeletePost/" + postId,
+            url: '@Url.Action("DeletePost","Posts")/' + postId,//"Posts/DeletePost/" + postId,
             success: function () {
                 var postFullId = '#post' + postId;
                 $(postFullId).remove();
@@ -233,7 +237,7 @@
 
         $.ajax({
             type: "GET",
-            url: "Posts/DeleteComment/",
+            url: '@Url.Action("DeleteComment","Posts")',//"Posts/DeleteComment/",
             data: { objId: commentId },
             contentType: "application/json; charset=utf-8",
             success: function () {
@@ -253,7 +257,7 @@
     function EditPostModal(postId) {
         $.ajax({
             type: "GET",
-            url: "Posts/EditPostModal/" + postId,
+            url: '@Url.Action("EditPostModal","Posts")/' + postId, //"Posts/EditPostModal/" + postId,
             success: function (response) {
                 $("#EditPostDiv").html(response);
                 $("#EditPostPopupContainer").modal("toggle");
@@ -268,7 +272,7 @@
 
         $.ajax({
             type: "GET",
-            url: "Posts/EditCommentModal/",
+            url: '@Url.Action("EditCommentModal","Posts")',//"Posts/EditCommentModal/",
             data: { objId: commenObj },
             success: function (response) {
                 $("#EditCommentDiv").html(response);
@@ -311,7 +315,7 @@
 
         $.ajax({
             type: "POST",
-            url: "Posts/EditComment",
+            url: '@Url.Action("EditComment","Posts")',//"Posts/EditComment",
             data: data,
             processData: false,
             contentType: false,

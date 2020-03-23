@@ -42,8 +42,6 @@ namespace Facebook_project.Controllers
                 var CurrentPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
                     .Include(p => p.Publisher).Where(p => p.PublisherId == userId || friendsIds.Contains(p.PublisherId)).ToList();
 
-                CurrentPosts = CurrentPosts.OrderByDescending(p => p.Date).ToList();
-
                 List<int> likedPosts = _db.Likes.Where(l => l.UserID == userId && l.isLiked).Select(l => l.PostID).ToList();
 
               //  if (CurrentPosts != null)

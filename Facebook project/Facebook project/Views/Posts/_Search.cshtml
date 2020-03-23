@@ -14,7 +14,7 @@
 
         $.ajax({
             type: "GET",
-            url: "Friends/Search/" + searchKey,
+            url: '@Url.Action("Search","Friends")/' + searchKey,//"Friends/Search/" + searchKey,
             success: function (response) {
                 console.log(response);
 

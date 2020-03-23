@@ -21,14 +21,11 @@
                 <p id="bio">@Model.Bio</p>
                 <p id="birthdate">@Model.BirthDate.ToString("MM/dd/yyyy")</p>
                 <p id="gender">@Model.Gender</p>
-
                 <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+
             </div>
             <div class="col-8">
-                @foreach (var item in Model.Posts)
-                {
-                    @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
-                }
+                 @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts);
             </div>
         </div>
     </div>
@@ -91,46 +88,6 @@
                 else {
                     gender.innerText  = "Male";
                 }
-
-                //var respPostId = Object.values(response)[0];
-                //var respText = Object.values(response)[4];
-                //var respImg = Object.values(response)[5];
-
-                //var imgDivId = '#PostImgDiv' + postId
-                //var textDivId = '#PostTextDiv' + postId
-
-
-                //if (respImg == null) {
-                //    respImg = "";
-                //}
-
-                //if (($(imgDivId)).children().length > 0) {
-
-                //    var ImgTag = (document.querySelector(imgDivId)).firstElementChild;
-                //    if (respImg == "")
-                //        ImgTag.src = "";
-                //    else
-                //        ImgTag.src = '/PostsPics/' + respImg;
-                //}
-                //else {
-                //    var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
-                //    (document.querySelector(imgDivId)).innerHTML += ImgTag;
-                //}
-
-                //if (respText != null) {
-
-                //    if (($(textDivId)).children().length > 0) {
-
-                //        var TextTag = (document.querySelector(textDivId)).firstElementChild;
-                //        TextTag.innerText = respText;
-                //    }
-                //    else {
-                //        var TextTag = '<p class="col-form-label">' + respText + '</p>';
-                //        (document.querySelector(textDivId)).innerHTML += TextTag;
-                //    }
-
-                //}
-
             },
             error: function () {
                 alert("Error Editing Post");
