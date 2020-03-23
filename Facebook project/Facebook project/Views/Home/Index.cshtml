@@ -36,7 +36,7 @@
 
     <p>
 
-        <div class="container">
+        @*<div class="container">
             <div class="row">
 
 
@@ -44,13 +44,13 @@
                        data-toggle="modal" data-target="#openModal" value="What's on your mind" />
 
             </div>
-        </div>
+        </div>*@
     </p>
 
-    @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post());
+   
 
 
-    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model);
+    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
 
 }
 

@@ -6,6 +6,20 @@
 <div id="EditPostDiv"></div>
 <div id="EditCommentDiv"></div>
 
+<div>
+    @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post())
+</div>
+
+<div class="container">
+    <div class="row">
+
+
+        <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
+               data-toggle="modal" data-target="#openModal" value="What's on your mind" />
+
+    </div>
+</div>
+
 <div id="postsContainer" class="container">
     @*@foreach (var item in Model)*@
     @{
@@ -13,12 +27,14 @@
 
         @foreach (var item in postsSorted)
         {
-            @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+            @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item)
         }
     }
 </div>
 
 <script>
+
+
     function addComment(postId) {
         var id = '#commentArea' + postId;
         var comment = document.querySelector(id).value;
