@@ -48,5 +48,17 @@ namespace Facebook_project.Repositories
 			}
 			return null;
 		}
+		public void CreatePost(Post post)
+		{
+			post.isDeleted = false;
+			post.numberOfLikes = 0;
+			post.Date = DateTime.Now;
+			_context.Posts.Add(post);
+			_context.SaveChanges();
+		}
+		public Post GetPostByUserAndDate(string userId, DateTime date)
+		{
+			return _context.Posts.Include(p => p.Publisher).Include(p => p.Like).Include(p => p.Comment).Where(p => p.PublisherId == userId && p.Date == date).FirstOrDefault();
+		}
 	}
 }
