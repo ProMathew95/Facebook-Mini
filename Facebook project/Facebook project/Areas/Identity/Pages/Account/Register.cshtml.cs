@@ -92,7 +92,7 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email , FullName = $"{Input.FirstName} {Input.LastName}",
+                var user = new AppUser { UserName = Input.Email, Email = Input.Email , PhotoURL="default.jpg",FullName = $"{Input.FirstName} {Input.LastName}",
                     BirthDate = Input.BirthDate, Gender = Input.Gender};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

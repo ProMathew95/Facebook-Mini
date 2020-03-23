@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@*@inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager*@
+
+@model Facebook_project.Models.AppUser
+@{
+    <div id="EditUserDataPopupContainer" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+
+                <h2>Edit User Data</h2>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="text-danger"></div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Update Info</label>
+                                </div>
+                                <div class="form-group">
+                                    <h2>Name</h2>
+                                    <input asp-for="@Model.FullName" id="fullname" />
+                                    <h2>Bio</h2>
+                                    <input asp-for="@Model.Bio" id="bio" />
+                                    <h2>Birthdate</h2>
+                                    <input asp-for="@Model.BirthDate" id="birthdate" />
+                                    <h2>Gender</h2>
+                                    <input asp-for="@Model.Gender" id="gender" />
+                                </div>
+                                <input type="button" onclick="EditUserData()" />
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        @Html.ActionLink("Back to List", "Index", "Home")
+                    </div>
+
+                </div>
+
+                <div class="modal-footer"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+}

@@ -20,5 +20,33 @@ namespace Facebook_project.Repositories
 			var appUser = _context.AppUsers.Include(c => c.Posts).ThenInclude(c=>(c as Post).Comment).Include(c => c.Posts).ThenInclude(c=>(c as Post).Like ).FirstOrDefault(c => c.Id == userId);
 			return appUser;
 		}
+		public bool isBlocked(string userID)
+		{
+			var user = _context.AppUsers.FirstOrDefault(u => u.Id == userID);
+			if(user!=null)
+			{
+				if (user.isBlocked == null)
+					return false;
+				return (bool)user.isBlocked;
+			}
+			return true;
+		}
+		public AppUser UpdateUserInfo(AppUser user)
+		{
+			if (user != null)
+			{
+				var appUSer = _context.AppUsers.FirstOrDefault(u => u.Id == user.Id);
+				if (appUSer != null)
+				{
+					appUSer.FullName = user.FullName;
+					appUSer.Bio = user.Bio;
+					appUSer.BirthDate = user.BirthDate;
+					appUSer.Gender = user.Gender;
+				}
+				_context.SaveChanges();
+				return appUSer;
+			}
+			return null;
+		}
 	}
 }

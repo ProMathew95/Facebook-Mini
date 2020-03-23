@@ -1,0 +1,126 @@
+﻿@model Facebook_project.Models.AppUser
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserInfo</title>
+</head>
+<body>
+    <div id="EditUserDataDiv"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-3 mr-3 text-center">
+
+                <img class="img-fluid rounded-circle" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
+                <h2 id="fullname">@Model.FullName</h2>
+                <p id="bio">@Model.Bio</p>
+                <p id="birthdate">@Model.BirthDate.ToString("MM/dd/yyyy")</p>
+                <p id="gender">@Model.Gender</p>
+
+                <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+            </div>
+            <div class="col-8">
+                @foreach (var item in Model.Posts)
+                {
+                    @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script type="text/javascript">
+
+		function EditUserDataModal() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditUserDataModal","Users")',
+            success: function (response) {
+                $("#EditUserDataDiv").html(response);
+                $("#EditUserDataPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+		}
+
+        function EditUserData() {
+
+	    var fullname = document.querySelector('#fullname').value;
+        var bio = document.querySelector('#bio').value;
+        var birthdate = document.querySelector('#birthdate').value;
+		var gender = document.querySelector('#gender').value;
+         
+			var data = new FormData();
+			data.append("fullname", fullname);
+			data.append("bio", bio);
+			data.append("birthdate", birthdate);
+			data.append("gender", gender);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("EditUserData","Users")',
+            data: data,
+            processData: false,
+            contentType: false,
+			success: function (response) {
+				alert("succes");
+                //var respPostId = Object.values(response)[0];
+                //var respText = Object.values(response)[4];
+                //var respImg = Object.values(response)[5];
+
+                //var imgDivId = '#PostImgDiv' + postId
+                //var textDivId = '#PostTextDiv' + postId
+
+
+                //if (respImg == null) {
+                //    respImg = "";
+                //}
+
+                //if (($(imgDivId)).children().length > 0) {
+
+                //    var ImgTag = (document.querySelector(imgDivId)).firstElementChild;
+                //    if (respImg == "")
+                //        ImgTag.src = "";
+                //    else
+                //        ImgTag.src = '/PostsPics/' + respImg;
+                //}
+                //else {
+                //    var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
+                //    (document.querySelector(imgDivId)).innerHTML += ImgTag;
+                //}
+
+                //if (respText != null) {
+
+                //    if (($(textDivId)).children().length > 0) {
+
+                //        var TextTag = (document.querySelector(textDivId)).firstElementChild;
+                //        TextTag.innerText = respText;
+                //    }
+                //    else {
+                //        var TextTag = '<p class="col-form-label">' + respText + '</p>';
+                //        (document.querySelector(textDivId)).innerHTML += TextTag;
+                //    }
+
+                //}
+
+            },
+            error: function () {
+                alert("Error Editing Post");
+            }
+        });
+    }
+    </script>
+</body>
+</html>
