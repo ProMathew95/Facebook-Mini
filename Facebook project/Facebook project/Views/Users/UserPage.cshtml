@@ -1,22 +1,17 @@
 ﻿@model Facebook_project.Models.AppUser
 @{
-	Layout = "_Layout";
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<title>_UserInfo</title>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserInfo</title>
 </head>
 <body>
-
     <div id="EditUserDataDiv"></div>
-
-    @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post());
-
-  
     <div class="container">
         <div class="row">
             <div class="col-3 mr-3 text-center">
@@ -29,15 +24,7 @@
 
                 <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
             </div>
-
             <div class="col-8">
-                <div>
-                    <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
-                           data-toggle="modal" data-target="#openModal" value="What's on your mind" />
-                </div>
-
-                <div id="CreatePostInUserPageDiv"></div>
-
                 @foreach (var item in Model.Posts)
                 {
                     @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
@@ -53,12 +40,6 @@
     <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
 
     <script type="text/javascript">
-
-        $(document).ready(function () {
-        $("#CreatePost").click(function () {
-            $("#PopupContainer").modal("toggle");
-        });
-    });
 
 		function EditUserDataModal() {
         $.ajax({
@@ -80,7 +61,7 @@
         var bio = document.querySelector('#bio').value;
         var birthdate = document.querySelector('#birthdate').value;
 		var gender = document.querySelector('#gender').value;
-
+         
 			var data = new FormData();
 			data.append("fullname", fullname);
 			data.append("bio", bio);
@@ -139,48 +120,6 @@
                 alert("Error Editing Post");
             }
         });
-		}
-
-        function addPost(signedInUserId) {
-        var postText = document.querySelector("#postText").value;
-
-        var data = new FormData();
-        var files = $("#creatPostImgSelector").get(0).files;
-
-        if (files.length > 0) {
-            data.append("postImg", files[0]);
-        }
-        else {
-            if (postText == "") {
-                alert("Cannot create an empty post");
-                return;
-            }
-        }
-
-        data.append("postText", postText);
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("AddPost","Users")',
-            data: data,
-            processData: false,
-            contentType: false,
-
-			success: function (response) {
-				alert(response);
-                document.querySelector("#CreatePostInUserPageDiv").insertAdjacentHTML('afterbegin', response);
-
-                document.querySelector("#postText").value = "";
-                document.querySelector('#creatPostImgSelector').remove();
-                document.querySelector('#creatPostImgSelectorDiv').innerHTML += '<input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" />';
-                document.querySelector('#createPostImg').src = "";
-            },
-            error: function (response) {
-                alert("Error submiting Post");
-            }
-        });
-
-        $("#PopupContainer").modal("toggle");
     }
     </script>
 </body>

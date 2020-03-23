@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -75,71 +74,6 @@ namespace Facebook_project.Controllers
                     }
                   }
                 }
-
-            return Json("error");
-        }
-
-        [HttpPost]
-        [Authorize]
-        //[ValidateAntiForgeryToken]
-        public IActionResult AddPost(IFormFile file)
-        {
-            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim != null)
-            {
-                var userId = claim.Value;
-                var picName = "";
-
-                /////checking image
-                if (HttpContext.Request.Form.Files.Any())
-                {
-                    var img = HttpContext.Request.Form.Files[0];
-                    string pic = Path.GetFileName(img.FileName);
-                    byte[] array;
-
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        img.CopyTo(ms);
-                        array = ms.GetBuffer();
-                        picName = $"{Guid.NewGuid()}.jpg";
-                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics", picName);
-                        System.IO.File.WriteAllBytes(str, array);
-                    }
-                }
-                /////////////////////
-
-                if (HttpContext.Request.Form.Keys.Any())
-                {
-                    Microsoft.Extensions.Primitives.StringValues post = "";
-                    Microsoft.Extensions.Primitives.StringValues PID = "";
-                    HttpContext.Request.Form.TryGetValue("postText", out post);
-
-                    string PostText = post.ToString();
-
-                    Post newpPost = new Post()
-                    {
-                        Date = DateTime.Now,
-                        isDeleted = false,
-                        Text = PostText,
-                        PublisherId = userId
-                    };
-
-                    if (picName != "")
-                        newpPost.PictureURL = picName;
-
-
-                    _context.CreatePost(newpPost);
-
-                    var respPost = _context.GetPostByUserAndDate(newpPost.PublisherId, newpPost.Date);
-
-
-
-                    return PartialView("~/Views/Posts/_Post.cshtml", respPost);
-
-                }
-            }
 
             return Json("error");
         }
