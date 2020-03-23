@@ -1,0 +1,369 @@
+﻿@model IEnumerable<Post>
+
+<div id="LikesDiv"></div>
+<div id="FriendRequestsDiv"></div>
+<div id="ConfirmDeleteDiv"></div>
+<div id="EditPostDiv"></div>
+<div id="EditCommentDiv"></div>
+
+<div id="postsContainer" class="container">
+    @*@foreach (var item in Model)*@
+    @foreach (var item in Model)
+    {
+        @await Html.PartialAsync("~/Views/Posts/_Post.cshtml", item);
+    }
+</div>
+
+<script>
+    function addComment(postId) {
+        var id = '#commentArea' + postId;
+        var comment = document.querySelector(id).value;
+
+        var CommentImgId = '#commentImg' + postId;
+
+        var data = new FormData();
+        var files = $(CommentImgId).get(0).files;
+
+        if (files.length > 0) {
+            data.append("CommentImg", files[0]);
+        }
+
+        data.append("Comment", comment);
+        data.append("PostId", postId);
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/AddComment",
+            data: data,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                var targetPostId = "#post" + postId;
+                var targetPost = document.querySelector(targetPostId);
+                targetPost.innerHTML += response;
+
+            },
+            error: function (response) {
+                alert("Error while submiting comment");
+            }
+        });
+
+        document.querySelector(id).value = "";
+    }
+
+    function editPost(postId) {
+
+        var text = document.querySelector('#EditPostText').value;
+        var data = new FormData();
+        var files = $("#postImgSelector").get(0).files;
+        var src = document.querySelector('#EditpostImg').src;
+        var isImgSelected = src.includes('jpg') || src.includes('jpeg');
+
+        if (text == "" && !isImgSelected) {
+            alert("Post cannot be empty");
+            return;
+        }
+
+
+        if (files.length > 0) {
+            data.append("postImg", files[0]);
+        }
+
+        data.append("postText", text);
+        data.append("postId", postId);
+        if (isImgSelected) {
+            data.append("removeImg", false);
+        }
+        else {
+            data.append("removeImg", true);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/EditPost",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                var respPostId = Object.values(response)[0];
+                var respText = Object.values(response)[4];
+                var respImg = Object.values(response)[5];
+
+                var imgDivId = '#PostImgDiv' + postId
+                var textDivId = '#PostTextDiv' + postId
+
+
+                if (respImg == null) {
+                    respImg = "";
+                }
+
+                if (($(imgDivId)).children().length > 0) {
+
+                    var ImgTag = (document.querySelector(imgDivId)).firstElementChild;
+                    if (respImg == "")
+                        ImgTag.src = "";
+                    else
+                        ImgTag.src = '/PostsPics/' + respImg;
+                }
+                else {
+                    var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
+                    (document.querySelector(imgDivId)).innerHTML += ImgTag;
+                }
+
+                if (respText != null) {
+
+                    if (($(textDivId)).children().length > 0) {
+
+                        var TextTag = (document.querySelector(textDivId)).firstElementChild;
+                        TextTag.innerText = respText;
+                    }
+                    else {
+                        var TextTag = '<p class="col-form-label">' + respText + '</p>';
+                        (document.querySelector(textDivId)).innerHTML += TextTag;
+                    }
+
+                }
+
+            },
+            error: function () {
+                alert("Error Editing Post");
+            }
+        });
+    }
+
+    function LikesModal(id) {
+
+        $.ajax({
+            type: "GET",
+            url: "Posts/LikesModal/" + id,
+            success: function (response) {
+                $("#LikesDiv").html(response);
+                $("#LikesPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    };
+
+    function Like(caller, id) {
+
+        var counterid = '#likes' + id;
+        var likeCounter = document.querySelector(counterid);
+        var countVal = likeCounter.innerHTML;
+
+        if (caller.classList.contains("fa-thumbs-up")) {
+
+
+            $.ajax({
+                type: "POST",
+                url: "Posts/Like/" + id,
+                success: function () {
+                    countVal++;
+                    likeCounter.innerHTML = countVal;
+                    caller.classList.remove("fa-thumbs-up");
+                    caller.classList.add("fa-thumbs-down");
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
+            });
+
+        }
+        else if (caller.classList.contains("fa-thumbs-down")) {
+
+
+            $.ajax({
+                type: "POST",
+                url: "Posts/Dislike/" + id,
+                success: function () {
+                    countVal--;
+                    likeCounter.innerHTML = countVal;
+                    caller.classList.remove("fa-thumbs-down");
+                    caller.classList.add("fa-thumbs-up");
+                },
+                error: function () {
+                    alert("Error while Disliking post");
+                }
+            });
+
+
+        }
+
+
+
+    }
+
+    function ConfirmDeleteModal(Id) {
+
+        $.ajax({
+            type: "GET",
+            url: "Posts/ConfirmDeleteModal/",
+            data: { objId: Id },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#ConfirmDeleteDiv").html(response);
+                ToggleConfirmDeleteModal();
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    };
+
+    function DeletePost(postId) {
+        $.ajax({
+            type: "POST",
+            url: "Posts/DeletePost/" + postId,
+            success: function () {
+                var postFullId = '#post' + postId;
+                $(postFullId).remove();
+            },
+            error: function () {
+                alert("Error Deleting Post");
+            }
+        });
+        ToggleConfirmDeleteModal();
+    }
+
+    function DeleteComment(commentId) {
+
+        $.ajax({
+            type: "GET",
+            url: "Posts/DeleteComment/",
+            data: { objId: commentId },
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                document.getElementById(commentId).remove();
+            },
+            error: function () {
+                alert("Error Deleting Comment");
+            }
+        });
+        ToggleConfirmDeleteModal();
+    }
+
+    function ToggleConfirmDeleteModal() {
+        $("#ConfirmDeletePopupContainer").modal("toggle");
+    }
+
+    function EditPostModal(postId) {
+        $.ajax({
+            type: "GET",
+            url: "Posts/EditPostModal/" + postId,
+            success: function (response) {
+                $("#EditPostDiv").html(response);
+                $("#EditPostPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    }
+
+    function EditCommentModal(commenObj) {
+
+        $.ajax({
+            type: "GET",
+            url: "Posts/EditCommentModal/",
+            data: { objId: commenObj },
+            success: function (response) {
+                $("#EditCommentDiv").html(response);
+                $("#EditCommentPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    }
+
+    function EditComment(postId, userId, time) {
+
+        var text = document.querySelector('#EditCommentText').value;
+        var data = new FormData();
+        var files = $("#commentImgSelector").get(0).files;
+        var src = document.querySelector('#EditCommentImg').src;
+        var isImgSelected = src.includes('jpg') || src.includes('jpeg');
+
+        if (text == "" && !isImgSelected) {
+            alert("Comment cannot be empty");
+            return;
+        }
+
+
+        if (files.length > 0) {
+            data.append("commentImg", files[0]);
+        }
+
+        data.append("commentText", text);
+        data.append("commentTime", time);
+        data.append("postId", postId);
+        data.append("userId", userId);
+        if (isImgSelected) {
+            data.append("removeImg", false);
+        }
+        else {
+            data.append("removeImg", true);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/EditComment",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                var respPostId = Object.values(response)[0];
+                var userId = Object.values(response)[1];
+                var commentTime = Object.values(response)[3];
+                var respText = Object.values(response)[4];
+                var respImg = Object.values(response)[5];
+
+
+                var imgDivId = 'CommentImgDiv*' + respPostId + "*" + userId + "*" + commentTime;
+                var textDivId = 'CommentTextDiv*' + respPostId + "*" + userId + "*" + commentTime;
+
+
+                if (respImg == null) {
+                    respImg = "";
+                }
+
+                if (document.getElementById(imgDivId).children.length > 0) {
+
+                    var ImgTag = (document.getElementById(imgDivId)).firstElementChild;
+                    if (respImg == "")
+                        ImgTag.src = "";
+                    else
+                        ImgTag.src = '/CommentsPics/' + respImg;
+                }
+                else {
+                    var ImgTag = '<img class="img-fluid" src="/CommentsPics/' + respImg + '" />';
+                    document.getElementById(imgDivId).innerHTML += ImgTag;
+                }
+
+                if (respText != null) {
+
+                    if (document.getElementById(textDivId).children.length > 0) {
+
+                        var TextTag = document.getElementById(textDivId).firstElementChild;
+                        TextTag.innerText = respText;
+                    }
+                    else {
+                        var TextTag = '<p class="col-form-label">' + respText + '</p>';
+                        document.getElementById(textDivId).innerHTML += TextTag;
+                    }
+
+                }
+
+            },
+
+            error: function () {
+                alert("Error Editing Comment");
+            }
+        });
+    }
+</script>

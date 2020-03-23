@@ -1,0 +1,53 @@
+﻿<div class="col-8">
+    <div class="dropdown">
+        <input type="text" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" onfocusout="hideResults()">
+        <div id="myDropdown" class="dropdown-content show">
+            @*search Results Here*@
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function Search() {
+        var searchKey = $('#myInput').val();
+
+        $.ajax({
+            type: "GET",
+            url: "Friends/Search/" + searchKey,
+            success: function (response) {
+                console.log(response);
+
+                var tagsStr = "";
+                for (var i = 0; i < response.length; i++) {
+                    var obj = response[i];
+
+
+                    if (obj.hasOwnProperty("fullName") &&
+                        obj.hasOwnProperty("id") &&
+                        obj.hasOwnProperty("photoURL")) {
+
+                        var fullName = obj['fullName'];
+                        var userId = obj['id'];
+                        var photoUrl = obj['photoURL'];
+
+                        tagsStr += '<div class="col-8"><img class="navbar-toggler-icon" src="/ProfilPics/' + photoUrl + '" />';
+                        tagsStr += '<a class="ml-2 d-inline" id="' + userId + '" href = "#" > ' + fullName + '</a></div >';
+
+                    }
+                }
+
+                document.querySelector("#myDropdown").innerHTML = tagsStr;
+
+
+
+
+
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+
+</script>
