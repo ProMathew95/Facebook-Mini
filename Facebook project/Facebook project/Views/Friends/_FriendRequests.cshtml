@@ -50,3 +50,37 @@
 
 
 }
+
+<script>
+
+    function FriendRequest(caller, ReqUserId) {
+        var RID = '#request' + ReqUserId;
+        var RequestElement = document.querySelector(RID);
+        if (caller.classList.contains("Accept")) {
+            $.ajax({
+                type: "POST",
+                url: "Friends/AcceptRequest/" + ReqUserId,
+                success: function () {
+                    RequestElement.remove();
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
+            });
+        }
+        else if (caller.classList.contains("Reject")) {
+
+            $.ajax({
+                type: "POST",
+                url: "Friends/RejectRequest/" + ReqUserId,
+                success: function () {
+                    RequestElement.remove();
+                },
+                error: function () {
+                    alert("Error while liking post");
+                }
+            });
+        }
+    }
+
+</script>

@@ -24,15 +24,15 @@
                                 </div>
                                 <div class="form-group">
                                     <h2>Name</h2>
-                                    <input asp-for="@Model.FullName" id="fullname" />
+                                    <input asp-for="@Model.FullName" id="Editfullname" />
                                     <h2>Bio</h2>
-                                    <input asp-for="@Model.Bio" id="bio" />
+                                    <input asp-for="@Model.Bio" id="Editbio" />
                                     <h2>Birthdate</h2>
-                                    <input asp-for="@Model.BirthDate" id="birthdate" />
+                                    <input asp-for="@Model.BirthDate" id="Editbirthdate" />
                                     <h2>Gender</h2>
-                                    <input asp-for="@Model.Gender" id="gender" />
+                                    <input asp-for="@Model.Gender" id="Editgender" />
                                 </div>
-                                <input type="button" onclick="EditUserData()" />
+                                <input type="button" value="Save" data-dismiss="modal" class="btn btn-primary" onclick="EditUserData()" />
                             </form>
                         </div>
                     </div>

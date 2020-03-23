@@ -57,3 +57,49 @@
 
 
 }
+
+<script>
+
+    function addPost(signedInUserId) {
+        var postText = document.querySelector("#postText").value;
+
+        var data = new FormData();
+        var files = $("#creatPostImgSelector").get(0).files;
+
+        if (files.length > 0) {
+            data.append("postImg", files[0]);
+        }
+        else {
+            if (postText == "") {
+                alert("Cannot create an empty post");
+                return;
+            }
+        }
+
+        data.append("postText", postText);
+
+        $.ajax({
+            type: "POST",
+            url: "Posts/AddPost",
+            data: data,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                document.querySelector("#postsContainer").insertAdjacentHTML('afterbegin', response);
+
+                document.querySelector("#postText").value = "";
+                document.querySelector('#creatPostImgSelector').remove();
+                document.querySelector('#creatPostImgSelectorDiv').innerHTML += '<input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" />';
+                document.querySelector('#createPostImg').src = "";
+            },
+            error: function (response) {
+                alert("Error submiting Post");
+            }
+        });
+
+        $("#PopupContainer").modal("toggle");
+    }
+
+</script>
