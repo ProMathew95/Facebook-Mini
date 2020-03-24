@@ -14,16 +14,21 @@
 	<div id="EditUserDataDiv"></div>
 	<div class="container">
 		<div class="row">
-			<div class="col-3 mr-3 text-center">
+            <div class="col-3 mr-3 text-center">
 
-				<img class="img-fluid rounded-circle" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
-				<h2 id="fullname">@Model.FullName</h2>
-				<p id="bio">@Model.Bio</p>
-				<p id="birthdate">@Model.BirthDate.ToString("MM/dd/yyyy")</p>
-				<p id="gender">@Model.Gender</p>
-				<i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+                <img class="img-fluid rounded-circle" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
+                <hr />
 
-			</div>
+                <i class="fas fa-edit ml-2" asp-controller="Users" asp-action="EditUserImageModal" onclick="EditUserImageModal()"></i>
+                <h2 id="fullname">@Model.FullName</h2>
+                <p id="bio">@Model.Bio</p>
+                <p id="birthdate">@Model.BirthDate.ToString("MM/dd/yyyy")</p>
+                <p id="gender">@Model.Gender</p>
+                <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+
+                <input type="hidden" asp-for="@Model.Id" id="UserId"/>
+
+            </div>
 			<div class="col-8">
 				@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
 			</div>
@@ -97,7 +102,96 @@
                 alert("Error Editing Post");
             }
         });
-    }
+		}
+        
+         function EditUserImage()
+        {
+            var data = new FormData();
+            var files = $("#postImgSelector").get(0).files;
+			 var src = document.querySelector('#EditUserImg').src;
+			 var userid = document.querySelector('#UserId').value;
+			 alert(userid);
+            var isImgSelected = src.includes('jpg') || src.includes('jpeg');
+            if (files.length > 0)
+            {
+            data.append("picName", files[0]);
+            }
+            if (isImgSelected)
+            {
+            data.append("removeImg", false);
+            }
+        else {
+            data.append("removeImg", true);
+        }
+
+        $.ajax({
+            type: "POST",
+
+            url: '@Url.Action("EditUserImage","Users")',
+
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response)
+			{
+				alert(response);
+				var respImg = Object.values(response)[0];
+                if (respImg == null)
+                {
+                    respImg = "default.jpg";
+                }
+
+                    var ImgTag = (document.querySelector('#profilePicture'));
+                    if (respImg == "")
+                        ImgTag.src = "default.jpg";
+                    else
+					ImgTag.src = '/ProfilPics/' + respImg;
+				window.location.href = '@Url.Action("UserPage","Users","userid")';
+
+                },
+
+
+             error: function () {
+                alert("Error Editing Profile Image ");
+            }
+        });
+
+
+	}
+         function EditUserImageModal() {
+              $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditUserImageModal","Users")',
+				  success: function (response) {
+			    $("#EditUserDataDiv").html(response);
+                $("#EditUserImagePopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+        }
+
+
+        function ResetFile(selector,div,img) {
+            document.querySelector('#' + selector).remove();
+            document.querySelector('#' + div).innerHTML += '<input type="file" name="file" id="' + selector + '" style="width: 100%;" onchange="readURL(this)" />';
+            document.querySelector('#' + img).src = "";
+
+	}
+
+         function readURL(input, selector)
+        {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(selector).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+        }
+
 	</script>
 </body>
 </html>

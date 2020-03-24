@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Facebook_project.Models;
+using Facebook_project.Models.ViewModels;
 using Facebook_project.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -75,6 +77,65 @@ namespace Facebook_project.Controllers
                   }
                 }
 
+            return Json("error");
+        }
+        public IActionResult EditUserImage(IFormFile file)
+        {
+
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                var status = _context.isBlocked(userId);
+                Microsoft.Extensions.Primitives.StringValues removeImg = "";
+
+                HttpContext.Request.Form.TryGetValue("removeImg", out removeImg);
+
+                string picName = "";
+                bool removeImage = bool.Parse(removeImg);
+
+                /////checking image
+                if (HttpContext.Request.Form.Files.Any())
+                {
+                    var img = HttpContext.Request.Form.Files[0];
+                    string pic = Path.GetFileName(img.FileName);
+                    byte[] array;
+
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        img.CopyTo(ms);
+                        array = ms.GetBuffer();
+                        picName = $"{Guid.NewGuid()}.jpg";
+                        var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//ProfilPics", picName);
+                        System.IO.File.WriteAllBytes(str, array);
+                    }
+                }
+
+                var respImg = _context.UpdateImageUser(userId, picName, removeImage);
+
+                ResponseViewModel response = new ResponseViewModel()
+                {
+                    PicURL = respImg.PhotoURL,
+                    
+                };
+                return Json(response);
+                //return Json(new { response=response, Url="UserPage/"+userId});
+            }
+            return Json("error");
+        }
+
+        public IActionResult EditUserImageModal()
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                var user = _context.GetUserByid(userId);
+                return PartialView("EditUserImageModal", user);
+            }
             return Json("error");
         }
     }

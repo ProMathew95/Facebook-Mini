@@ -48,5 +48,27 @@ namespace Facebook_project.Repositories
 			}
 			return null;
 		}
+		public AppUser UpdateImageUser(string id, string PictureUrl, bool removeImg)
+		{
+			var AppUser = _context.AppUsers.FirstOrDefault(u => u.Id == id);
+
+			if (AppUser != null)
+			{
+
+				if (removeImg)
+					AppUser.PhotoURL = "default.jpg";
+
+
+				else if (PictureUrl != "")
+					AppUser.PhotoURL = PictureUrl;
+
+
+
+			}
+
+			_context.SaveChanges();
+			return AppUser;
+		}
+
 	}
 }
