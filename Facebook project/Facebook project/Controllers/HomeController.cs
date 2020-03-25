@@ -86,5 +86,23 @@ namespace Facebook_project.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult HomePartial()
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                var user = _db.AppUsers.FirstOrDefault(u => u.Id == userId);
+
+                if(user != null)
+                {
+                    return PartialView("~/Views/Shared/_HomePartial.cshtml", user);
+                }
+                return NotFound();
+            }
+            return NotFound();
+        }
     }
 }

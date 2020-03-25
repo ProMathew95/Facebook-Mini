@@ -3,27 +3,64 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="~/css/UserHome.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link href="~/css/UserHome.css" rel="stylesheet" />
+    <link href="~/css/PostStyle.css" rel="stylesheet" />
+    <link href="~/css/WritePost.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+
+
+
+
+
+
 
     <title>@ViewBag.Title</title>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
-            @*<div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Valid" asp-action="MainPage">Facebook</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>*@
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <partial name="_HomePartial" />
-                <ul class="navbar-nav flex-grow-1">
-                </ul>
+        <nav class="navbar navbar-expand-lg navbar-light ">
+            @*<p>FaceBook</p>*@
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                
+    @*needs a fix*@
+    @*<partial name="_HomePartial" />*@
+
+            <div id="HomePartialdiv"></div>
+
+
+
+
+                @*<ul class="navbar-nav mr-auto">
+                        <partial name="_HomePartial" />
+
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>*@
             </div>
-            @*</div>*@
         </nav>
+
+
+
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_HomePartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                    </ul>
+                </div>
+                </div>
+            </nav>*@
     </header>
     <div>
         @RenderBody()
@@ -33,9 +70,33 @@
             &copy; 2020 - Facebook_project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script src="https://kit.fontawesome.com/f5fdd04ada.js" crossorigin="anonymous"></script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    };
+
+
+
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("HomePartial","Home")',//"Friends/FriendRequestsModal/",
+            success: function (response) {
+                $("#HomePartialdiv").html(response);
+                //$("#FriendRequestsPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error retreiving Users");
+            }
+        });
+    });
+</script>

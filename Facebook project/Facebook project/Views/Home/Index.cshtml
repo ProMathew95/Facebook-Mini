@@ -11,7 +11,7 @@
 @{
     ViewData["Title"] = "Home Page";
     ViewData["id"] = 0;
-    //Layout = "_HomeLayout";
+    Layout = "_HomeLayout";
 
 }
 
@@ -37,20 +37,19 @@
     <p>
 
         @*<div class="container">
-            <div class="row">
+                <div class="row">
 
 
-                <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
-                       data-toggle="modal" data-target="#openModal" value="What's on your mind" />
+                    <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
+                           data-toggle="modal" data-target="#openModal" value="What's on your mind" />
 
-            </div>
-        </div>*@
+                </div>
+            </div>*@
     </p>
 
-   
 
 
-    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
 
 }
 

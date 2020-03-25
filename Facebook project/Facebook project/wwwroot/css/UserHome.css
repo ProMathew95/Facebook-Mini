@@ -1,10 +1,26 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+*
+{
+    padding:0px 0px 0px 0px;
+    margin:0;
+    
+}
 
-nav {
-    height: 85px;
-    background-color: #425d99;
+#myDropdown {
+    background-color: white;
+    border: 1px solid black;
+}
+
+#SearchSetting {
+    position: relative;
+    left: 30%;
+    width: 50%;
+    padding-bottom: 0px;
+    top: -58px;
+    padding-top: 0px;
+    padding-left: 0px;
 }
 
 
@@ -93,17 +109,39 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+    
 }
 
-.navbar-light .navbar-brand {
-    color: #f8f9fa;
+.navbar-brand {
+    /*color: #f8f9fa;*/
     font-weight: bolder;
+    /*background-color:mediumvioletred;*/
 }
 
-ul > li {
+nav {
+    height: 85px;
+    background-color: #425d99;
+}
+
+/*#navbarSupportedContent > ul {
+    background-color: #425d99;
+    /*width: 80px;*/
+}*/
+.navbar {
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    position: fixed;
+    height: 60px;
+}
+
+
+
+
+/*ul > li {
     display: inline-block;
     padding-right: 10px;
-}
+}*/
 
 .footer {
     position: absolute;
@@ -111,4 +149,17 @@ ul > li {
     width: 100%;
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
+}
+
+
+#myInput {
+    position: relative;
+    padding-bottom: 0px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+#navbarSupportedContent > ul > li > a
+{
+    color:white;
 }

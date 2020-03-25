@@ -1,59 +1,62 @@
 ﻿@model Comment
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
 
 @{
+
+    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = claim.Value;
+
     if (!Model.isRemoved)
     {
         string CommentID = $"comment*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
-        <div id="@CommentID" class="border mt-2">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4">
-                    <p class="col-form-label">
-
-                        <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">
-                            <img src="~/ProfilPics/@Model.User.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />
-                        </a>
-                        <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">@Model.User.FullName</a>
-
-                        @*<img src="~/ProfilPics/@Model.User.PhotoURL" class="navbar-toggler-icon img-fluid rounded-circle" />
-                        <a href="#">@Model.User.FullName</a>*@
-                    </p>
-                    <div>
-                        @{
-                            string CommentTextDiv = $"CommentTextDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
-                            <div id="@CommentTextDiv" class="col-12">
-                                @if (Model.Text != null && Model.Text != "")
-                                {
-                                    <p class="col-form-label">@Model.Text</p>
-                                }
-                            </div>
-                        }
 
 
-                        @{
-                            string CommentImgDiv = $"CommentImgDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
+        <li id="@CommentID" class="comment">
 
-                            <div id="@CommentImgDiv" class="col-12">
-                                @if (Model.PictureURL != null && Model.PictureURL != "")
-                                {
-                                    <img class="img-fluid" src="~/CommentsPics/@Model.PictureURL" />
-                                }
-                            </div>
+                <a class="pull-left" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">
+                    <img id="profileImg" src="~/ProfilPics/@Model.User.PhotoURL" class="avatar img-thumbnail" />
+                </a>
 
-                        }
-
-
+                <div class="comment-body">
+                    <div class="comment-heading">
+                        <a class="user" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">@Model.User.FullName</a>
+                        <p>@Model.Time</p>
                     </div>
+                    @{
+                        string CommentTextDiv = $"CommentTextDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
+                        <div id="@CommentTextDiv" class="col-12">
+                            @if (Model.Text != null && Model.Text != "")
+                            {
+                                <p class="col-form-label">@Model.Text</p>
+                            }
+                        </div>
+                    }
+                    @{
+                        string CommentImgDiv = $"CommentImgDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
+
+                        <div id="@CommentImgDiv" class="col-12">
+                            @if (Model.PictureURL != null && Model.PictureURL != "")
+                            {
+                                <img class="img-fluid" src="~/CommentsPics/@Model.PictureURL" />
+                            }
+                        </div>
+
+                    }
+
+
                 </div>
-                <div class="col-4">
+                @if (userId == Model.UserID)
+                {
                     <p class="col-form-label text-center">
-                        @Model.Time
-                        <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal('@CommentID')"></i>
-                        <i class="fas fa-edit ml-2" onclick="EditCommentModal('@CommentID')"></i>
+                        <i class="fa fa-trash ml-2" onclick="ConfirmDeleteModal('@CommentID')"></i>
+                        <i class="fa fa-edit ml-2" onclick="EditCommentModal('@CommentID')"></i>
                     </p>
-                </div>
-            </div>
-        </div>
+                }
+            @*</div>*@
+        </li>
+
 
     }
 }

@@ -2,7 +2,7 @@
 
 @*@model AppUser*@
 
-@model Facebook_project.Models.ViewModels.UserPosts;
+@model Facebook_project.Models.AppUser;
 
 
 @using Microsoft.AspNetCore.Identity
@@ -21,27 +21,33 @@
 
         <li class="nav-item">
             <div>
-                <a class="nav-link" asp-action="" asp-controller="">
+
+                <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Id">
+                    <img src="~/ProfilPics/@Model.PhotoURL" class="avatar rounded-circle img-fluid icon" alt="profImg" />
+                    <div><span>@Model.FullName</span></div>
+                </a>
+
+                @*<a class="nav-link" asp-action="" asp-controller="">
 
                     <img id="homeProfileImg" src="~/femaleProfile.PNG" />
-                    <span>@Model.myUser.NormalizedUserName</span>
-                </a>
+                    <span>@Model.FullName</span>
+                </a>*@
             </div>
         </li>
         <li class="nav-item">
             <div>
-                <a class="nav-link" asp-action="Home" asp-controller="User">
+                <a class="nav-link" asp-action="Index" asp-controller="Home">
                     Home
                 </a>
             </div>
         </li>
-        <li class="nav-item">
+        @*<li class="nav-item">
             <div>
                 <a class="nav-link" asp-action="Home" asp-controller="User">
                     <i class="fa fa-bell" aria-hidden="true"></i>
                 </a>
             </div>
-        </li>
+        </li>*@
         <li class="nav-item">
             <div>
                 <a class="nav-link" asp-action="Home" asp-controller="User">

@@ -14,7 +14,7 @@
 	<div id="EditUserDataDiv"></div>
 	<div class="container">
 		<div class="row">
-            <div class="col-3 mr-3 text-center">
+            <div class="col-12 col-md-3 text-center">
 
                 <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
                 <hr />
@@ -29,7 +29,7 @@
                 <input type="hidden" asp-for="@Model.Id" id="UserId"/>
 
             </div>
-			<div class="col-8">
+			<div class="col-12 col-md-8">
 				@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
 			</div>
 		</div>

@@ -7,52 +7,86 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
 
-    <div id="PopupContainer" class="modal fade CreateModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"></div>
 
-                <h2>Create</h2>
-                <div class="modal-body">
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            
-                            <form method="post" enctype="multipart/form-data">
-                                <div class="text-danger"></div>
 
-                                <div class="form-group">
-                                    <label class="control-label">New Post</label>
-                                    <textarea id="postText"></textarea>
-                                </div>
-
-                                <div id="createPostImgDiv" class="col-12">
-                                    <img id="createPostImg" class="img-fluid" src="" />
-                                </div>
-
-                                <div id="creatPostImgSelectorDiv" class="form-group">
-                                    <input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" onchange="readURL(this,'#createPostImg')"/>
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div>
-                        @Html.ActionLink("Back to List", "Index","Home")
-                    </div>
-
+    <div class="col-md-offset-3 col-md-12 col-xs-12">
+        <div class="well well-sm well-social-post">
+            <form method="post" enctype="multipart/form-data">
+                @*<ul class="list-inline" id='list_PostActions'>
+                    <li><p>Create Post</p></li>
+                </ul>*@
+                <textarea id="postText" class="form-control" placeholder="What's in your mind?"></textarea>
+                <div id="createPostImgDiv" class="col-12">
+                    <img id="createPostImg" class="img-fluid" src="" />
                 </div>
 
-                <div class="modal-footer"></div>
+                <ul class='list-inline post-actions'>
+                    <div class="creatPostImgSelectorDiv">
+                        <i class="btn fa fa-camera"></i>
+                        <input class="file" type="file" name="file" id="creatPostImgSelector" style="width: 3%" onchange="readURL(this,'#createPostImg')" />
 
+                    </div>
 
-            </div>
+                    <li class='pull-right'>
+                        <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
+
+                    </li>
+
+                    @*<a onclick="addPost()"  class='btn btn-primary btn-xs'>Post</a></li>*@
+                </ul>
+            </form>
         </div>
     </div>
+
+
+
+    @*<div id="PopupContainer" class="modal fade CreateModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header"></div>
+
+                    <h2>Create</h2>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <form method="post" enctype="multipart/form-data">
+                                    <div class="text-danger"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">New Post</label>
+                                        <textarea id="postText"></textarea>
+                                    </div>
+
+                                    <div id="createPostImgDiv" class="col-12">
+                                        <img id="createPostImg" class="img-fluid" src="" />
+                                    </div>
+
+                                    <div id="creatPostImgSelectorDiv" class="form-group">
+                                        <input type="file" name="file" id="creatPostImgSelector" style="width: 100%;" onchange="readURL(this,'#createPostImg')"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            @Html.ActionLink("Back to List", "Index","Home")
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer"></div>
+
+
+                </div>
+            </div>
+        </div>*@
 
 
 
