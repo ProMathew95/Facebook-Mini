@@ -78,7 +78,7 @@
                             <div class="post-footer-option container">
                                 <ul class="list-unstyled">
 
-                                    @if (Model.Like.Where(l => l.UserID == userId).ToList().Count > 0)
+                                    @if (Model.Like.Where(l => l.UserID == userId && l.isLiked).ToList().Count > 0)
                                     {
                                         <li>
                                             <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
@@ -91,9 +91,18 @@
                                         </li>
                                     }
 
+
+                                    @{string likesId = $"likes{Model.PostId}";}
+                                    <a id="@likesId" class="btn likes" onclick="LikesModal(@Model.PostId)">@Model.Like.Count(l => l.isLiked)</a>
+
+
+
+
+
+
                                     @*<li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
-                                    <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                    <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>*@
+        <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
+        <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>*@
                                 </ul>
                             </div>
                             <div class="post-footer-comment-wrapper">
