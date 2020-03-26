@@ -55,7 +55,7 @@
 
             success: function (response) {
 
-                var targetPostId = "#post" + postId;
+                var targetPostId = "#commentsSection" + postId;
                 var targetPost = document.querySelector(targetPostId);
                 targetPost.innerHTML += response;
 

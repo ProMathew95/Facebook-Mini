@@ -10,63 +10,10 @@
 
     if (!Model.isRemoved)
     {
-        @*string CommentID = $"comment*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
-
-
-            <li id="@CommentID" class="comment">
-
-                <a class="pull-left" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">
-                    <img id="profileImg" src="~/ProfilPics/@Model.User.PhotoURL" class="avatar img-thumbnail" />
-                </a>
-
-                <div class="comment-body">
-                    <div class="comment-heading">
-                        <a class="user" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">@Model.User.FullName</a>
-                        <p>@Model.Time</p>
-                    </div>
-                    @{
-                        string CommentTextDiv = $"CommentTextDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
-                        <div id="@CommentTextDiv" class="col-12">
-                            @if (Model.Text != null && Model.Text != "")
-                            {
-                                <p class="col-form-label">@Model.Text</p>
-                            }
-                        </div>
-                    }
-                    @{
-                        string CommentImgDiv = $"CommentImgDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
-
-                        <div id="@CommentImgDiv" class="col-12">
-                            @if (Model.PictureURL != null && Model.PictureURL != "")
-                            {
-                                <img class="img-fluid" src="~/CommentsPics/@Model.PictureURL" />
-                            }
-                        </div>
-
-                    }
-
-
-                </div>
-                @if (userId == Model.UserID)
-                {
-                    <p class="col-form-label text-center">
-                        <i class="fa fa-trash ml-2" onclick="ConfirmDeleteModal('@CommentID')"></i>
-                        <i class="fa fa-edit ml-2" onclick="EditCommentModal('@CommentID')"></i>
-                    </p>
-                }
-                </div>
-            </li>*@
-
-
-
         string CommentID = $"comment*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
 
         <li id="@CommentID" class="comment">
             <div class="media">
-
-
-
-
 
                 <div class="container">
 
@@ -98,35 +45,6 @@
                             }
                         </div>
 
-
-
-
-
-
-                        @*<div class="media-left">
-                    <a class="media-object photo-profile" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.UserID">
-                        <img id="profileImg" src="~/ProfilPics/@Model.User.PhotoURL" class="avatar img-thumbnail" width="32" height="32" />
-                    </a>
-
-
-                </div>
-
-                <div class="media-body col-md-11">
-                    <a id="publisherNameLabel" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.User.Id">
-                        <h4 class="media-heading">@Model.User.FullName</h4>
-                    </a>
-                    <p class="anchor-time">@Model.Time</p>
-                </div>
-                <div class="col-md-1">
-                    @if (userId == Model.UserID)
-                    {
-                        <p class="col-form-label text-center">
-                            <i class="fa fa-trash ml-2" onclick="ConfirmDeleteModal('@CommentID')"></i>
-                            <i class="fa fa-edit ml-2" onclick="EditCommentModal('@CommentID')"></i>
-                        </p>
-                    }
-                </div>*@
-
                         <section class="post-body">
                             @{
                                 string CommentTextDiv = $"CommentTextDiv*{Model.PostID}*{Model.UserID}*{Model.Time.ToString().Replace(" ", "")}";
@@ -143,14 +61,12 @@
                                 <div id="@CommentImgDiv" class="col-12">
                                     @if (Model.PictureURL != null && Model.PictureURL != "")
                                     {
-                                        <img class="img-fluid" src="~/CommentsPics/@Model.PictureURL" />
+                                        <img class="img-fluid img-thumbnail" src="~/CommentsPics/@Model.PictureURL" />
                                     }
                                 </div>
 
                             }
                         </section>
-
-
 
                     </div>
                 </div>

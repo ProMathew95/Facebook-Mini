@@ -116,8 +116,9 @@
                                     </form>
                                 </div>
 
+                                @{string CommentsSectionID = $"commentsSection{Model.PostId}";}
 
-                                <ul style="list-style: none;" class="comments-list mt-2" id="@PostID">
+                                <ul style="list-style: none;" class="comments-list mt-2" id="@CommentsSectionID">
                                     @foreach (var comment in Model.Comment)
                                     {
                                         @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
@@ -126,7 +127,7 @@
 
 
 
-                                
+
                             </div>
                         </section>
                     </div>
