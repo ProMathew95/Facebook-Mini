@@ -33,4 +33,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\CommentsPics\" />
+    <Folder Include="wwwroot\PostsPics\" />
+  </ItemGroup>
+
 </Project>

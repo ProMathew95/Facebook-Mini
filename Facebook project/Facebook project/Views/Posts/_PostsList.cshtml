@@ -17,7 +17,7 @@
     </div>
 </div>*@
 
-<div id="postsContainer" class="container-fluid">
+<div id="postsContainer" @*class="container"*@>
     @*@foreach (var item in Model)*@
     @{
         var postsSorted = Model.OrderByDescending(p => p.Date).ToList();

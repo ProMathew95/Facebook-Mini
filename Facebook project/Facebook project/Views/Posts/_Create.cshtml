@@ -10,7 +10,7 @@
 
 
 
-    <div class="col-md-offset-3 col-md-12 col-xs-12">
+    <div class="col-md-12 col-xs-12">
         <div class="well well-sm well-social-post">
             <form method="post" enctype="multipart/form-data">
                 @*<ul class="list-inline" id='list_PostActions'>
@@ -20,21 +20,24 @@
                 <div id="createPostImgDiv" class="col-12">
                     <img id="createPostImg" class="img-fluid" src="" />
                 </div>
+                
 
-                <ul class='list-inline post-actions'>
+                <div class='list-inline post-actions'>
                     <div class="creatPostImgSelectorDiv">
-                        <i class="btn fa fa-camera"></i>
-                        <input class="file" type="file" name="file" id="creatPostImgSelector" style="width: 3%" onchange="readURL(this,'#createPostImg')" />
+                        @*<i class="btn fa fa-camera"></i>*@
+                        <label class="custom-file-upload">
+                            <input class="btn fa fa-camera" type="file" name="file" id="creatPostImgSelector" style="display:none" onchange="readURL(this,'#createPostImg')">
+                            <i class="btn fa fa-camera"></i>
+                        </label>
+                    </div>
+
+                    <div class=''>
+                        <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
 
                     </div>
 
-                    <li class='pull-right'>
-                        <input type="button" value="Create" class="btn btn-primary" onclick="addPost()" />
-
-                    </li>
-
                     @*<a onclick="addPost()"  class='btn btn-primary btn-xs'>Post</a></li>*@
-                </ul>
+                </div>
             </form>
         </div>
     </div>

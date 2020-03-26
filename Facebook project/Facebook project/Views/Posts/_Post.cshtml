@@ -13,99 +13,115 @@
 
     if (Model.isDeleted == null || !(bool)Model.isDeleted)
     {
-        <div class="container bootstrap snippet col-sm-12 mt-2" @*class="border mt-5"*@>
-            <div class="panel panel-white post panel-shadow p-3">
-                <div class="post-heading row">
-                    <div class="pull-left image">
-                        <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
-                            <img src="~/ProfilPics/@Model.Publisher.PhotoURL" class="avatar rounded-circle img-fluid icon" alt="profImg" />
-                        </a>
-                    </div>
-                    <div class="pull-left meta col-4 col-sm-6 col-md-7 p-0">
-                        <div class="title h5">
-                            <a id="publisherNameLabel" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">@Model.Publisher.FullName</a>
-                        </div>
-                        <h6 class="text-muted time">@Model.Date</h6>
-                    </div>
-                    <div style="float:right" class="col-3 col-lg-3 col-md-2 col-sm-3 text-right p-0">
-                        @if (userId == Model.PublisherId)
-                        {
-                            <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
-                            <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
-                        }
-                    </div>
-                </div>
-
-
-                <div class="post-description">
-                    @{
-                        string PostTextDiv = $"PostTextDiv{Model.PostId}";
-                        <div id="@PostTextDiv" class="col-12">
-                            @if (Model.Text != null && Model.Text != "")
-                            {
-                                <h4>
-                                    @Model.Text
-                                </h4>
-                            }
-                        </div>
-                    }
-
-
-                    @{
-                        string PostImgDiv = $"PostImgDiv{Model.PostId}";
-
-                        <div id="@PostImgDiv" class="col-12 mb-2">
-                            @if (@Model.PictureURL != null && @Model.PictureURL != "")
-                            {
-                                <img class="img-fluid" src="~/PostsPics/@Model.PictureURL" />
-                            }
-                        </div>
-
-                    }
-                    <div class="state">
-                        @if (Model.Like.Where(l => l.UserID == userId).ToList().Count > 0)
-                        {
-                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
-                        }
-                        else
-                        {
-                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@Model.PostId)"></i>
-                        }
-
-                        @{string likesId = $"likes{Model.PostId}";}
-                        <a id="@likesId" class="btn likes" onclick="LikesModal(@Model.PostId)">@Model.Like.Count(l => l.isLiked)</a>
-
-                        <div class="post-footer">
-                            <div class="input-group">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <p>Leave a Comment</p>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <form method="post" enctype="multipart/form-data">
-                                            @{string CommentAreaID = $"commentArea{Model.PostId}";}
-                                            <input type="text" class="fa-comments" placeholder="Add Comment" id="@CommentAreaID" />
-                                            <input type="button" value="Submit" onclick="addComment(@Model.PostId)" />
-                                            @{string CommentImgID = $"commentImg{Model.PostId}";}
-                                            <input type="file" name="file" id="@CommentImgID" />
-                                        </form>
+        
+        <div id="@PostID" class="mt-3">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <section class="post-heading">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
+                                                <img class="media-object photo-profile rounded-circle"
+                                                     src="~/ProfilPics/@Model.Publisher.PhotoURL"
+                                                     width="40" height="40" alt="...">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <a id="publisherNameLabel" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
+                                                <h4 class="media-heading">@Model.Publisher.FullName</h4>
+                                            </a>
+                                            <p class="anchor-time">@Model.Date</p>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    @if (userId == Model.PublisherId)
+                                    {
+                                        <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
+                                        <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
+                                    }
+                                </div>
                             </div>
+                        </section>
+                        <section class="post-body">
+                            @{
+                                string PostTextDiv = $"PostTextDiv{Model.PostId}";
+                                <div id="@PostTextDiv" class="col-12">
+                                    @if (Model.Text != null && Model.Text != "")
+                                    {
+                                        <p>
+                                            @Model.Text
+                                        </p>
+                                    }
+                                </div>
+                            }
 
-                            <ul class="comments-list" id="@PostID">
-                                @foreach (var comment in Model.Comment)
-                                {
-                                    @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
 
-                                }
-                            </ul>
+                            @{
+                                string PostImgDiv = $"PostImgDiv{Model.PostId}";
 
-                        </div>
+                                <div id="@PostImgDiv" class="col-12 mb-2">
+                                    @if (@Model.PictureURL != null && @Model.PictureURL != "")
+                                    {
+                                        <img class="img-fluid img-thumbnail" src="~/PostsPics/@Model.PictureURL" />
+                                    }
+                                </div>
+
+                            }
+
+                        </section>
+                        <section class="post-footer">
+                            <hr>
+                            <div class="post-footer-option container">
+                                <ul class="list-unstyled">
+
+                                    @if (Model.Like.Where(l => l.UserID == userId).ToList().Count > 0)
+                                    {
+                                        <li>
+                                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@Model.PostId)"></i>
+                                        </li>
+                                    }
+
+                                    @*<li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
+                                    <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                                    <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>*@
+                                </ul>
+                            </div>
+                            <div class="post-footer-comment-wrapper">
+                                <div class="comment-form">
+                                    <form method="post" enctype="multipart/form-data">
+                                        @{string CommentAreaID = $"commentArea{Model.PostId}";}
+                                        <input type="text" class="fa-comments" placeholder="Add Comment" id="@CommentAreaID" />
+                                        <input type="button" value="Submit" onclick="addComment(@Model.PostId)" />
+                                        @{string CommentImgID = $"commentImg{Model.PostId}";}
+                                        <input type="file" name="file" id="@CommentImgID" />
+                                    </form>
+                                </div>
+
+
+                                <ul style="list-style: none;" class="comments-list mt-2" id="@PostID">
+                                    @foreach (var comment in Model.Comment)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
+                                    }
+                                </ul>
+
+
+
+                                
+                            </div>
+                        </section>
                     </div>
                 </div>
-
             </div>
         </div>
     }

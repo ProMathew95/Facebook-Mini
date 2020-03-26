@@ -1,6 +1,6 @@
 ﻿@model Facebook_project.Models.AppUser
 @{
-	Layout = "_Layout";
+	Layout = "_HomeLayout";
 }
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@
                 <input type="hidden" asp-for="@Model.Id" id="UserId"/>
 
             </div>
-			<div class="col-12 col-md-8">
+			<div class="col-8">
 				@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
 			</div>
 		</div>
