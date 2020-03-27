@@ -17,7 +17,7 @@ namespace Facebook_project.Repositories
 		}
 		public AppUser GetUserByid(string userId)
 		{
-			var appUser = _context.AppUsers.Include(c => c.Posts).ThenInclude(c=>(c as Post).Comment).Include(c => c.Posts).ThenInclude(c=>(c as Post).Like ).FirstOrDefault(c => c.Id == userId);
+			var appUser = _context.AppUsers.Include(c => c.Posts).ThenInclude(c=>(c as Post).Comment).Include(c => c.Posts).ThenInclude(c=>(c as Post).Like ).Include(c => c.Friends).FirstOrDefault(c => c.Id == userId);
 			return appUser;
 		}
 		public bool isBlocked(string userID)
@@ -70,5 +70,15 @@ namespace Facebook_project.Repositories
 			return AppUser;
 		}
 
-	}
+        public void ChangeRelation(string senderId, string receiverId, string status)
+        {
+            var prevActivity = _context.Friends.FirstOrDefault(f => f.senderUserID == senderId || f.senderUserID == receiverId);
+            if (prevActivity != null)
+                prevActivity.Status = (Status)Enum.Parse(typeof(Status), status);
+            else
+                _context.Friends.Add(new Friend() { senderUserID = senderId, receiverUserID = receiverId, Status = (Status)Enum.Parse(typeof(Status), status) });
+
+            _context.SaveChanges();
+        }
+    }
 }

@@ -1,52 +1,128 @@
-﻿@model Facebook_project.Models.AppUser
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@model Facebook_project.Models.AppUser
 @{
-	Layout = "_HomeLayout";
+    Layout = "_HomeLayout";
+    //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+    //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    //var userId = claim.Value;
+    var CurrentUser = ViewBag.CurrentUser as AppUser;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<title>_UserInfo</title>
+    <meta name="viewport" content="width=device-width" />
+    <title>_UserInfo</title>
 </head>
 <body>
-	<div id="EditUserDataDiv"></div>
-	<div class="container">
-		<div class="row">
+    <div id="EditUserDataDiv"></div>
+    <div class="container">
+        <div class="row">
             <div class="col-12 col-md-3 text-center">
 
-                <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
+                @if (Model.Id == CurrentUser.Id)
+                {
+                    <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" onclick="EditUserImageModal()" />
+                }
+                else
+                {
+                    <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
+                }
                 <hr />
 
-                <i class="fas fa-edit ml-2" asp-controller="Users" asp-action="EditUserImageModal" onclick="EditUserImageModal()"></i>
+                @*<i class="fas fa-edit ml-2" asp-controller="Users" asp-action="EditUserImageModal" onclick="EditUserImageModal()"></i>*@
+
                 <h2 id="fullname">@Model.FullName</h2>
                 <p id="bio">@Model.Bio</p>
                 <p id="birthdate">@Model.BirthDate.ToString("MM/dd/yyyy")</p>
                 <p id="gender">@Model.Gender</p>
-                <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+                <input type="hidden" asp-for="@Model.Id" id="UserId" />
 
-                <input type="hidden" asp-for="@Model.Id" id="UserId"/>
+                @if (Model.Id == CurrentUser.Id)
+                {
+                    <div id="EditSection">
+                        <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+                    </div>
+                }
+                else
+                {
+                    <div id="StatusSection">
+                        @{
+                            var IAmReceiver = CurrentUser.Friends.FirstOrDefault(f => f.senderUserID == Model.Id);
+                            var IAmSender = Model.Friends.FirstOrDefault(f => f.senderUserID == CurrentUser.Id);
+
+                            if (IAmSender == null && IAmReceiver == null)
+                            {
+                                <i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>
+                            }
+                            else
+                            {
+                                if (IAmSender != null)
+                                {
+                                    if (IAmSender.Status == Status.FriendRemoved ||
+                                    IAmSender.Status == Status.RequestCanceled ||
+                                    IAmSender.Status == Status.RequestRejected)
+                                    {
+                                        <i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>
+                                    }
+                                    else if (IAmSender.Status == Status.RequestConfirmed)
+                                    {
+                                        <i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>
+                                    }
+                                    else if (IAmSender.Status == Status.RequestPending)
+                                    {
+                                        <i class="fas fa-user-clock" onclick="ChangeRelationStatus(4)"></i>
+                                    }
+                                }
+                                else if (IAmReceiver != null)
+                                {
+
+                                    if (IAmReceiver.Status == Status.FriendRemoved ||
+                                    IAmReceiver.Status == Status.RequestCanceled ||
+                                    IAmReceiver.Status == Status.RequestRejected)
+                                    {
+                                        <i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>
+                                    }
+                                    else if (IAmReceiver.Status == Status.RequestPending)
+                                    {
+                                        <i class="fas fa-people-arrows" onclick="ChangeRelationStatus(2)"></i>
+                                    }
+                                    else if (IAmReceiver.Status == Status.RequestConfirmed)
+                                    {
+                                        <i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+
+
+                }
+
+
 
             </div>
-			<div class="col-8">
-				@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
-			</div>
-		</div>
-	</div>
+            <div class="col-12 col-md-8">
+                @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
+            </div>
+        </div>
+    </div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
 
-	<script type="text/javascript">
+    <script type="text/javascript">
 
-		$(document).ready(function () {
-        $("#CreatePost").click(function () {
-            $("#PopupContainer").modal("toggle");
+        $(document).ready(function () {
+            $("#CreatePost").click(function () {
+                $("#PopupContainer").modal("toggle");
+            });
         });
-         });
+
 		function EditUserDataModal() {
         $.ajax({
             type: "GET",
@@ -103,8 +179,8 @@
             }
         });
 		}
-        
-         function EditUserImage()
+
+        function EditUserImage()
         {
             var data = new FormData();
             var files = $("#postImgSelector").get(0).files;
@@ -157,8 +233,9 @@
         });
 
 
-	}
-         function EditUserImageModal() {
+        }
+
+        function EditUserImageModal() {
               $.ajax({
             type: "GET",
             url: '@Url.Action("EditUserImageModal","Users")',
@@ -173,6 +250,37 @@
         }
 
 
+        function ChangeRelationStatus(status) {
+
+            var userid = document.querySelector('#UserId').value;
+            var concat = `${userid}*${status}`; //String.concat(receiverId,"*", status);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ChangeRelationStatus","Users")/' + concat,
+                success: function () {
+                    if (status == 0) {
+                        document.querySelector("#StatusSection").innerHTML =
+                            '<i class="fas fa-user-clock" onclick="ChangeRelationStatus(4)"></i>';
+                    }
+                    else if (status == 4 || status == 3) {
+                        document.querySelector("#StatusSection").innerHTML =
+                            '<i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>';
+                    }
+                    else if (status == 2) {
+                        document.querySelector("#StatusSection").innerHTML =
+                            '<i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>';
+                    }
+
+
+                },
+                error: function () {
+                    alert("Error retreiving Users");
+                }
+            });
+        }
+
+
+
         function ResetFile(selector,div,img) {
             document.querySelector('#' + selector).remove();
             document.querySelector('#' + div).innerHTML += '<input type="file" name="file" id="' + selector + '" style="width: 100%;" onchange="readURL(this)" />';
@@ -180,7 +288,7 @@
 
 	}
 
-         function readURL(input, selector)
+        function readURL(input, selector)
         {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -192,6 +300,6 @@
         }
         }
 
-	</script>
+    </script>
 </body>
 </html>

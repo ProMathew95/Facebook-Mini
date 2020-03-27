@@ -30,14 +30,15 @@ namespace Facebook_project.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult RejectRequest(string senderId)
+        [HttpPost]
+        public IActionResult RejectRequest(string id)
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (claim != null)
             {
                 var userId = claim.Value;
-                _context.changeRequestStatus(senderId, userId, Status.RequestRejected);
+                _context.changeRequestStatus(id, userId, Status.RequestRejected);
             }
             return Json("success");
         }

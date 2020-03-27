@@ -24,6 +24,13 @@ namespace Facebook_project.Controllers
         public IActionResult UserPage(string id)
         {
             var user = _context.GetUserByid(id);
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+                ViewBag.CurrentUser = _context.GetUserByid(userId);
+            }
             return View(user);
         }
         public IActionResult EditUserDataModal()
@@ -61,7 +68,7 @@ namespace Facebook_project.Controllers
 
                     var userId = claim.Value;
                     var status = _context.isBlocked(userId);
-                    if(!status)
+                    if (!status)
                     {
                         AppUser user = new AppUser
                         {
@@ -74,11 +81,12 @@ namespace Facebook_project.Controllers
                         _context.UpdateUserInfo(user);
                         return Json(user);
                     }
-                  }
                 }
+            }
 
             return Json("error");
         }
+
         public IActionResult EditUserImage(IFormFile file)
         {
 
@@ -118,7 +126,7 @@ namespace Facebook_project.Controllers
                 ResponseViewModel response = new ResponseViewModel()
                 {
                     PicURL = respImg.PhotoURL,
-                    
+
                 };
                 return Json(response);
                 //return Json(new { response=response, Url="UserPage/"+userId});
@@ -138,5 +146,21 @@ namespace Facebook_project.Controllers
             }
             return Json("error");
         }
-    }
+
+        public IActionResult ChangeRelationStatus(string Id)
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var components = Id.Split("*");
+                var receiverId = components[0];
+                var status = components[1];
+                var userId = claim.Value;
+                _context.ChangeRelation(userId,receiverId,status);
+                return Json("success");
+            }
+            return Json("error");
+        }
+    } 
 }
