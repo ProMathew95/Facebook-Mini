@@ -25,8 +25,8 @@
                                 string RequestId = $"request{item.Id}";
 
                                 <div id="@RequestId">
-                                    <img src="~/ProfilPics/@item.PhotoURL" class="navbar-toggler-icon" />
-                                    <a href="#">@item.FullName</a>
+                                    <img src="~/ProfilPics/@item.PhotoURL" class="img-fluid searchResult" />
+                                    <a href="/Users/UserPage/@item.Id">@item.FullName</a>
                                     <input type="button" class="btn btn-primary Accept" value="Accept" onclick="FriendRequest(this,'@item.Id')" />
                                     <input type="button" class="btn btn-danger Reject" value="Reject" onclick="FriendRequest(this,'@item.Id')" />
                                 </div>

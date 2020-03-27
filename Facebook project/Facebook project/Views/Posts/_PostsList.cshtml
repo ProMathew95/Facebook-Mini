@@ -10,15 +10,7 @@
     @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post())
 </div>
 
-@*<div class="container">
-    <div class="row">
-        <input type="text" style="height: 100px" readonly id="CreatePost" class="col-12"
-               data-toggle="modal" data-target="#openModal" value="What's on your mind" />
-    </div>
-</div>*@
-
-<div id="postsContainer" @*class="container"*@>
-    @*@foreach (var item in Model)*@
+<div id="postsContainer" 
     @{
         var postsSorted = Model.OrderByDescending(p => p.Date).ToList();
 
@@ -61,10 +53,13 @@
 
                 var commentlblImg = '#commentlblImg' + postId;
                 var CreatecommentImg = '#CreatecommentImg' + postId;
+                var CreatecommentImgstr = 'CreatecommentImg' + postId;
+
+                var CommentImgIdstr = 'commentImg' + postId;
 
                 document.querySelector(id).value = "";
                 document.querySelector(CommentImgId).remove();
-                document.querySelector(commentlblImg).innerHTML = '<input class="btn fa fa-camera" type="file" name="file" id="'+ CommentImgId +'" style="display:none" onchange="readURL(this,"'+ CreatecommentImg +'")"/> <i class="btn fa fa-camera fa-lg"></i>';
+                document.querySelector(commentlblImg).innerHTML = '<input class="btn fa fa-camera" type="file" name="file" id="'+ CommentImgIdstr +'" style="display:none" onchange="readURL(this,'+ CreatecommentImgstr +')"/> <i class="btn fa fa-camera fa-lg"></i>';
 				document.querySelector(CreatecommentImg).src = "";
 
             },
