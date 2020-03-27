@@ -1,6 +1,6 @@
 ﻿@*<div class="col-8">*@
     <div id="SearchSetting" class="navbar-brand dropdown col-4">
-        <input type="text" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" @*onfocusout="hideResults()"*@>
+        <input type="text" class="form-control" placeholder="Search.." id="myInput" onkeyup="Search()" onfocus="showResults()" @*onfocusout="hideResults()"*@>
         <div id="myDropdown" class="dropdown-content show">
             @*search Results Here*@
         </div>
@@ -31,9 +31,9 @@
                         var userId = obj['id'];
                         var photoUrl = obj['photoURL'];
 
-                        tagsStr += '<div class="col-8">';
+                        tagsStr += '<div class="col-8" style="padding:10px">';
                         tagsStr += '<a href="/Users/UserPage/' + userId + '">';
-                        tagsStr += '<img src="/ProfilPics/' + photoUrl +'" class="navbar-toggler-icon img-fluid rounded-circle img-thumbnail" /></a>'
+                        tagsStr += '<img src="/ProfilPics/' + photoUrl +'" class="img-fluid searchResult"/></a>'
                         tagsStr += '<a href="/Users/UserPage/' + userId + '">' + fullName + '</a>';
                         tagsStr += '</div >';
 

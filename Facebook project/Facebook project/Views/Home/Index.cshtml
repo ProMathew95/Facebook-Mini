@@ -21,30 +21,17 @@
     var claimsIdentity = (ClaimsIdentity)this.User.Identity;
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
-    <br />
-    <a asp-controller="Users" asp-action="UserPage" asp-route-id="@userId">Profile Page</a>
 
-    <br />
     <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <i class="btn fas fa-user-friends fa-lg" onclick="FriendRequestsModal()"></i>
-            </div>
-            <partial name="~/Views/Posts/_Search.cshtml">
-        </div>
+        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
     </div>
 
-
-        <div class="container">
-            @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
-        </div>
-
-        }
-
-        
+}
 
 
-        <script type="text/javascript">
+
+
+<script type="text/javascript">
 
     $(document).ready(function () {
         $("#CreatePost").click(function () {
@@ -52,19 +39,4 @@
         });
     });
 
-    function FriendRequestsModal() {
-
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("FriendRequestsModal","Friends")',//"Friends/FriendRequestsModal/",
-            success: function (response) {
-                $("#FriendRequestsDiv").html(response);
-                $("#FriendRequestsPopupContainer").modal("toggle");
-            },
-            error: function () {
-                alert("Error retreiving Users");
-            }
-        });
-    };
-
-        </script>
+</script>

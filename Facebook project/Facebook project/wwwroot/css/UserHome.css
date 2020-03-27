@@ -13,7 +13,7 @@ for details on configuring this project to bundle and minify static web assets. 
     border: 1px solid black;
 }
 
-#SearchSetting {
+/*#SearchSetting {
     position: relative;
     left: 30%;
     width: 50%;
@@ -21,7 +21,7 @@ for details on configuring this project to bundle and minify static web assets. 
     top: -58px;
     padding-top: 0px;
     padding-left: 0px;
-}
+}*/
 
 
 #UserSetting {
@@ -119,8 +119,8 @@ body {
 }
 
 nav {
-    height: 85px;
-    background-color: #425d99;
+    height: 65px;
+    background-color: #3b5998;
 }
 
 /*#navbarSupportedContent > ul {
@@ -152,14 +152,27 @@ nav {
 }
 
 
-#myInput {
+/*#myInput {
     position: relative;
     padding-bottom: 0px;
     width: 100%;
     border-radius: 8px;
-}
+}*/
 
 #navbarSupportedContent > ul > li > a
 {
     color:white;
+}
+
+#facebookLogo {
+    width: 30px;
+    height: 30px;
+    margin-right:10px;
+    margin-top:16px;
+}
+.searchResult {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right:10px;
 }
