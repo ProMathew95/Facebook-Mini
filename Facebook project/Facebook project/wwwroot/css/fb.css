@@ -36,8 +36,10 @@ body{
     font-size:1.2rem;
 }
 
-.post-footer-comment-wrapper{
-    background-color:#F6F7F8;
+.post-footer-comment-wrapper {
+    background-color: #F6F7F8;
+    padding: 10px;
+    margin-top:15px;
 }
 
 .custom-file-upload {
@@ -53,4 +55,26 @@ body{
     justify-content: space-between;
     align-items: flex-start;
     align-content: stretch;
+}
+
+comment-body{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+.comment {
+    margin-top: 15px !important;
+}
+
+.post-footer-option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: center;
 }

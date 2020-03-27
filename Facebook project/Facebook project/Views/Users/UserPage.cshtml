@@ -43,7 +43,7 @@
                 @if (Model.Id == CurrentUser.Id)
                 {
                     <div id="EditSection">
-                        <i class="fas fa-edit ml-2" onclick="EditUserDataModal()"></i>
+                        <i class="fas fa-edit ml-2 fa-lg" onclick="EditUserDataModal()"></i>
                     </div>
                 }
                 else
@@ -55,7 +55,7 @@
 
                     if (IAmSender == null && IAmReceiver == null)
                     {
-                        <i class="fas fa-user-plus" onclick="ChangeRelationStatus(0)"></i>
+                        <i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>
                         @*<i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>*@
                     }
                     else
@@ -66,15 +66,15 @@
                             IAmSender.Status == Status.RequestCanceled ||
                             IAmSender.Status == Status.RequestRejected)
                             {
-                                <i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>
+                                <i class="fas fa-user-friends fa-lg" onclick="ChangeRelationStatus(0)"></i>
                             }
                             else if (IAmSender.Status == Status.RequestConfirmed)
                             {
-                                <i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>
+                                <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
                             }
                             else if (IAmSender.Status == Status.RequestPending)
                             {
-                                <i class="fas fa-user-clock" onclick="ChangeRelationStatus(4)"></i>
+                                <i class="fas fa-user-clock fa-lg" onclick="ChangeRelationStatus(4)"></i>
                             }
                         }
                         else if (IAmReceiver != null)
@@ -84,17 +84,17 @@
                             IAmReceiver.Status == Status.RequestCanceled ||
                             IAmReceiver.Status == Status.RequestRejected)
                             {
-                                <i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>
+                                <i class="fas fa-user-friends fa-lg" onclick="ChangeRelationStatus(0)"></i>
                             }
                             else if (IAmReceiver.Status == Status.RequestPending)
                             {
-                                <i class="fas fa-people-arrows" onclick="ChangeRelationStatus(2)" style="margin-right:4px"></i>
+                                <i class="fas fa-people-arrows fa-lg" onclick="ChangeRelationStatus(2)" style="margin-right:4px"></i>
                                 
-                                <i class="fas fa-user-times" onclick="ChangeRelationStatus(5)"></i>
+                                <i class="fas fa-user-times fa-lg" onclick="ChangeRelationStatus(5)"></i>
                             }
                             else if (IAmReceiver.Status == Status.RequestConfirmed)
                             {
-                                <i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>
+                                <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
                             }
                         }
                     }

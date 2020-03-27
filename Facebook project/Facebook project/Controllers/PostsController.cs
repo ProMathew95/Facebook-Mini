@@ -314,6 +314,9 @@ namespace Facebook_project.Controllers
                             array = ms.GetBuffer();
                             picName = $"{Guid.NewGuid()}.jpg";
                             var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics", picName);
+                            
+                            if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics")))
+                                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "wwwroot//PostsPics"));
                             System.IO.File.WriteAllBytes(str, array);
                         }
                     }
@@ -385,6 +388,8 @@ namespace Facebook_project.Controllers
                             array = ms.GetBuffer();
                             picName = $"{Guid.NewGuid()}.jpg";
                             var str = Path.Combine(Environment.CurrentDirectory, "wwwroot//CommentsPics", picName);
+                            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "wwwroot//CommentsPics")))
+                                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "wwwroot//CommentsPics"));
                             System.IO.File.WriteAllBytes(str, array);
                         }
                     }

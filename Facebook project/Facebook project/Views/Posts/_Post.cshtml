@@ -13,7 +13,7 @@
 
     if (Model.isDeleted == null || !(bool)Model.isDeleted)
     {
-        
+
         <div id="@PostID" class="mt-3">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -40,19 +40,12 @@
                                         <div class="right-section">
                                             @if (userId == Model.PublisherId)
                                             {
-                                                <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
-                                                <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
+                                                <i class="fas fa-trash-alt ml-2 fa-lg" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
+                                                <i class="fas fa-edit ml-2 fa-lg" onclick="EditPostModal(@Model.PostId)"></i>
                                             }
                                         </div>
                                     </div>
                                 </div>
-                                @*<div class="col-md-2">
-                                    @if (userId == Model.PublisherId)
-                                    {
-                                        <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
-                                        <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
-                                    }
-                                </div>*@
                             </div>
                         </section>
                         <section class="post-body">
@@ -84,46 +77,49 @@
                         </section>
                         <section class="post-footer">
                             <hr>
-                            <div class="post-footer-option container">
-                                <ul class="list-unstyled">
+                            <div class="post-footer-option container-fluid">
 
+                                <div class="like-section">
                                     @if (Model.Like.Where(l => l.UserID == userId && l.isLiked).ToList().Count > 0)
                                     {
-                                        <li>
-                                            <i class="btn fa fa-thumbs-down" onclick="Like(this,@Model.PostId)"></i>
-                                        </li>
+                                        <i class="btn fa fa-thumbs-down fa-lg" onclick="Like(this,@Model.PostId)"></i>
                                     }
                                     else
                                     {
-                                        <li>
-                                            <i class="btn fa fa-thumbs-up" onclick="Like(this,@Model.PostId)"></i>
-                                        </li>
+                                        <i class="btn fa fa-thumbs-up fa-lg" onclick="Like(this,@Model.PostId)"></i>
                                     }
 
 
                                     @{string likesId = $"likes{Model.PostId}";}
                                     <a id="@likesId" class="btn likes" onclick="LikesModal(@Model.PostId)">@Model.Like.Count(l => l.isLiked)</a>
+                                </div>
 
 
+                                <div class="add-comment-section-1">
+                                    @{string CommentAreaID = $"commentArea{Model.PostId}";}
+                                    <input maxlength="120" size="100" type="text" class="fa-comments form-control" placeholder="Add Comment" id="@CommentAreaID" />
+                                </div>
 
+                                <div class="add-comment-section-2">
+                                    @{string CommentImgID = $"commentImg{Model.PostId}";}
+                                    @{string CommentlblImgID = $"commentlblImg{Model.PostId}";}
+                                    <label id="@CommentlblImgID" class="@CommentlblImgID">
+                                        @{string CreatecommentImg = $"CreatecommentImg{Model.PostId}";}
+                                        <input class="btn fa fa-camera" type="file" name="file" id="@CommentImgID" style="display:none" onchange="readURL(this,@CreatecommentImg)">
+                                        <i class="btn fa fa-camera fa-lg"></i>
+                                    </label>
+                                </div>
 
+                                <div id="createCommentImgDiv" class="col-12">
+                                    <img style="width:120px;" id="@CreatecommentImg" class="img-fluid" src="" />
+                                </div>
 
+                                <div class="add-comment-section-3">
+                                    <input class="btn btn-primary" type="button" value="Submit" onclick="addComment(@Model.PostId)" />
+                                </div>
 
-                                    @*<li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
-        <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
-        <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>*@
-                                </ul>
                             </div>
                             <div class="post-footer-comment-wrapper">
-                                <div class="comment-form">
-                                    <form method="post" enctype="multipart/form-data">
-                                        @{string CommentAreaID = $"commentArea{Model.PostId}";}
-                                        <input type="text" class="fa-comments" placeholder="Add Comment" id="@CommentAreaID" />
-                                        <input type="button" value="Submit" onclick="addComment(@Model.PostId)" />
-                                        @{string CommentImgID = $"commentImg{Model.PostId}";}
-                                        <input type="file" name="file" id="@CommentImgID" />
-                                    </form>
-                                </div>
 
                                 @{string CommentsSectionID = $"commentsSection{Model.PostId}";}
 
@@ -133,10 +129,6 @@
                                         @await Html.PartialAsync("~/Views/Posts/_Comment.cshtml", comment);
                                     }
                                 </ul>
-
-
-
-
                             </div>
                         </section>
                     </div>

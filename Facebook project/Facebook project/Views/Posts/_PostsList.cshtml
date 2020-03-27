@@ -59,6 +59,14 @@
                 var targetPost = document.querySelector(targetPostId);
                 targetPost.innerHTML += response;
 
+                var commentlblImg = '#commentlblImg' + postId;
+                var CreatecommentImg = '#CreatecommentImg' + postId;
+
+                document.querySelector(id).value = "";
+                document.querySelector(CommentImgId).remove();
+                document.querySelector(commentlblImg).innerHTML = '<input class="btn fa fa-camera" type="file" name="file" id="'+ CommentImgId +'" style="display:none" onchange="readURL(this,"'+ CreatecommentImg +'")"/> <i class="btn fa fa-camera fa-lg"></i>';
+				document.querySelector(CreatecommentImg).src = "";
+
             },
             error: function (response) {
                 alert("Error while submiting comment");
@@ -380,5 +388,22 @@
                 alert("Error Editing Comment");
             }
         });
+    }
+
+    function readURL(input, selector) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(selector).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function ResetFile(selector, div, img) {
+        document.querySelector('#' + selector).remove();
+        document.querySelector('#' + div).innerHTML += '<input type="file" name="file" id="' + selector + '" style="width: 100%;" onchange="readURL(this)" />';
+        document.querySelector('#' + img).src = "";
     }
 </script>

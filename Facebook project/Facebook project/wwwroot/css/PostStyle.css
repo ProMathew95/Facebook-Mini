@@ -164,6 +164,7 @@
 }
 .comment {
     background-color: lightblue;
+    margin-top: 15px !important;
 }
 
 #postImg {
