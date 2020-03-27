@@ -80,9 +80,8 @@ body {
 
 
 #writepostsContainer {
-    width: 70%;
-    margin: 0 auto;
-    padding-top: 30px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 div.creatPostImgSelectorDiv {
     position: relative;

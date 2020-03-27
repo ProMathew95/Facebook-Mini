@@ -20,30 +20,39 @@
                     <div class="panel-body">
                         <section class="post-heading">
                             <div class="row">
-                                <div class="col-md-10">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
-                                                <img class="media-object photo-profile rounded-circle"
-                                                     src="~/ProfilPics/@Model.Publisher.PhotoURL"
-                                                     width="40" height="40" alt="...">
-                                            </a>
+                                <div class="col-md-12">
+                                    <div class="post-header">
+                                        <div class="left-section">
+                                            <div class="media-left">
+                                                <a asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
+                                                    <img class="media-object photo-profile rounded-circle"
+                                                         src="~/ProfilPics/@Model.Publisher.PhotoURL"
+                                                         width="40" height="40" alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <a id="publisherNameLabel" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
+                                                    <h4 class="media-heading">@Model.Publisher.FullName</h4>
+                                                </a>
+                                                <p class="anchor-time">@Model.Date</p>
+                                            </div>
                                         </div>
-                                        <div class="media-body">
-                                            <a id="publisherNameLabel" asp-controller="Users" asp-action="UserPage" asp-route-id="@Model.Publisher.Id">
-                                                <h4 class="media-heading">@Model.Publisher.FullName</h4>
-                                            </a>
-                                            <p class="anchor-time">@Model.Date</p>
+                                        <div class="right-section">
+                                            @if (userId == Model.PublisherId)
+                                            {
+                                                <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
+                                                <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
+                                            }
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                @*<div class="col-md-2">
                                     @if (userId == Model.PublisherId)
                                     {
                                         <i class="fas fa-trash-alt ml-2" onclick="ConfirmDeleteModal(@Model.PostId)"></i>
                                         <i class="fas fa-edit ml-2" onclick="EditPostModal(@Model.PostId)"></i>
                                     }
-                                </div>
+                                </div>*@
                             </div>
                         </section>
                         <section class="post-body">
