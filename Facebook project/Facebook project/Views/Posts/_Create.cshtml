@@ -7,7 +7,7 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
 
-    <div class="col-md-12 col-xs-12" style="z-index:-1">
+    <div class="col-md-12 col-xs-12">
         <div class="well well-sm well-social-post">
             <form method="post" enctype="multipart/form-data">
 
@@ -71,7 +71,7 @@
 
 				document.querySelector("#postText").value = "";
                 document.querySelector('#creatPostImgSelector').remove();
-                document.querySelector('#custom-file-upload').innerHTML = '<input class="btn fa fa-camera" type="file" name="file" id="creatPostImgSelector" style="display:none" onchange="readURL(this,"#createPostImg")"/> <i class="btn fa fa-camera fa-lg"></i>';
+                document.querySelector('#custom-file-upload').innerHTML = '<input class="btn fa fa-camera" type="file" name="file" id="creatPostImgSelector" style="display:none" onchange="readURL(this,createPostImg)"/> <i class="btn fa fa-camera fa-lg"></i>';
 				document.querySelector('#createPostImg').src = "";
 			},
 			error: function (response) {
