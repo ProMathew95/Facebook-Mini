@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<AppRole>
 @{
     ViewData["Title"] = "ListRoles";
+
 }
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 <h1>All Roles</h1>
 @if (Model.Any())
 {
     <a class="btn btn-primary mb-3" style="width:auto" asp-controller="Admin" asp-action="CreateRole">ADD New Role</a>
-    foreach(var role in Model)
+    foreach (var role in Model)
     {
         <div class="card">
             <div class="card-header">
@@ -18,7 +22,7 @@
             </div>
             <div class="card-footer">
                 <a asp-action="EditRole" asp-controller="Admin" asp-route-Id="@role.Id" class="btn btn-primary">Edit</a>
-              @* <a href="#" asp-action="DeleteRole" asp-controller="Admin"  asp-route-Id="@role.Id"  class="btn btn-danger">Delete</a>*@
+                @* <a href="#" asp-action="DeleteRole" asp-controller="Admin"  asp-route-Id="@role.Id"  class="btn btn-danger">Delete</a>*@
 
 
             </div>

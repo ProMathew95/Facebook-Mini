@@ -1,13 +1,59 @@
-﻿
-
-@*@model AppUser*@
+﻿@*@model AppUser*@
 
 @model Facebook_project.Models.AppUser;
 
 
 @using Microsoft.AspNetCore.Identity
 
-    @*<nav class="navbar navbar-expand-lg navbar-light "></nav>*@
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container" style="padding-left:35px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <div style=" padding:20px;">
+                            <a asp-action="Listusers" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Users</a>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <div style=" padding:20px;">
+                            <a asp-action="edituser" asp-controller="admin" asp-route-id="@Model.Id" class="dropdown-item" style="color:white;font-weight: bold;">Setting</a>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <div style=" padding:20px;">
+                            <a asp-action="Listroles" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Roles</a>
+                        </div>
+                    </li>
+
+                    <li class="active">
+                        <div style="padding:14px; padding-left:10px">
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+}
+
+else
+{
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container" style="padding-left:35px;">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -51,13 +97,6 @@
                                 </form>
                             </div>
                         </li>
-
-                        @*<li class="active">
-                            <div style=" padding:20px;">
-                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Settings</a>
-                            </div>
-                        </li>*@
-
                         <li class="active">
                             <div style="padding:14px; padding-left:10px">
                                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -69,42 +108,11 @@
                         <li class="active">
                             <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
                         </li>
-
-
-
-                        @*<li><a href="#">Link</a></li>
-
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </li>*@
                     </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-
+}
 <script>
 
     function FriendRequestsModal() {
