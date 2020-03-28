@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Facebook_project.Controllers
 {
-   [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<AppRole> roleManager;
         private readonly UserManager<AppUser> userManager;
 
-        public AdminController(RoleManager<AppRole> roleManager,UserManager<AppUser> userManager)
+        public AdminController(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -37,7 +37,7 @@ namespace Facebook_project.Controllers
         public async Task<IActionResult> EditUser(string id)
         {
             var user = await userManager.FindByIdAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with id= {id} cannot be found";
                 //return View("NotFound");
@@ -45,10 +45,12 @@ namespace Facebook_project.Controllers
             var UserRoles = await userManager.GetRolesAsync(user);
             var model = new EditUserViewModel
             {
+                Password = user.PasswordHash,
+                ConfirmPassword = user.PasswordHash,
                 id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                Roles=UserRoles
+                //UserName = user.UserName,
+                //Email = user.Email,
+                //Roles=UserRoles
             };
             return View(model);
         }
@@ -63,8 +65,11 @@ namespace Facebook_project.Controllers
             }
             else
             {
-                user.Email = model.Email;
-                user.UserName = model.UserName;
+                user.PasswordHash = model.Password;
+                user.PasswordHash = model.ConfirmPassword;
+
+                //user.Email = model.Email;
+                //user.UserName = model.UserName;
                 var result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
@@ -77,7 +82,7 @@ namespace Facebook_project.Controllers
             }
             return View(model);
         }
-      
+
         public async Task<IActionResult> BlockUser(string id)
         {
             var users = userManager.Users;
@@ -100,9 +105,9 @@ namespace Facebook_project.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
-                return View(users);
+            return View(users);
         }
-      
+
         public async Task<IActionResult> UnBlockUser(string id)
         {
             var users = userManager.Users;
@@ -132,13 +137,13 @@ namespace Facebook_project.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppRole appRole = new AppRole { Name=model.RoleName };
+                AppRole appRole = new AppRole { Name = model.RoleName };
                 IdentityResult result = await roleManager.CreateAsync(appRole);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("ListRoles", "Admin");
                 }
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
@@ -151,15 +156,15 @@ namespace Facebook_project.Controllers
             var roles = roleManager.Roles;
             return View(roles);
         }
-       // [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
-            var result=await roleManager.FindByIdAsync(id);
-            if(result == null)
+            var result = await roleManager.FindByIdAsync(id);
+            if (result == null)
             {
                 ViewBag.ErrorMessage = $"role with Id={id} cannot be found";
-               // return View("NotFound");
+                // return View("NotFound");
             }
             EditRoleViewModel model = new EditRoleViewModel
             {
@@ -170,7 +175,7 @@ namespace Facebook_project.Controllers
             };
             foreach (var user in userManager.Users)
             {
-                if(await userManager.IsInRoleAsync(user, result.Name))
+                if (await userManager.IsInRoleAsync(user, result.Name))
                 {
                     model.USers.Add(user.UserName);
                 }
@@ -191,25 +196,25 @@ namespace Facebook_project.Controllers
             {
                 result.Name = model.RoleName;
                 result.Description = model.Description;
-                var result2=await roleManager.UpdateAsync(result);
+                var result2 = await roleManager.UpdateAsync(result);
                 if (result2.Succeeded)
                 {
                     return RedirectToAction("ListRoles");
                 }
-            foreach (var error in result2.Errors)
-            {
+                foreach (var error in result2.Errors)
+                {
                     ModelState.AddModelError("", error.Description);
-            }
+                }
             }
             return View(model);
         }
         //[Authorize(Roles = "Admin")]
         [HttpGet]
-       public async Task<IActionResult> EditUserInRole(string roleId)
+        public async Task<IActionResult> EditUserInRole(string roleId)
         {
             ViewBag.roleId = roleId;
-            var role =await roleManager.FindByIdAsync(roleId);
-            if(role == null)
+            var role = await roleManager.FindByIdAsync(roleId);
+            if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role with Id = {roleId} Cannot Be found";
                 //return View("notFound");
@@ -222,7 +227,7 @@ namespace Facebook_project.Controllers
                     UserId = user.Id,
                     UserName = user.UserName
                 };
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     userRoleviewModel.IsSelected = true;
                 }
@@ -233,7 +238,7 @@ namespace Facebook_project.Controllers
                 model.Add(userRoleviewModel);
             }
             return View(model);
-        } 
+        }
         [HttpGet]
         public async Task<IActionResult> ManageUserRoles(string id)
         {
@@ -252,7 +257,7 @@ namespace Facebook_project.Controllers
                     RoleId = role.Id,
                     RoleName = role.Name
                 };
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     instance.IsSelected = true;
                 }
@@ -265,7 +270,7 @@ namespace Facebook_project.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> models,string id)
+        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> models, string id)
         {
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
@@ -290,7 +295,7 @@ namespace Facebook_project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model,string roleId)
+        public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model, string roleId)
         {
 
             var role = await roleManager.FindByIdAsync(roleId);
@@ -330,27 +335,28 @@ namespace Facebook_project.Controllers
 
         }
         [HttpPost]
-       // [HttpGet]
         [Route("/Admin/getuser/{Name}")]
         public IActionResult getUser(string Name)
         {
-            var result= userManager.Users.Where(X=>X.UserName==Name).FirstOrDefault();
-           if(result == null)
+            var result = userManager.Users.Where(X => X.UserName == Name).FirstOrDefault();
+            if (result == null)
             {
                 return Json("eMPTY");
             }
             else
             {
-               // var UserRoles =  userManager.GetRolesAsync(result);
+                var UserRoles = userManager.GetRolesAsync(result);
                 var model = new EditUserViewModel
                 {
                     id = result.Id,
-                    UserName = result.UserName,
-                    Email = result.Email,
-                    
+                    Password = result.PasswordHash,
+                    ConfirmPassword = result.PasswordHash
+                    //UserName = result.UserName,
+                    //Email = result.Email,
+
                 };
                 return Json(model);
             }
         }
     }
-}
+    }

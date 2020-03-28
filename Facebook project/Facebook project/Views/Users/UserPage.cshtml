@@ -38,7 +38,7 @@
 
                 @if (Model.Id == CurrentUser.Id)
                 {
-                    <div id="EditSection">
+                    <div id="EditSection" class="mb-5">
                         <i class="fas fa-edit ml-2 fa-lg" onclick="EditUserDataModal()"></i>
                     </div>
                 }
@@ -98,9 +98,10 @@
 
 
                 }
-
+                <br />
+            <div class="mt-5">
                 <a class="btn btn-primary" onclick="FriendsModal()">Friends</a>
-
+            </div>
             </div>
             <div class="col-12 col-md-8">
                 @if (Model.Id == CurrentUser.Id)

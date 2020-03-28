@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<AppUser>
 @{
     ViewData["Title"] = "All Users";
+
 }
+
+
 <form method="post">
     <label>Search</label>
     <input type="text" id="searchi" />
@@ -19,9 +22,9 @@
         @foreach (var user in Model)
         {
             <div class="card">
-                <div class="card-header">
+                @*<div class="card-header">
                     User ID :@user.Id
-                </div>
+                </div>*@
                 <div class="card-body">
                     <h5 class="card-title">
                         @user.UserName
@@ -57,7 +60,7 @@ else
     </div>
 }
 @section Scripts{
-   
+
     <script src="~/js/site.js"></script>
 }
 @*<script>

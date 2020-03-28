@@ -22,21 +22,36 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
 
-    <div class="container">
-        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model,new ViewDataDictionary(ViewData) { { "IsMyAccount", true}})
-    </div>
 
-}
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        @*@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })*@
+        <div class="container">
+            <p style="    margin: auto;
+    text-align: center;
+    font-size: 121px;">Hello Admin</p>
+              </div>
+
+            }
+            else
+            {
+            <div class="container">
+                @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })
+            </div>
+
+            }
+
+            }
 
 
 
 
-<script type="text/javascript">
+            <script type="text/javascript">
 
-    $(document).ready(function () {
-        $("#CreatePost").click(function () {
-            $("#PopupContainer").modal("toggle");
-        });
-    });
+                $(document).ready(function () {
+                    $("#CreatePost").click(function () {
+                        $("#PopupContainer").modal("toggle");
+                    });
+                });
 
-</script>
+            </script>

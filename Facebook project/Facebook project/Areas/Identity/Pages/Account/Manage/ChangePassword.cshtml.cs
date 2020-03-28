@@ -94,8 +94,9 @@ namespace Facebook_project.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
+            await _signInManager.SignOutAsync();
 
-            return RedirectToPage();
+            return RedirectToPage("/Account/Login");
         }
     }
 }
