@@ -15,6 +15,7 @@
 </head>
 <body>
     <div id="EditUserDataDiv"></div>
+    <div id="FriendsModalDiv"></div>
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-3 text-center">
@@ -98,14 +99,14 @@
 
                 }
 
-
+                <a class="btn btn-primary" onclick="FriendsModal()">Friends</a>
 
             </div>
             <div class="col-12 col-md-8">
                 @if (Model.Id == CurrentUser.Id)
                     @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })
-                else
-                    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts, new ViewDataDictionary(ViewData) { { "IsMyAccount", false } });
+                    else
+                        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts, new ViewDataDictionary(ViewData) { { "IsMyAccount", false } });
 
             </div>
         </div>
@@ -122,7 +123,7 @@
             //$("#CreatePost").click(function () {
             //    $("#PopupContainer").modal("toggle");
             //});
-            
+
         });
 
 		function EditUserDataModal() {
@@ -137,7 +138,22 @@
                 alert("Error retreiving Users");
             }
         });
+        }
+
+        function FriendsModal() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("FriendsModal","Friends")',
+            success: function (response) {
+                $("#FriendsModalDiv").html(response);
+                $("#FriendsPopupContainer").modal("toggle");
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
 		}
+
 
         function EditUserData() {
 
@@ -277,8 +293,6 @@
                 }
             });
         }
-
-
 
         function ResetFile(selector,div,img) {
             document.querySelector('#' + selector).remove();

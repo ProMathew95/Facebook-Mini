@@ -35,5 +35,19 @@ namespace Facebook_project.Repositories
         {
             return _context.AppUsers.Where(u => u.FullName.Contains(searchKey)).ToList();
         }
+
+        public List<AppUser> GetFriends(string userId)
+        {
+            var result = _context.Friends.Include(f => f.RecieverUser)
+                .Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.RecieverUser).ToList();
+                
+            result.AddRange(_context.Friends.Include(f => f.SenderUser)
+                .Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.SenderUser).ToList());
+            
+            if (result != null)
+                return result;
+            return new List<AppUser>();
+
+        }
     }
 }

@@ -9,13 +9,15 @@
     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
     var userId = claim.Value;
 
-    <div id="FriendRequestsPopupContainer" class="modal fade LikesModal">
+    <div id="FriendsPopupContainer" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header"></div>
 
-                <h2>Friend Requests</h2>
+                <h2>My Friends</h2>
                 <div class="modal-body">
+
+
 
                     <div class="container-fluid">
                         <div class="row">
@@ -24,9 +26,8 @@
 
                                     @foreach (var item in Model)
                                     {
-                                        string RequestId = $"request{item.Id}";
-
-                                        <li id="@RequestId" class="list-group-item d-flex justify-content-between align-items-center">
+                                        string LiId = "Item" + item.Id;
+                                        <li id="@LiId" class="list-group-item d-flex justify-content-between align-items-center">
                                             <div class="ModalList">
                                                 <div class="col-8" style="padding:10px">
                                                     <a href="/Users/UserPage/@item.Id">
@@ -35,8 +36,8 @@
                                                     <a href="/Users/UserPage/@item.Id">@item.FullName</a>
                                                 </div>
                                                 <div>
-                                                    <input type="button" class="btn btn-primary Accept" value="Accept" onclick="FriendRequest(this,'@item.Id')" />
-                                                    <input type="button" class="btn btn-danger Reject" value="Reject" onclick="FriendRequest(this,'@item.Id')" />
+                                                    <input type="button" class="btn btn-danger Reject" value="Remove" onclick="RemoveFriend('@item.Id')" />
+
                                                 </div>
                                             </div>
                                         </li>
@@ -45,6 +46,23 @@
                             </div>
                         </div>
                     </div>
+
+
+                    @*<div class="row">
+            <div class="col-10">
+
+                @foreach (var item in Model)
+                {
+                    string RequestId = $"request{item.Id}";
+
+                    <div id="@RequestId">
+                        <img src="~/ProfilPics/@item.PhotoURL" class="img-fluid searchResult" />
+                        <a href="/Users/UserPage/@item.Id">@item.FullName</a>
+                        <input type="button" class="btn btn-danger Reject" value="Remove" onclick="FriendRequest(this,'@item.Id')" />
+                    </div>
+                }
+            </div>
+        </div>*@
 
                     <div>
                         @Html.ActionLink("Back to List", "Index", "Home")
@@ -65,35 +83,26 @@
 
 <script>
 
-    function FriendRequest(caller, ReqUserId) {
+    function RemoveFriend(UserId) {
 
-        var RID = '#request' + ReqUserId;
-        var RequestElement = document.querySelector(RID);
-        if (caller.classList.contains("Accept")) {
+        var RID = '#Item' + UserId;
+        var UserElement = document.querySelector(RID);
+
+        alert(UserElement.innerHTML);
+
+        //var userid = document.querySelector('#UserId').value;
+            var concat = `${UserId}*${3}`;
             $.ajax({
-                type: "POST",
-                url: "Friends/AcceptRequest/" + ReqUserId,
+                type: "GET",
+                url: '@Url.Action("ChangeRelationStatus","Users")/' + concat,
                 success: function () {
-                    RequestElement.remove();
+                        
+                    UserElement.remove();
                 },
                 error: function () {
-                    alert("Error while liking post");
+                    alert("Error");
                 }
             });
-        }
-        else if (caller.classList.contains("Reject")) {
-
-            $.ajax({
-                type: "POST",
-                url: "Friends/RejectRequest/" + ReqUserId,
-                success: function () {
-                    RequestElement.remove();
-                },
-                error: function () {
-                    alert("Error while liking post");
-                }
-            });
-        }
     }
 
 </script>

@@ -68,5 +68,18 @@ namespace Facebook_project.Controllers
             }
             return Json("error");
         }
+        public IActionResult FriendsModal()
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var userId = claim.Value;
+
+                var users = _context.GetFriends(userId);
+                return PartialView("_FriendsModal", users);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
