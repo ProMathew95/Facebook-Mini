@@ -18,6 +18,7 @@ namespace Facebook_project.Repositories
 
         public List<AppUser> GetFriendRequests(string UserId)
         {
+            //return friend requests where the parameter belongs to request reciever 
             return _context.Friends.Include(f => f.SenderUser).
                 Where(f => f.receiverUserID == UserId
                 && f.Status == Status.RequestPending).Select(f => f.SenderUser).ToList();
@@ -38,7 +39,8 @@ namespace Facebook_project.Repositories
 
         public List<AppUser> GetFriends(string userId)
         {
-            var result = _context.Friends.Include(f => f.RecieverUser)
+            //.Include(f => f.RecieverUser)
+            var result = _context.Friends
                 .Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.RecieverUser).ToList();
                 
             result.AddRange(_context.Friends.Include(f => f.SenderUser)
