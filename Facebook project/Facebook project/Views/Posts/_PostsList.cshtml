@@ -10,7 +10,7 @@
     @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post())
 </div>
 
-<div id="postsContainer" 
+<div id="postsContainer"> 
     @{
         var postsSorted = Model.OrderByDescending(p => p.Date).ToList();
 
