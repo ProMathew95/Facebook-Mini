@@ -49,11 +49,9 @@
         if (files.length > 0) {
             data.append("postImg", files[0]);
         }
-        else {
-            if (postText == "") {
+        else if (postText.trim() == "") {
                 alert("Cannot create an empty post");
                 return;
-            }
         }
 
         data.append("postText", postText);

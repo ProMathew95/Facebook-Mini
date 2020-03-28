@@ -51,14 +51,22 @@
                         </li>
 
                         <li class="active">
-                            <div style=" padding:20px;">
-                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Log Out</a>
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+                                    @*<a style="color:white;font-weight:bold;"asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Log Out</a>*@
+                                </form>
                             </div>
+                                @*
+                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Log Out</a>
+            </div>*@
                         </li>
 
                         <li class="active">
                             <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
                         </li>
+
+
 
                         @*<li><a href="#">Link</a></li>
 

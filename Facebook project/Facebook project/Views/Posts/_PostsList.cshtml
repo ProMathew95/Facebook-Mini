@@ -39,6 +39,10 @@
         if (files.length > 0) {
             data.append("CommentImg", files[0]);
         }
+        else if (comment.trim() == "") {
+            alert("Cannot create an empty comment");
+            return;
+        }
 
         data.append("Comment", comment);
         data.append("PostId", postId);
