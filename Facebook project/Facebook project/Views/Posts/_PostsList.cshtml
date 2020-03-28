@@ -136,7 +136,7 @@
                         ImgTag.src = '/PostsPics/' + respImg;
                 }
                 else {
-                    var ImgTag = '<img class="img-fluid" src="/PostsPics/' + respImg + '" />';
+                    var ImgTag = '<img class="img-fluid img-thumbnail" src="/PostsPics/' + respImg + '" />';
                     (document.querySelector(imgDivId)).innerHTML += ImgTag;
                 }
 
@@ -368,7 +368,7 @@
                         ImgTag.src = '/CommentsPics/' + respImg;
                 }
                 else {
-                    var ImgTag = '<img class="img-fluid" src="/CommentsPics/' + respImg + '" />';
+                    var ImgTag = '<img class="img-fluid img-thumbnail" src="/CommentsPics/' + respImg + '" />';
                     document.getElementById(imgDivId).innerHTML += ImgTag;
                 }
 
