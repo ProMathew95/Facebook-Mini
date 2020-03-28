@@ -1,109 +1,72 @@
-﻿
-
-@*@model AppUser*@
+﻿@*@model AppUser*@
 
 @model Facebook_project.Models.AppUser;
 
 
 @using Microsoft.AspNetCore.Identity
 
-    @*<nav class="navbar navbar-expand-lg navbar-light "></nav>*@
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container" style="padding-left:35px;">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-action="index" asp-controller="Home"><img src="~/images/facebookLogo.png" class="img-fluid" id="facebookLogo" /></a>
-            </div>
+@*<nav class="navbar navbar-expand-lg navbar-light "></nav>*@
+<nav class="navbar navbar-expand-lg navbar-light">
+	<div class="container" style="padding-left:35px;">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a asp-action="index" asp-controller="Home"><img src="~/images/facebookLogo.png" class="img-fluid" id="facebookLogo" /></a>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <partial name="~/Views/Posts/_Search.cshtml">
+			<button class="navbar-toggler bg-transparent d-md-none" type="button" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1" aria-controls="bs-example-navbar-collapse-1" aria-expanded="false"
+					aria-label="Toggle navigation">
+				<span><i class="fas fa-bars fa-1x"></i></span>
+			</button>
+		</div>
 
-                    <ul class="nav navbar-nav">
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-                        <li class="active">
-                            <div class="col-8" style="padding:15px">
-                                <a href="/Users/UserPage/@Model.Id">
-                                    <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
-                                </a>
-                                <a href="/Users/UserPage/@Model.Id" style="color:white;font-weight: bold;">
-                                    @Model.FullName.Split(" ")[0]
-                                </a>
-                            </div>
-                        </li>
+			<ul class="nav navbar-nav">
 
-                        <li class="active">
-                            <div style=" padding:20px;">
-                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Home</a>
-                            </div>
-                        </li>
+					<partial name="~/Views/Posts/_Search.cshtml">
 
-                        <li class="active">
-                            <div style="padding:14px; padding-left:10px">
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
-                                </form>
-                            </div>
-                        </li>
+				<li class="active list-group-item">
+					<div class="col-8" style="padding:15px">
+						<a href="/Users/UserPage/@Model.Id">
+							<img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
+						</a>
+						<a href="/Users/UserPage/@Model.Id" style="color:white;font-weight: bold;">
+							@Model.FullName.Split(" ")[0]
+						</a>
+					</div>
+				</li>
 
-                        @*<li class="active">
-                            <div style=" padding:20px;">
-                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Settings</a>
-                            </div>
-                        </li>*@
+				<li class="active list-group-item">
+					<div style=" padding:20px;">
+						<a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Home</a>
+					</div>
+				</li>
 
-                        <li class="active">
-                            <div style="padding:14px; padding-left:10px">
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
-                                </form>
-                            </div>
-                        </li>
-
-                        <li class="active">
-                            <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
-                        </li>
+				<li class="active list-group-item">
+					<div style="padding:14px; padding-left:10px">
+						<form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+							<button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
+						</form>
+					</div>
+				</li>
 
 
+				<li class="active list-group-item">
+					<div style="padding:14px; padding-left:10px">
+						<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+							<button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+						</form>
+					</div>
+				</li>
 
-                        @*<li><a href="#">Link</a></li>
-
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </li>*@
-                    </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+				<li class="active list-group-item">
+					<i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
+				</li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>
 
 <script>
 
