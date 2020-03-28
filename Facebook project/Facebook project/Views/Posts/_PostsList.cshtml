@@ -1,16 +1,21 @@
 ﻿@model IEnumerable<Post>
-
+@{
+    bool? isMyAccount = ViewData["IsMyAccount"] as bool?;
+}
 <div id="LikesDiv"></div>
 <div id="FriendRequestsDiv"></div>
 <div id="ConfirmDeleteDiv"></div>
 <div id="EditPostDiv"></div>
 <div id="EditCommentDiv"></div>
 
-<div id="writepostsContainer" class="container-fluid">
-    @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post())
-</div>
+@if (isMyAccount != null && isMyAccount == true)
+{
+    <div id="writepostsContainer" class="container-fluid">
+        @await Html.PartialAsync("~/Views/Posts/_Create.cshtml", new Post())
+    </div>
+}
 
-<div id="postsContainer"> 
+<div id="postsContainer">
     @{
         var postsSorted = Model.OrderByDescending(p => p.Date).ToList();
 

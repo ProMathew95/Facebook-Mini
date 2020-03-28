@@ -23,7 +23,7 @@
     var userId = claim.Value;
 
     <div class="container">
-        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model,new ViewDataDictionary(ViewData) { { "IsMyAccount", true}})
     </div>
 
 }

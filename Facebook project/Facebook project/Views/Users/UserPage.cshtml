@@ -108,7 +108,11 @@
 
             </div>
             <div class="col-12 col-md-8">
-                @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts)
+                @if (Model.Id == CurrentUser.Id)
+                    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })
+                else
+                    @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model.Posts, new ViewDataDictionary(ViewData) { { "IsMyAccount", false } });
+
             </div>
         </div>
     </div>
@@ -121,9 +125,10 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#CreatePost").click(function () {
-                $("#PopupContainer").modal("toggle");
-            });
+            //$("#CreatePost").click(function () {
+            //    $("#PopupContainer").modal("toggle");
+            //});
+            
         });
 
 		function EditUserDataModal() {
@@ -249,7 +254,6 @@
             }
         });
         }
-
 
         function ChangeRelationStatus(status) {
 
