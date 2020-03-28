@@ -2,114 +2,117 @@
 
 @model Facebook_project.Models.AppUser;
 
+
 @using Microsoft.AspNetCore.Identity
 
-@*<nav class="navbar navbar-expand-lg navbar-light "></nav>*@
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container" style="padding-left:35px;">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a asp-action="index" asp-controller="Home"><img src="~/images/facebookLogo.png" class="img-fluid" id="facebookLogo" /></a>
-        </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <partial name="~/Views/Posts/_Search.cshtml">
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container" style="padding-left:35px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                 <ul class="nav navbar-nav">
-
-                    <li class="active">
-                        <div class="col-8" style="padding:15px">
-                            <a href="/Users/UserPage/@Model.Id">
-                                <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
-                            </a>
-                            <a href="/Users/UserPage/@Model.Id" style="color:white;font-weight: bold;">
-                                @Model.FullName.Split(" ")[0]
-                            </a>
-                        </div>
-                    </li>
-
                     <li class="active">
                         <div style=" padding:20px;">
-                            <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Home</a>
+                            <a asp-action="Listusers" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Users</a>
                         </div>
                     </li>
-
                     <li class="active">
                         <div style=" padding:20px;">
-                            <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Settings</a>
+                            <a asp-action="edituser" asp-controller="admin" asp-route-id="@Model.Id" class="dropdown-item" style="color:white;font-weight: bold;">Setting</a>
                         </div>
                     </li>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <li style="padding:7px"  class="active nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
-                            <div class="dropdown-menu" aria-labelledby="navbardropdown">
-                                <a asp-action="Listusers" asp-controller="admin" class="dropdown-item">Users</a>
-                                <a asp-action="Listroles" asp-controller="admin" class="dropdown-item">Roles</a>
+                    <li class="active">
+                        <div style=" padding:20px;">
+                            <a asp-action="Listroles" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Roles</a>
+                        </div>
+                    </li>
 
-                            </div>
-                        </li>
-                    }
                     <li class="active">
                         <div style="padding:14px; padding-left:10px">
                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
-                                @*<a style="color:white;font-weight:bold;"asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Log Out</a>*@
                             </form>
                         </div>
-                        @*
-                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Log Out</a>
-                            </div>*@
                     </li>
-
-                    <li class="active">
-                        <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
-                    </li>
-
-
-
-                    @*<li><a href="#">Link</a></li>
-
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">One more separated link</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="#">Link</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </li>*@
                 </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+}
+
+else
+{
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container" style="padding-left:35px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-action="index" asp-controller="Home"><img src="~/images/facebookLogo.png" class="img-fluid" id="facebookLogo" /></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <partial name="~/Views/Posts/_Search.cshtml">
+
+                    <ul class="nav navbar-nav">
+
+                        <li class="active">
+                            <div class="col-8" style="padding:15px">
+                                <a href="/Users/UserPage/@Model.Id">
+                                    <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
+                                </a>
+                                <a href="/Users/UserPage/@Model.Id" style="color:white;font-weight: bold;">
+                                    @Model.FullName.Split(" ")[0]
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="active">
+                            <div style=" padding:20px;">
+                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Home</a>
+                            </div>
+                        </li>
+
+                        <li class="active">
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="active">
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+                                </form>
+                            </div>
+                        </li>
+
+                        <li class="active">
+                            <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
+                        </li>
+                    </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+}
 <script>
 
     function FriendRequestsModal() {
@@ -132,4 +135,4 @@
 
 
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
