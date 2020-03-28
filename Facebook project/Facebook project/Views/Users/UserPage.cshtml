@@ -3,9 +3,6 @@
 @model Facebook_project.Models.AppUser
 @{
     Layout = "_HomeLayout";
-    //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-    //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-    //var userId = claim.Value;
     var CurrentUser = ViewBag.CurrentUser as AppUser;
 }
 
@@ -24,15 +21,13 @@
 
                 @if (Model.Id == CurrentUser.Id)
                 {
-                    <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" onclick="EditUserImageModal()" />
+                    <img class="img-fluid img-thumbnail" style="border-radius:50%" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" onclick="EditUserImageModal()" />
                 }
                 else
                 {
-                    <img class="img-fluid rounded-circle img-thumbnail" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
+                    <img class="img-fluid img-thumbnail" style="border-radius:50%" src="~/ProfilPics/@Model.PhotoURL" id="profilePicture" />
                 }
                 <hr />
-
-                @*<i class="fas fa-edit ml-2" asp-controller="Users" asp-action="EditUserImageModal" onclick="EditUserImageModal()"></i>*@
 
                 <h2 id="fullname">@Model.FullName</h2>
                 <p id="bio">@Model.Bio</p>
@@ -56,7 +51,6 @@
                             if (IAmSender == null && IAmReceiver == null)
                             {
                                 <i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>
-                                @*<i class="fas fa-user-friends" onclick="ChangeRelationStatus(0)"></i>*@
                             }
                             else
                             {

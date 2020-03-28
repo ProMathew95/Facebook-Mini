@@ -18,11 +18,11 @@
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-xs-12">
 
                             @foreach (var item in Model)
                             {
-                                <img src="~/ProfilPics/@item.PhotoURL" class="navbar-toggler-icon" />
+                                <img src="~/ProfilPics/@item.PhotoURL" class="img-fluid searchResult" />
                                 <a href="#">@item.FullName</a>
                             }
                         </div>
