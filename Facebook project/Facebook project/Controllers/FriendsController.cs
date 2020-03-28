@@ -19,6 +19,7 @@ namespace Facebook_project.Controllers
         public IActionResult FriendRequestsModal()
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            //Get User ID
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (claim != null)
             {
@@ -27,7 +28,7 @@ namespace Facebook_project.Controllers
                 var users = _context.GetFriendRequests(userId);
                 return PartialView("_FriendRequests", users);
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));//nameof(Index)
         }
 
         [HttpPost]
