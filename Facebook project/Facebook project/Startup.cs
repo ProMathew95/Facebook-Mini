@@ -49,7 +49,6 @@ namespace Facebook_project
 
 
 
-
             services.AddRazorPages();
             services.AddScoped<PostRepository>();
             services.AddScoped<FriendsRepository>();

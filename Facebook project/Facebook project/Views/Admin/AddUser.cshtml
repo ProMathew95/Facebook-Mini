@@ -1,0 +1,88 @@
+﻿@model AddUserViewModel
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "AddUser";
+ 
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddUser" asp-controller="Admin" method="post">
+            <h4>add New User.</h4>
+            <hr />
+            <div class="form-group">
+                @*<label asp-for="Input.FirstName"></label>*@
+                <input asp-for="@Model.FirstName" placeholder="FirstName" class="d-block" id="firstnameSec">
+                <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.LastName"></label>*@
+                <input asp-for="@Model.LastName" placeholder="LastName" id="lastnameSec">
+                <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+            </div>
+            @* </div> *@
+            <div class="form-group">
+                @*<label asp-for="Input.Email"></label>*@
+                <input asp-for="@Model.Email" placeholder="Email or Phone" id="emailSec">
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.Password"></label>*@
+                <input asp-for="@Model.Password" placeholder="Password" id="passswordSec" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                @*<label asp-for="Input.ConfirmPassword"></label>*@
+                <input asp-for="@Model.ConfirmPassword" class="form-control" placeholder="ConfirmPassword" id="confirmpassswordSec" />
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="@Model.BirthDate"></label>
+                <input asp-for="@Model.BirthDate" class="form-control" />
+                <span asp-validation-for="@Model.BirthDate" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="@Model.Gender"></label>
+                <br />
+                <label>
+                    <input type="radio" name="Input.Gender" value="0">
+                    Female
+                </label>
+                <label>
+                    <input type="radio" name="Input.Gender" value="1">
+                    Male
+                </label>
+                <span asp-validation-for="@Model.Gender" class="text-danger"></span>
+            </div>
+
+            <input asp-for="@Model.BirthDate" class="form-control" />
+
+            @Html.DropDownList("id", (IEnumerable<SelectListItem>)ViewBag.roles, null, new { @class = "form-control" })
+
+
+
+
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+    </div>
+
+    <div class="col-md-6 col-md-offset-2">
+        <p>Facebook helps you connect and share with the <br>people in your life.</p>
+        <img src="~/imgs/Communication.png" />
+    </div>
+
+
+
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

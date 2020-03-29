@@ -7,6 +7,7 @@ using Facebook_project.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Facebook_project.Controllers
 {
@@ -31,8 +32,37 @@ namespace Facebook_project.Controllers
         public IActionResult ListUsers()
         {
             var users = userManager.Users;
+            ViewBag.allroles = roleManager.Roles;
+            ViewBag.roles = new SelectList(roleManager.Roles, "id");
             return View(users);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddUser()
+        {
+            ViewBag.roles = new SelectList(roleManager.Roles, "id");
+            return View();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddUser(AddUserViewModel user)
+        {
+
+            var x = user;
+
+
+            return Redirect("Admin/ListUsers");
+            return View();
+
+        }
+
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
@@ -45,12 +75,11 @@ namespace Facebook_project.Controllers
             var UserRoles = await userManager.GetRolesAsync(user);
             var model = new EditUserViewModel
             {
-                Password = user.PasswordHash,
-                ConfirmPassword = user.PasswordHash,
+              
                 id = user.Id,
-                //UserName = user.UserName,
-                //Email = user.Email,
-                //Roles=UserRoles
+                UserName = user.UserName,
+                 Email = user.Email,
+                Roles=UserRoles
             };
             return View(model);
         }
@@ -58,6 +87,7 @@ namespace Facebook_project.Controllers
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
             var user = await userManager.FindByIdAsync(model.id);
+            
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with id= {model.id} cannot be found";
@@ -65,11 +95,10 @@ namespace Facebook_project.Controllers
             }
             else
             {
-                user.PasswordHash = model.Password;
-                user.PasswordHash = model.ConfirmPassword;
-
-                //user.Email = model.Email;
-                //user.UserName = model.UserName;
+               
+               
+                user.Email = model.Email;
+                user.UserName = model.UserName;
                 var result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
@@ -349,10 +378,9 @@ namespace Facebook_project.Controllers
                 var model = new EditUserViewModel
                 {
                     id = result.Id,
-                    Password = result.PasswordHash,
-                    ConfirmPassword = result.PasswordHash
-                    //UserName = result.UserName,
-                    //Email = result.Email,
+                   
+                    UserName = result.UserName,
+                    Email = result.Email,
 
                 };
                 return Json(model);

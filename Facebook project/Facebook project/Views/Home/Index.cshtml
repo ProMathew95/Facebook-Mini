@@ -3,55 +3,57 @@
 @using System.Drawing;
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
-@*@model Facebook_project.Models.ViewModels.UserPosts;*@
+    @*@model Facebook_project.Models.ViewModels.UserPosts;*@
 
-@model IEnumerable<Post>
-
-
-@{
-    ViewData["Title"] = "Home Page";
-    ViewData["id"] = 0;
-    Layout = "_HomeLayout";
-
-}
-
-@if (SignInManager.IsSignedIn(User))
-{
-
-    var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-    var userId = claim.Value;
+    @model IEnumerable<Post>
 
 
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    @{
+        ViewData["Title"] = "Home Page";
+        ViewData["id"] = 0;
+        Layout = "_HomeLayout";
+
+    }
+
+    @if (SignInManager.IsSignedIn(User))
     {
-        @*@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })*@
-        <div class="container">
-            <p style="    margin: auto;
-    text-align: center;
-    font-size: 121px;">Hello Admin</p>
-              </div>
 
-            }
-            else
-            {
+        var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+        var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+        var userId = claim.Value;
+
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            @*@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })*@
+
+
+            <div class="container">
+                <p style="    margin: auto;
+       text-align: center;
+        font-size: 121px;">Hello Admin</p>
+            </div>
+
+        }
+        else
+        {
             <div class="container">
                 @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })
             </div>
 
-            }
+        }
 
-            }
-
-
+    }
 
 
-            <script type="text/javascript">
 
-                $(document).ready(function () {
-                    $("#CreatePost").click(function () {
-                        $("#PopupContainer").modal("toggle");
-                    });
-                });
 
-            </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#CreatePost").click(function () {
+                $("#PopupContainer").modal("toggle");
+            });
+        });
+
+    </script>

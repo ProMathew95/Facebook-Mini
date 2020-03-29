@@ -70,7 +70,10 @@ namespace Facebook_project.Repositories
 			return AppUser;
 		}
 
-        public void ChangeRelation(string senderId, string receiverId, string status)
+
+	      
+
+		public void ChangeRelation(string senderId, string receiverId, string status)
         {
             var prevActivity = _context.Friends.FirstOrDefault(f => f.senderUserID == senderId || f.senderUserID == receiverId);
             if (prevActivity != null)
