@@ -23,6 +23,10 @@ namespace Facebook_project.Controllers
             this.userManager = userManager;
         }
         //[Authorize(Roles ="Admin")]
+
+        
+
+
         [HttpGet]
         public IActionResult CreateRole()
         {
@@ -48,13 +52,35 @@ namespace Facebook_project.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser(AddUserViewModel user)
         {
+           var selectedRole = Request.Form["id"].ToString();
 
-            var x = user;
+            if(ModelState.IsValid&&selectedRole!=null)
+            {
+                
+                    var newUser = new AppUser
+                    {
+                        UserName = user.Email,
+                        Email = user.Email,
+                        PhotoURL = "default.jpg",
+                        FullName = $"{user.FirstName} {user.LastName}",
+                        BirthDate = user.BirthDate,
+                        Gender = user.Gender
+                    };
 
 
-            return Redirect("Admin/ListUsers");
-            return View();
 
+                    var result = await userManager.CreateAsync(newUser, user.Password);
+                    if (result.Succeeded)
+                    {
+                        var result1 = await userManager.AddToRoleAsync(newUser, selectedRole);
+
+                        if (result1.Succeeded)
+                        {
+                           return Redirect("~/Admin/ListUsers");
+                          }
+                }
+                }
+            return Redirect("~/Admin/ListUsers");
         }
 
 
@@ -268,6 +294,20 @@ namespace Facebook_project.Controllers
             }
             return View(model);
         }
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> ManageUserRoles(string id)
         {

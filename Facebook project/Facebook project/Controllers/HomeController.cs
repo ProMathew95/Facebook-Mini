@@ -11,6 +11,7 @@ using Facebook_project.Models.ViewModels;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Facebook_project.Controllers
 {
@@ -35,6 +36,8 @@ namespace Facebook_project.Controllers
             {
                 var userId = claim.Value;
                 currentUser = _db.AppUsers.Find(userId);
+
+                
 
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
                 friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
@@ -86,6 +89,8 @@ namespace Facebook_project.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
 
         public IActionResult HomePartial()
         {

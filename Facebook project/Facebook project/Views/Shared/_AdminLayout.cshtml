@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link href="~/css/UserHome.css" rel="stylesheet" />
+    @*<link href="~/css/WritePost.css" rel="stylesheet" />*@
+    <link href="~/css/fb.css" rel="stylesheet" id="fb-css">
+
+  
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    @*<link href="~/css/WelcomePage.css" rel="stylesheet" />*@
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/css/site.css" />*@
+
+
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <header id="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container" style="padding-left:35px;">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <div style=" padding:20px;">
+
+                                <a asp-action="Listusers" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Users</a>
+                            </div>
+                        </li>
+                        <li class="active">
+                            <div style=" padding:12px;">
+
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("ListUsers", "Admin", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="active">
+                            <div style=" padding:20px;">
+                                <a asp-action="Listroles" asp-controller="admin" class="dropdown-item" style="color:white;font-weight: bold;">Roles</a>
+                            </div>
+                        </li>
+
+                        <li class="active">
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Facebook_project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="https://kit.fontawesome.com/f5fdd04ada.js" crossorigin="anonymous"></script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+

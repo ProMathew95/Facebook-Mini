@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Facebook_project.Areas.Identity.Pages.Account
 {
@@ -80,6 +81,14 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             public Gender? Gender { get; set; }
         }
 
+
+
+        public class InputModelWithRole:InputModel
+        {
+
+            public AppRole Role { get; set; }
+        }
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -94,6 +103,9 @@ namespace Facebook_project.Areas.Identity.Pages.Account
             {
                 var user = new AppUser { UserName = Input.Email, Email = Input.Email , PhotoURL="default.jpg",FullName = $"{Input.FirstName} {Input.LastName}",
                     BirthDate = Input.BirthDate, Gender = Input.Gender};
+
+                 
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -101,7 +113,8 @@ namespace Facebook_project.Areas.Identity.Pages.Account
 
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Home", Input);
+
+                            return RedirectToAction("Index", "Home", Input);
 
                        // return LocalRedirect(returnUrl);
                     }

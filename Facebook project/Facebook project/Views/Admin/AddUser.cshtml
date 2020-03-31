@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "AddUser";
+        Layout = "_AdminLayout";
+
  
 }
 
@@ -64,7 +66,6 @@
                 <span asp-validation-for="@Model.Gender" class="text-danger"></span>
             </div>
 
-            <input asp-for="@Model.BirthDate" class="form-control" />
 
             @Html.DropDownList("id", (IEnumerable<SelectListItem>)ViewBag.roles, null, new { @class = "form-control" })
 

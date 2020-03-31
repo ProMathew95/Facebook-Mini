@@ -25,7 +25,7 @@ namespace Facebook_project.Areas.Identity.Pages.Account
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly UserManager<IdentityUser> _usManager;
+
 
 
 
@@ -93,45 +93,42 @@ namespace Facebook_project.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
 
-                  
-                    var user = await _userManager.FindByIdAsync(User.Identity.Name);
-                    var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    if(userId!=null)
+                    // Resolve the user via their email
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    // Get the roles for the user
+                    var role = await _userManager.GetRolesAsync(user);
+              
+                    if(user.isBlocked==true)
                     {
-                        var currentUser = await _userManager.FindByNameAsync(userId);
-
-                        if (currentUser != null)
-                        {
-                            if (currentUser.isBlocked == true)
-                                _logger.LogWarning("User account locked out.");
+                           _logger.LogWarning("User account locked out.");
                             return RedirectToPage("./Lockout");
-
-                        }
-
-
-                    }
-                    
+                    }     
                     else
                     {
-                        return RedirectToAction("Index", "Home", Input);
 
+                        if (role.Count > 0)
+                        {
+                            if (role[0] == "Admin")
+                            {
+                                return RedirectToAction("ListUsers", "Admin", Input);
+
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home", Input);
+                        }
+
+                        
                     }
 
                 }
-                //if (result.RequiresTwoFactor)
-                //{
-                //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                //}
-                //if (result.IsLockedOut)
-                //{
-                //    _logger.LogWarning("User account locked out.");
-                //    return RedirectToPage("./Lockout");
-                //}
+          
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");

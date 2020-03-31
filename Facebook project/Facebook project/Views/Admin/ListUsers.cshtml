@@ -2,84 +2,83 @@
 @using Microsoft.AspNetCore.Identity
 
 @{
-ViewData["Title"] = "All Users";
+    ViewData["Title"] = "All Users";
+    Layout = "_AdminLayout";
 
 }
 
 <style>
-    #id
-    {
-           width: 8%;
-       display: inline;
+    #id {
+        width: 8%;
+        display: inline;
     }
-
-    </style>
-
-
-    <div>
+</style>
 
 
-        <form method="post">
-            <label>Search</label>
-            <input type="text" id="searchi" />
-            <input type="button" onclick="srch()" id="searchb" value="Start" />
-            <div id="search">
+<div>
 
-            </div>
-        </form>
 
-        <a asp-controller="Admin" asp-action="AddUser" class="btn btn-primary" style="width: auto ">Add new User</a>
+    <form method="post">
+        <label>Search</label>
+        <input type="text" id="searchi" />
+        <input type="button" onclick="srch()" id="searchb" value="Start" />
+        <div id="search">
 
-    </div>
+        </div>
+    </form>
+
+    <a asp-controller="Admin" asp-action="AddUser" class="btn btn-primary" style="width: auto ">Add new User</a>
+
+</div>
 <h1>All Users</h1>
 
-    @if (Model.Any())
-    {
+@if (Model.Any())
+{
 
-        <form method="post">
-            @foreach (var user in Model)
-            {
-                <div class="card">
-                    @*<div class="card-header">
-                            User ID :@user.Id
-                        </div>*@
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            @user.UserName
-                        </h5>
-                    </div>
-                    <div class="card-footer">
-
-
-
-                        @Html.DropDownList("id", (IEnumerable<SelectListItem>)ViewBag.roles, null,new { @class="btn btn-info"})
-
-                        @*<a asp-action="EditUser" asp-controller="admin" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>*@
-                        @if (user.isBlocked == true)
-                        {
-                            <a asp-action="UnblockUser" asp-route-id="@user.Id" class="btn btn-danger">Un Block</a>
-                        }
-                        else
-                        {
-                            <a asp-action="blockUser" asp-route-id="@user.Id" onclick="return confirm('Are You Sure you want to block user : @user.UserName')" class="btn btn-danger">Block</a>
-
-                        }
-                    </div>
+    <form method="post">
+        @foreach (var user in Model)
+        {
+            <div class="card">
+                @*<div class="card-header">
+                        User ID :@user.Id
+                    </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @user.UserName
+                    </h5>
                 </div>
-            }
-        </form>
-    }
-    else
-    {
-        <div class="card">
-            <div class="card-header">
-                No Users Created Yet
+                <div class="card-footer">
+
+
+
+                    @Html.DropDownList("id", (IEnumerable<SelectListItem>)ViewBag.roles, null, new { @class = "btn btn-info" })
+
+                    @*<a asp-action="EditUser" asp-controller="admin" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>*@
+                    @if (user.isBlocked == true)
+                    {
+                        <a asp-action="UnblockUser" asp-route-id="@user.Id" class="btn btn-danger">Un Block</a>
+                    }
+                    else
+                    {
+                        <a asp-action="blockUser" asp-route-id="@user.Id" onclick="return confirm('Are You Sure you want to block user : @user.UserName')" class="btn btn-danger">Block</a>
+
+                    }
+                </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Use Button below to create a user</h5>
-                <a href="/Account/register" class="btn btn-primary" style="width:auto">Add new User</a>
-            </div>
+        }
+    </form>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Users Created Yet
         </div>
-    }
+        <div class="card-body">
+            <h5 class="card-title">Use Button below to create a user</h5>
+            <a href="/Account/register" class="btn btn-primary" style="width:auto">Add new User</a>
+        </div>
+    </div>
+}
 
 

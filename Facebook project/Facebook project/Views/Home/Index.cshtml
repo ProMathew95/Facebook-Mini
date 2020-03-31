@@ -15,7 +15,7 @@
 
     }
 
-    @if (SignInManager.IsSignedIn(User))
+    @*@if (SignInManager.IsSignedIn(User))
     {
 
         var claimsIdentity = (ClaimsIdentity)this.User.Identity;
@@ -25,7 +25,6 @@
 
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
-            @*@await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })*@
 
 
             <div class="container">
@@ -34,14 +33,14 @@
         font-size: 121px;">Hello Admin</p>
             </div>
 
-        }
-        else
-        {
+        }*@
+        @*else
+        {*@
             <div class="container">
                 @await Html.PartialAsync("~/Views/Posts/_PostsList.cshtml", Model, new ViewDataDictionary(ViewData) { { "IsMyAccount", true } })
             </div>
 
-        }
+        @*}*@
 
     }
 

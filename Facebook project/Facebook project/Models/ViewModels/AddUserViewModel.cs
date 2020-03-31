@@ -9,15 +9,7 @@ namespace Facebook_project.Models.ViewModels
 {
     public class AddUserViewModel
     {
-
-      
-
-
-
         public string Role { get; set; }
-
-
-
 
         [Required]
 
