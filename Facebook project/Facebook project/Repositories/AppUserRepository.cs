@@ -75,7 +75,9 @@ namespace Facebook_project.Repositories
 
 		public void ChangeRelation(string senderId, string receiverId, string status)
         {
-            var prevActivity = _context.Friends.FirstOrDefault(f => f.senderUserID == senderId || f.senderUserID == receiverId);
+            var prevActivity = _context.Friends.FirstOrDefault(f => (f.senderUserID == senderId && f.receiverUserID == receiverId)
+            || (f.senderUserID == receiverId && f.receiverUserID == senderId));
+            
             if (prevActivity != null)
                 prevActivity.Status = (Status)Enum.Parse(typeof(Status), status);
             else

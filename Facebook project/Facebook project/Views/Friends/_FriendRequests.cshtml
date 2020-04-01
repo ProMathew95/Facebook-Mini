@@ -72,12 +72,12 @@
         if (caller.classList.contains("Accept")) {
             $.ajax({
                 type: "POST",
-                url: "Friends/AcceptRequest/" + ReqUserId,
+                url: '@Url.Action("AcceptRequest","Friends")/' + ReqUserId,
                 success: function () {
                     RequestElement.remove();
                 },
                 error: function () {
-                    alert("Error while liking post");
+                    alert("Error while Accepting Request");
                 }
             });
         }
@@ -85,12 +85,12 @@
 
             $.ajax({
                 type: "POST",
-                url: "Friends/RejectRequest/" + ReqUserId,
+                url: '@Url.Action("RejectRequest","Friends")/' + ReqUserId,
                 success: function () {
                     RequestElement.remove();
                 },
                 error: function () {
-                    alert("Error while liking post");
+                    alert("Error while Rejecting Request");
                 }
             });
         }
