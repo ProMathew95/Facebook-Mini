@@ -44,57 +44,57 @@
                 }
                 else
                 {
-                    <div id="StatusSection">
-                        @{
-                            var IAmReceiver = CurrentUser.Friends.FirstOrDefault(f => f.senderUserID == Model.Id);
-                            var IAmSender = Model.Friends.FirstOrDefault(f => f.senderUserID == CurrentUser.Id);
+            <div id="StatusSection">
+                @{
+                    var IAmReceiver = CurrentUser.Friends.FirstOrDefault(f => f.senderUserID == Model.Id);
+                    var IAmSender = Model.Friends.FirstOrDefault(f => f.senderUserID == CurrentUser.Id);
 
-                            if (IAmSender == null && IAmReceiver == null)
+                    if (IAmSender == null && IAmReceiver == null)
+                    {
+                        <i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>
+                    }
+                    else
+                    {
+                        if (IAmSender != null)
+                        {
+                            if (IAmSender.Status == Status.FriendRemoved ||
+                            IAmSender.Status == Status.RequestCanceled ||
+                            IAmSender.Status == Status.RequestRejected)
                             {
                                 <i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>
                             }
-                            else
+                            else if (IAmSender.Status == Status.RequestConfirmed)
                             {
-                                if (IAmSender != null)
-                                {
-                                    if (IAmSender.Status == Status.FriendRemoved ||
-                                    IAmSender.Status == Status.RequestCanceled ||
-                                    IAmSender.Status == Status.RequestRejected)
-                                    {
-                                        <i class="fas fa-user-friends fa-lg" onclick="ChangeRelationStatus(0)"></i>
-                                    }
-                                    else if (IAmSender.Status == Status.RequestConfirmed)
-                                    {
-                                        <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
-                                    }
-                                    else if (IAmSender.Status == Status.RequestPending)
-                                    {
-                                        <i class="fas fa-user-clock fa-lg" onclick="ChangeRelationStatus(4)"></i>
-                                    }
-                                }
-                                else if (IAmReceiver != null)
-                                {
-
-                                    if (IAmReceiver.Status == Status.FriendRemoved ||
-                                    IAmReceiver.Status == Status.RequestCanceled ||
-                                    IAmReceiver.Status == Status.RequestRejected)
-                                    {
-                                        <i class="fas fa-user-friends fa-lg" onclick="ChangeRelationStatus(0)"></i>
-                                    }
-                                    else if (IAmReceiver.Status == Status.RequestPending)
-                                    {
-                                        <i class="fas fa-people-arrows fa-lg" onclick="ChangeRelationStatus(2)" style="margin-right:4px"></i>
-
-                                        <i class="fas fa-user-times fa-lg" onclick="ChangeRelationStatus(5)"></i>
-                                    }
-                                    else if (IAmReceiver.Status == Status.RequestConfirmed)
-                                    {
-                                        <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
-                                    }
-                                }
+                                <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
+                            }
+                            else if (IAmSender.Status == Status.RequestPending)
+                            {
+                                <i class="fas fa-user-clock fa-lg" onclick="ChangeRelationStatus(4)"></i>
                             }
                         }
-                    </div>
+                        else if (IAmReceiver != null)
+                        {
+
+                            if (IAmReceiver.Status == Status.FriendRemoved ||
+                            IAmReceiver.Status == Status.RequestCanceled ||
+                            IAmReceiver.Status == Status.RequestRejected)
+                            {
+                                <i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>
+                            }
+                            else if (IAmReceiver.Status == Status.RequestPending)
+                            {
+                                <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(2)" style="margin-right:4px"></i>
+
+                                <i class="fas fa-user-times fa-lg" onclick="ChangeRelationStatus(5)"></i>
+                            }
+                            else if (IAmReceiver.Status == Status.RequestConfirmed)
+                            {
+                                <i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>
+                            }
+                        }
+                    }
+                }
+            </div>
 
 
                 }
@@ -154,7 +154,6 @@
             }
         });
 		}
-
 
         function EditUserData() {
 
@@ -276,15 +275,15 @@
                 success: function () {
                     if (status == 0) {
                         document.querySelector("#StatusSection").innerHTML =
-                            '<i class="fas fa-user-clock" onclick="ChangeRelationStatus(4)"></i>';
+                            '<i class="fas fa-user-clock fa-lg" onclick="ChangeRelationStatus(4)"></i>';
                     }
                     else if (status == 3 || status == 4 || status == 5) {
                         document.querySelector("#StatusSection").innerHTML =
-                            '<i class="fas fa-user-plus" onclick="ChangeRelationStatus(0)"></i>';
+                            '<i class="fas fa-user-plus fa-lg" onclick="ChangeRelationStatus(0)"></i>';
                     }
                     else if (status == 2) {
                         document.querySelector("#StatusSection").innerHTML =
-                            '<i class="fas fa-user-check" onclick="ChangeRelationStatus(3)"></i>';
+                            '<i class="fas fa-user-check fa-lg" onclick="ChangeRelationStatus(3)"></i>';
                     }
 
 
