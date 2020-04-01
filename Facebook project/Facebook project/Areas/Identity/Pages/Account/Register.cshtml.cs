@@ -24,16 +24,19 @@ namespace Facebook_project.Areas.Identity.Pages.Account
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private RoleManager<AppRole> _roleManager;
+
         //private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            ILogger<RegisterModel> logger)//,
+            ILogger<RegisterModel> logger, RoleManager<AppRole> roleManager)//,
             //IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
             //_emailSender = emailSender;
         }
@@ -113,6 +116,28 @@ namespace Facebook_project.Areas.Identity.Pages.Account
 
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+
+
+
+                        //assigne role member for all new users 
+                        bool x = await _roleManager.RoleExistsAsync("Member");
+                        if (!x)
+                        {
+                            // first we create Member rool    
+                            var role = new AppRole();
+                            role.Name = "Member";
+                            await _roleManager.CreateAsync(role);
+
+                            
+                       
+                        }
+                        await _userManager.AddToRoleAsync(user, "Member");
+
+                      
+
+
+
+
 
                             return RedirectToAction("Index", "Home", Input);
 

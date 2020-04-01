@@ -50,9 +50,12 @@ namespace Facebook_project
 
 
             services.AddRazorPages();
+            services.AddScoped<RoleManager<AppRole>>();
+
             services.AddScoped<PostRepository>();
             services.AddScoped<FriendsRepository>();
             services.AddScoped<AppUserRepository>();
+
 
         }
 

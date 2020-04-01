@@ -90,7 +90,56 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
 
+
+    <script>
+
+    $(document).ready(function () {
+        $("#id").change(function () {
+            console.log("hi");
+            var role = $('#id').val();
+            var userID = $('#userID').text();
+            changeRole(userID,role)
+            //debugger;
+        })
+    });
+
+
+
+    @*$('#id').on("change", function () {
+        var role = $('#id').val();
+        debugger;
+        changeRole(userID,role)
+    }
+        *@
+
+
+    function changeRole(id,role) {
+         $.ajax({
+             type: "POST",
+             url:
+              '@Url.Action("EditUserRole","Admin")/'id,
+            
+             success: function (response) {
+                 debugger;
+        },
+        error: function () {
+                alert("Error");
+            }
+        });
+
+
+    }
+
+
+
+
+
+
+    </script>
+
     @RenderSection("Scripts", required: false)
+
+
 </body>
 </html>
 

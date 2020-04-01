@@ -44,7 +44,8 @@
                     </div>*@
                 <div class="card-body">
                     <h5 class="card-title">
-                        @user.UserName
+                       @user.UserName
+                        <p id ="userID" style="display:none"> @user.Id </p>
                     </h5>
                 </div>
                 <div class="card-footer">
@@ -52,7 +53,7 @@
 
 
                     @Html.DropDownList("id", (IEnumerable<SelectListItem>)ViewBag.roles, null, new { @class = "btn btn-info" })
-
+                         
                     @*<a asp-action="EditUser" asp-controller="admin" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>*@
                     @if (user.isBlocked == true)
                     {
@@ -80,5 +81,48 @@ else
         </div>
     </div>
 }
+
+
+@*<script>
+
+    $(document).ready(function () {
+        $("#id").change(function () {
+            console.log("hi");
+            var role = $('#id').val();
+            debugger;
+        })
+    });
+
+
+
+    $('#id').on("change", function () {
+        var role = $('#id').val();
+        debugger;
+        changeRole(userID,role)
+    }
+            
+
+
+    function changeRole(userID,role) {
+         $.ajax({
+             type: "GET",
+             url: '@Url.Action("EditUser","Admin")/' + userID,
+        success: function (response) {
+
+        },
+        error: function () {
+                alert("Error");
+            }
+        });
+
+
+    }
+
+   
+
+
+
+
+</script>*@
 
 

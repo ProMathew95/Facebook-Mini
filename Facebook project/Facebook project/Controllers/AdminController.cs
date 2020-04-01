@@ -85,6 +85,16 @@ namespace Facebook_project.Controllers
 
 
 
+        [HttpPost]
+        public async Task<IActionResult> EditUserRole(String id )
+        {
+
+            var x = id;
+            //var y = Role;
+            return null;
+        
+        }
+
 
 
 
