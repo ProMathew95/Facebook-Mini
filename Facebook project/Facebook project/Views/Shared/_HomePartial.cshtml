@@ -6,79 +6,64 @@
 
 
 
-    <div class="container">
-        <nav class="navbar navbar-default">
-            <div class="navbar-brand" id="navbarbrand" href="#">
-                <form class="navbar-form form-inline">
-                    <div class="form-group">
-                        <button id="addDoku" type="button" class="btn btn-default " data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></button>
-                        <input type="text" name="search" onkeyup="searchFunction1()" id="search" class="form-control" placeholder="Search">
-                    </div>
-                </form>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container" style="padding-left:35px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-action="index" asp-controller="Home"><img src="~/images/facebookLogo.png" class="img-fluid" id="facebookLogo" /></a>
             </div>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav navbar-nav navbar-right">
-                    <li style="text-align:center">
-                        <a href="/Users/UserPage/@Model.Id">
-                            <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid userpic">
-                        </a>
 
-                        @*<button href="/Users/UserPage/@Model.Id" style="font-weight:bold;outline:none;" class="nav-link btn btn-link">
-                            <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
-                        </button>*@
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <partial name="~/Views/Posts/_Search.cshtml">
 
-                    </li>
+                    <ul class="nav navbar-nav">
 
-                    <li>
-                        <a href="/Users/UserPage/@Model.Id" style="font-weight: bold;" class="nav-link btn btn-link">
-                            @Model.FullName.Split(" ")[0]
-                        </a>
+                        <li class="active">
+                            <div class="col-8" style="padding:15px">
+                                <a href="/Users/UserPage/@Model.Id">
+                                    <img src="/ProfilPics/@Model.PhotoURL" class="img-fluid searchResult">
+                                </a>
+                                <a href="/Users/UserPage/@Model.Id" style="color:white;font-weight: bold;">
+                                    @Model.FullName.Split(" ")[0]
+                                </a>
+                            </div>
+                        </li>
 
-                        @*<button href="/Users/UserPage/@Model.Id" style="font-weight:bold;outline:none;" class="nav-link btn btn-link">
-                            @Model.FullName.Split(" ")[0]
-                        </button>*@
+                        <li class="active">
+                            <div style=" padding:20px;">
+                                <a style="color:white;font-weight:bold;" asp-action="index" asp-controller="Home">Home</a>
+                            </div>
+                        </li>
 
-                    </li>
+                        <li class="active">
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="active">
+                            <div style="padding:14px; padding-left:10px">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" style="color:white;font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
+                                </form>
+                            </div>
+                        </li>
 
-                    <li>
-                        <a style="font-weight:bold;" asp-action="index" asp-controller="Home" class="nav-link btn btn-link">Home</a>
-                    
-                    @*<button asp-action="index" asp-controller="Home" style="font-weight:bold;outline:none;" class="nav-link btn btn-link">Home</button>*@
-                    </li>
-
-                    <li style="margin-top:10px; text-align:center">
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" style="font-weight:bold;outline:none;" class="nav-link btn btn-link">Settings</button>
-                        </form>
-                    </li>
-
-                    <li style="margin-top:10px; text-align:center">
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" style="font-weight:bold;outline:none;" class="nav-link btn btn-link">Logout</button>
-                        </form>
-                    </li>
-
-                    <li style="text-align:center">
-                        <i class="btn fas fa-user-friends fa-lg" style="margin-top:16px;" onclick="FriendRequestsModal()"></i>
-                    </li>
-                    
-                </ul>
-            </div>
-        </nav>
-    </div>
-
-
-
-
-
-
-    
+                        <li class="active">
+                            <i class="btn fas fa-user-friends fa-lg" style="color:white;margin-top:16px;" onclick="FriendRequestsModal()"></i>
+                        </li>
+                    </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 
 <script>
 
