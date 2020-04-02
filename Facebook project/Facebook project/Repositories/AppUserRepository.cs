@@ -79,7 +79,17 @@ namespace Facebook_project.Repositories
             || (f.senderUserID == receiverId && f.receiverUserID == senderId));
             
             if (prevActivity != null)
-                prevActivity.Status = (Status)Enum.Parse(typeof(Status), status);
+            {
+                if(prevActivity.senderUserID == senderId)
+                {
+                    prevActivity.Status = (Status)Enum.Parse(typeof(Status), status);
+                }
+                else
+                {
+                    _context.Friends.Remove(prevActivity);
+                    _context.Friends.Add(new Friend() { senderUserID = senderId, receiverUserID = receiverId, Status = (Status)Enum.Parse(typeof(Status), status) });
+                }
+            }
             else
                 _context.Friends.Add(new Friend() { senderUserID = senderId, receiverUserID = receiverId, Status = (Status)Enum.Parse(typeof(Status), status) });
 
