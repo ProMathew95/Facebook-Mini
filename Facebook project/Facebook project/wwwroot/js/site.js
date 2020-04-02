@@ -21,18 +21,27 @@ function ConfirmBlock(uniqueId, IsBLockClicked) {
         var aaa = $('#searchi').val();
         $.ajax({
             type: 'POST',
-            url: "/Admin/getuser/" + aaa,
+            url: "/Admin/getuser/"+aaa,
 
 
             success: function (data)
             {
-                var respUserID = Object.values(data)[0];
-                var respUserName = Object.values(data)[1];
-
+                
+                var respUserID = Object.values(data)[1];
+                var respUserName = Object.values(data)[2];
+                var blockkk = Object.values(data)[3];
                 var cards = '<div class="card"> <div class="card-header">'+ respUserID +'';
                     
-                cards += '</div> <div class="card-body"> <h5 class="card-title">' + respUserName + '</h5>';
-                cards += '</div> </div>';
+                cards += '</div> <div class="card-body"> <h5 class="card-title">' + respUserName + '</h5></div>';
+                if (blockkk) {
+                    cards += '<div class="card-footer">This is blocked user </div > </div >';
+                }
+                else {
+                    cards += '</div > </div >';
+                }
+
+               
+                document.querySelector("#search").innerHTML = '';
                 document.querySelector("#search").insertAdjacentHTML('beforeend',cards);
             },
 
