@@ -37,7 +37,10 @@ namespace Facebook_project.Controllers
                 var userId = claim.Value;
                 currentUser = _db.AppUsers.Find(userId);
 
-                
+                if(currentUser.isBlocked != null && currentUser.isBlocked == true)
+                {
+                    //LOGOUT HERE
+                }
 
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
                 friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
