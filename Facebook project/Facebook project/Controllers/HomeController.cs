@@ -40,6 +40,9 @@ namespace Facebook_project.Controllers
                 if(currentUser.isBlocked != null && currentUser.isBlocked == true)
                 {
                     //LOGOUT HERE
+                    //HttpContext.Response.Redirect("../Areas/Identity/Pages/Account/Lockout");
+                    //return RedirectToPage("/Account/Lockout");               
+                    return View("Locked");
                 }
 
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
