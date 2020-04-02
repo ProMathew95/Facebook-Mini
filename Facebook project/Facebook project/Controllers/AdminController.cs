@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Threading.Tasks;
 using Facebook_project.Models;
@@ -417,20 +418,28 @@ namespace Facebook_project.Controllers
         [Route("/Admin/getuser/{Name}")]
         public IActionResult getUser(string Name)
         {
-            var result = userManager.Users.Where(X => X.UserName == Name).FirstOrDefault();
+            //SqlFunctions.PatIndex("C%", person.FirstName) > 0
+            //select person;
+            // var result = userManager.Users.Where(X => X.patI == Name).FirstOrDefault();
+            var result=(from user in userManager.Users
+            where user.Email.Contains(Name)
+            select user).FirstOrDefault();
+
             if (result == null)
-            {
+            { 
                 return Json("eMPTY");
             }
             else
             {
                 var UserRoles = userManager.GetRolesAsync(result);
-                var model = new EditUserViewModel
+                var model = new 
                 {
                     id = result.Id,
-                   
+                   // Password = result.PasswordHash,
+                    //ConfirmPassword = result.PasswordHash
                     UserName = result.UserName,
                     Email = result.Email,
+                    block=result.isBlocked
 
                 };
                 return Json(model);
