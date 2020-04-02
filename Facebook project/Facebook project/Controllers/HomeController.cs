@@ -42,8 +42,33 @@ namespace Facebook_project.Controllers
                 List<string> friendsIds = _db.Friends.Where(f => f.receiverUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.senderUserID).ToList();
                 friendsIds.AddRange(_db.Friends.Where(f => f.senderUserID == userId && f.Status == Status.RequestConfirmed).Select(f => f.receiverUserID).ToList());
 
-                var CurrentPosts = _db.Posts.Include(p => p.Comment).Include(p => p.Like)
-                    .Include(p => p.Publisher).Where(p => p.PublisherId == userId || friendsIds.Contains(p.PublisherId)).ToList();
+                var CurrentPosts = _db.Posts.Include(p => p.Comment).ThenInclude(c => (c as Comment).User)
+                    .Include(p => p.Like).ThenInclude(l => (l as Like).User)
+                    .Include(p => p.Publisher)
+                    .Where(p => p.PublisherId == userId || 
+                    (friendsIds.Contains(p.PublisherId) 
+                    && (p.Publisher.isBlocked == null || p.Publisher.isBlocked == false))).ToList();
+
+                foreach (var post in CurrentPosts)
+                {
+                    var commentsToRemove = post.Comment.Where(c => (c.User.isBlocked != null && c.User.isBlocked == true)).ToList();
+                    if(commentsToRemove != null && commentsToRemove.Count > 0)
+                    {
+                        foreach(var comment in commentsToRemove)
+                        {
+                            post.Comment.Remove(comment);
+                        }
+                    }
+
+                    var likesToRemove = post.Like.Where(c => (c.User.isBlocked != null && c.User.isBlocked == true)).ToList();
+                    if (likesToRemove != null && likesToRemove.Count > 0)
+                    {
+                        foreach (var like in likesToRemove)
+                        {
+                            post.Like.Remove(like);
+                        }
+                    }
+                }
 
                 List<int> likedPosts = _db.Likes.Where(l => l.UserID == userId && l.isLiked).Select(l => l.PostID).ToList();
 
